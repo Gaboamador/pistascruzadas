@@ -8,11 +8,16 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy": "npm run build && npx netlify deploy --prod --dir=dist"
+    "deploy": "npm run build && npx netlify deploy --prod --dir=dist",
+    "deploy:rules": "firebase deploy --only firestore:rules"
   },
   "dependencies": {
+    "firebase": "^12.16.0",
+    "motion": "^12.42.2",
     "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react-dom": "^19.2.7",
+    "react-icons": "^5.7.0",
+    "react-router": "^7.18.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -22,8 +27,10 @@
     "eslint": "^10.6.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.3",
+    "firebase-tools": "^15.23.0",
     "globals": "^17.7.0",
     "netlify-cli": "^26.2.0",
-    "vite": "^8.1.1"
+    "sass": "^1.101.0",
+    "vite": "^8.0.16"
   }
 }

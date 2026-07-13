@@ -1,0 +1,164 @@
+.panel {
+  padding: $space-lg;
+  background-color: $color-bg-elevated;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-lg;
+  margin-bottom: $space-lg;
+}
+
+.eyebrow {
+  margin: 0 0 $space-xs;
+  color: $color-accent-primary;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-family: $font-family-display;
+  font-size: $font-size-2xl;
+  line-height: $line-height-tight;
+}
+
+.counter {
+  flex: 0 0 auto;
+  padding: $space-xs $space-sm;
+  color: $color-accent-primary;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  background-color: rgba($color-accent-primary, 0.12);
+  border: 1px solid rgba($color-accent-primary, 0.35);
+  border-radius: $radius-pill;
+}
+
+.boardScroller {
+  overflow-x: auto;
+  padding-bottom: $space-xs;
+}
+
+.board {
+  --grid-size: 4;
+
+  display: grid;
+  grid-template-columns:
+    minmax(7rem, 0.95fr)
+    repeat(var(--grid-size), minmax(6rem, 1fr));
+  gap: $space-xs;
+  min-width: max-content;
+}
+
+.corner {
+  min-height: 5.5rem;
+}
+
+.columnHeader,
+.rowHeader {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: $space-xs;
+  min-width: 0;
+  padding: $space-sm;
+  text-align: center;
+  background-color: rgba($color-accent-primary, 0.1);
+  border: 1px solid rgba($color-accent-primary, 0.35);
+  border-radius: $radius-md;
+}
+
+.columnHeader {
+  min-height: 5.5rem;
+}
+
+.rowHeader {
+  min-height: 4.75rem;
+}
+
+.axisLabel {
+  color: $color-accent-primary;
+  font-family: $font-family-display;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+}
+
+.axisWord {
+  overflow-wrap: anywhere;
+  color: $color-text-primary;
+  font-size: $font-size-sm;
+  line-height: $line-height-normal;
+}
+
+.boardRow {
+  display: contents;
+}
+
+.coordinateCell {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 4.75rem;
+  color: $color-text-muted;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  background-color: $color-bg-elevated-2;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.coordinateCellRevealed {
+  color: $color-accent-primary-contrast;
+  background-color: $color-success;
+  border-color: $color-success;
+  box-shadow: $shadow-sm;
+}
+
+.status {
+  display: grid;
+  place-items: center;
+  min-height: 12rem;
+  padding: $space-xl;
+  color: $color-text-secondary;
+  text-align: center;
+  background-color: $color-bg-elevated;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .panel {
+    padding: $space-md;
+  }
+
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .board {
+    grid-template-columns:
+      6.5rem
+      repeat(var(--grid-size), 5.5rem);
+    gap: $space-2xs;
+  }
+
+  .columnHeader,
+  .rowHeader,
+  .coordinateCell {
+    border-radius: $radius-sm;
+  }
+}

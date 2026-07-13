@@ -1,0 +1,78 @@
+.page {
+  @include centered-page;
+}
+
+.content {
+  @include centered-panel;
+}
+
+.eyebrow {
+  margin: 0 0 $space-sm;
+  color: $color-accent-primary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-family: $font-family-display;
+  font-size: clamp($font-size-2xl, 8vw, $font-size-4xl);
+  line-height: $line-height-tight;
+}
+
+.description {
+  max-width: 34rem;
+  margin: $space-md auto 0;
+  color: $color-text-secondary;
+  line-height: $line-height-relaxed;
+}
+
+.form {
+  @include form-stack;
+}
+
+.field {
+  @include form-field;
+}
+
+.label {
+  @include field-label;
+}
+
+.help {
+  @include field-help;
+}
+
+.error {
+  @include field-error;
+}
+
+.codeInput {
+  font-family: $font-family-display;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.18em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.submitError {
+  @include field-error;
+
+  padding: $space-sm $space-md;
+  background-color: rgba($color-danger, 0.1);
+  border: 1px solid rgba($color-danger, 0.4);
+  border-radius: $radius-md;
+}
+
+.actions {
+  display: grid;
+  gap: $space-sm;
+}
+
+.actions a[aria-disabled="true"] {
+  pointer-events: none;
+  opacity: 0.5;
+}

@@ -1,0 +1,29 @@
+.page {
+  @include centered-page;
+}
+
+.content {
+  @include centered-panel;
+}
+
+.code {
+  margin: 0 0 $space-xs;
+  color: $color-accent-primary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.12em;
+}
+
+.title {
+  margin: 0;
+  font-family: $font-family-display;
+  font-size: clamp($font-size-2xl, 8vw, $font-size-4xl);
+  line-height: $line-height-tight;
+}
+
+.description {
+  max-width: 34rem;
+  margin: $space-md auto $space-xl;
+  color: $color-text-secondary;
+  line-height: $line-height-relaxed;
+}

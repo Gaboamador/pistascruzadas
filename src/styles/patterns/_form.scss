@@ -1,0 +1,38 @@
+@use "../tokens/colors" as *;
+@use "../tokens/radius" as *;
+@use "../tokens/spacing" as *;
+@use "../tokens/typography" as *;
+
+@mixin form-stack {
+  display: grid;
+  gap: $space-lg;
+  width: 100%;
+  margin-top: $space-xl;
+  text-align: left;
+}
+
+@mixin form-field {
+  display: grid;
+  gap: $space-xs;
+}
+
+@mixin field-label {
+  color: $color-text-primary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+}
+
+@mixin field-help {
+  margin: 0;
+  color: $color-text-muted;
+  font-size: $font-size-xs;
+  line-height: $line-height-normal;
+}
+
+@mixin field-error {
+  margin: 0;
+  color: $color-danger;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  line-height: $line-height-normal;
+}

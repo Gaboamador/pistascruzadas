@@ -1,0 +1,44 @@
+.page {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  padding: $space-lg;
+}
+
+.status {
+  width: min(100%, $layout-content-narrow);
+  margin: auto;
+  padding: $space-xl;
+  text-align: center;
+  background-color: $color-bg-elevated;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+}
+
+.eyebrow {
+  margin: 0 0 $space-sm;
+  color: $color-accent-primary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-family: $font-family-display;
+  font-size: clamp($font-size-2xl, 8vw, $font-size-4xl);
+  line-height: $line-height-tight;
+}
+
+.description {
+  max-width: 34rem;
+  margin: $space-md auto 0;
+  color: $color-text-secondary;
+  line-height: $line-height-relaxed;
+}
+
+.description:has(+ button) {
+  margin-bottom: $space-xl;
+}

@@ -1,0 +1,489 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAllowedGridSize(gridSize) {
+      return gridSize == 3
+        || gridSize == 4
+        || gridSize == 5;
+    }
+
+    function isValidCoordinate(coordinate) {
+      return coordinate is string
+        && coordinate.matches('^[A-E][1-5]$');
+    }
+
+    function tablePath(tableCode) {
+      return /databases/$(database)/documents/tables/$(tableCode);
+    }
+
+    function participantPath(tableCode, participantUid) {
+      return /databases/$(database)/documents/tables/$(tableCode)/participants/$(participantUid);
+    }
+
+    function playerPath(tableCode, playerUid) {
+      return /databases/$(database)/documents/tables/$(tableCode)/players/$(playerUid);
+    }
+
+    function setupBoardPath(tableCode) {
+      return /databases/$(database)/documents/tables/$(tableCode)/setup/board;
+    }
+
+    function gameBoardPath(tableCode) {
+      return /databases/$(database)/documents/tables/$(tableCode)/game/board;
+    }
+
+    function gameStatePath(tableCode) {
+      return /databases/$(database)/documents/tables/$(tableCode)/game/state;
+    }
+
+    function isActiveParticipant(tableCode, participantUid) {
+      return exists(participantPath(tableCode, participantUid))
+        && get(participantPath(tableCode, participantUid)).data.status == 'active';
+    }
+
+    function isCurrentHost(tableCode) {
+      return isAuthenticated()
+        && get(tablePath(tableCode)).data.hostUid == request.auth.uid
+        && isActiveParticipant(tableCode, request.auth.uid);
+    }
+
+    function isLobby(tableCode) {
+      return get(tablePath(tableCode)).data.status == 'lobby';
+    }
+
+    function hasValidPublicPlayerAfter(tableCode, participantUid) {
+      return existsAfter(playerPath(tableCode, participantUid))
+        && getAfter(playerPath(tableCode, participantUid)).data.uid
+          == participantUid
+        && getAfter(playerPath(tableCode, participantUid)).data.nickname
+          == getAfter(participantPath(tableCode, participantUid)).data.nickname
+        && getAfter(playerPath(tableCode, participantUid)).data.role
+          == getAfter(participantPath(tableCode, participantUid)).data.role
+        && getAfter(playerPath(tableCode, participantUid)).data.status
+          == getAfter(participantPath(tableCode, participantUid)).data.status;
+    }
+
+    function isCreatingHost(tableCode, participantUid) {
+      return request.resource.data.role == 'host'
+        && getAfter(tablePath(tableCode)).data.hostUid == participantUid;
+    }
+
+    function isJoiningLobby(tableCode) {
+      return request.resource.data.role == 'player'
+        && exists(tablePath(tableCode))
+        && get(tablePath(tableCode)).data.status == 'lobby';
+    }
+
+    function hasValidBoardPreparation(tableCode) {
+      return request.resource.data.keys().hasOnly([
+          'gridSize',
+          'columnWords',
+          'rowWords',
+          'updatedAt'
+        ])
+        && request.resource.data.gridSize
+          == get(tablePath(tableCode)).data.gridSize
+        && request.resource.data.columnWords is list
+        && request.resource.data.rowWords is list
+        && request.resource.data.columnWords.size()
+          == request.resource.data.gridSize
+        && request.resource.data.rowWords.size()
+          == request.resource.data.gridSize
+        && request.resource.data.updatedAt == request.time;
+    }
+
+    function isStartingGame() {
+      return resource.data.status == 'lobby'
+        && request.resource.data.status == 'playing'
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly([
+            'status',
+            'startedAt'
+          ])
+        && request.resource.data.startedAt == request.time;
+    }
+
+    match /tables/{tableCode} {
+      allow create: if isAuthenticated()
+        && request.resource.data.keys().hasOnly([
+          'code',
+          'gridSize',
+          'hostUid',
+          'status',
+          'createdAt'
+        ])
+        && request.resource.data.code == tableCode
+        && request.resource.data.hostUid == request.auth.uid
+        && request.resource.data.status == 'lobby'
+        && request.resource.data.createdAt == request.time
+        && isAllowedGridSize(request.resource.data.gridSize)
+        && existsAfter(participantPath(tableCode, request.auth.uid))
+        && getAfter(
+          participantPath(tableCode, request.auth.uid)
+        ).data.uid == request.auth.uid
+        && getAfter(
+          participantPath(tableCode, request.auth.uid)
+        ).data.role == 'host'
+        && hasValidPublicPlayerAfter(
+          tableCode,
+          request.auth.uid
+        );
+
+      allow get: if isAuthenticated();
+
+      allow update: if isAuthenticated()
+        && request.auth.uid == resource.data.hostUid
+        && isActiveParticipant(tableCode, request.auth.uid)
+        && (
+          (
+            resource.data.status == 'lobby'
+            && request.resource.data.diff(resource.data).affectedKeys()
+              .hasOnly([
+                'gridSize'
+              ])
+            && isAllowedGridSize(
+              request.resource.data.gridSize
+            )
+          )
+          ||
+          (
+            isStartingGame()
+            && existsAfter(gameBoardPath(tableCode))
+            && existsAfter(gameStatePath(tableCode))
+          )
+        );
+
+      allow list, delete: if false;
+
+      match /participants/{participantUid} {
+        allow create: if isAuthenticated()
+          && participantUid == request.auth.uid
+          && request.resource.data.keys().hasOnly([
+            'uid',
+            'nickname',
+            'role',
+            'status',
+            'currentCoordinate',
+            'failedCoordinates',
+            'joinedAt'
+          ])
+          && request.resource.data.uid == request.auth.uid
+          && request.resource.data.nickname is string
+          && request.resource.data.nickname.size() >= 2
+          && request.resource.data.nickname.size() <= 20
+          && request.resource.data.status == 'active'
+          && request.resource.data.currentCoordinate == null
+          && request.resource.data.failedCoordinates is list
+          && request.resource.data.failedCoordinates.size() == 0
+          && request.resource.data.joinedAt == request.time
+          && (
+            isCreatingHost(tableCode, participantUid)
+            || isJoiningLobby(tableCode)
+          )
+          && hasValidPublicPlayerAfter(
+            tableCode,
+            participantUid
+          );
+
+        allow get: if isAuthenticated()
+          && (
+            participantUid == request.auth.uid
+            ||
+            (
+              isCurrentHost(tableCode)
+              && get(tablePath(tableCode)).data.status == 'lobby'
+            )
+          );
+
+        allow update: if isAuthenticated()
+          && (
+            /*
+            * Reingreso de un participante que había abandonado
+            * mientras la mesa continúa en el lobby.
+            */
+            (
+              participantUid == request.auth.uid
+              && resource.data.uid == request.auth.uid
+              && resource.data.status == 'left'
+              && get(tablePath(tableCode)).data.status == 'lobby'
+              && request.resource.data.diff(resource.data)
+                .affectedKeys()
+                .hasOnly([
+                  'nickname',
+                  'status'
+                ])
+              && request.resource.data.nickname is string
+              && request.resource.data.nickname.size() >= 2
+              && request.resource.data.nickname.size() <= 20
+              && request.resource.data.status == 'active'
+              && hasValidPublicPlayerAfter(
+                tableCode,
+                participantUid
+              )
+            )
+
+            ||
+
+            /*
+            * Asignación inicial de coordenadas realizada por el
+            * anfitrión al iniciar la partida.
+            */
+            (
+              isCurrentHost(tableCode)
+              && get(tablePath(tableCode)).data.status == 'lobby'
+              && getAfter(tablePath(tableCode)).data.status
+                == 'playing'
+              && resource.data.status == 'active'
+              && resource.data.currentCoordinate == null
+              && request.resource.data.diff(resource.data)
+                .affectedKeys()
+                .hasOnly([
+                  'currentCoordinate'
+                ])
+              && isValidCoordinate(
+                request.resource.data.currentCoordinate
+              )
+            )
+
+            ||
+
+            /*
+            * Resolución de la coordenada actual por parte del
+            * propio jugador durante la partida.
+            *
+            * Puede:
+            * - recibir otra coordenada;
+            * - quedar con currentCoordinate en null;
+            * - conservar failedCoordinates;
+            * - agregar su coordenada anterior a failedCoordinates.
+            */
+            (
+              participantUid == request.auth.uid
+              && resource.data.uid == request.auth.uid
+              && resource.data.status == 'active'
+              && get(tablePath(tableCode)).data.status == 'playing'
+              && isValidCoordinate(
+                resource.data.currentCoordinate
+              )
+              && request.resource.data.diff(resource.data)
+                .affectedKeys()
+                .hasOnly([
+                  'currentCoordinate',
+                  'failedCoordinates'
+                ])
+              && request.resource.data.uid
+                == resource.data.uid
+              && request.resource.data.nickname
+                == resource.data.nickname
+              && request.resource.data.role
+                == resource.data.role
+              && request.resource.data.status
+                == resource.data.status
+              && request.resource.data.joinedAt
+                == resource.data.joinedAt
+              && (
+                request.resource.data.currentCoordinate == null
+                || isValidCoordinate(
+                  request.resource.data.currentCoordinate
+                )
+              )
+              && request.resource.data.failedCoordinates is list
+              && (
+                request.resource.data.failedCoordinates
+                  == resource.data.failedCoordinates
+                ||
+                request.resource.data.failedCoordinates
+                  == resource.data.failedCoordinates.concat([
+                    resource.data.currentCoordinate
+                  ])
+              )
+            )
+          );
+
+        allow list, delete: if false;
+      }
+
+      match /players/{playerUid} {
+        allow create: if isAuthenticated()
+          && playerUid == request.auth.uid
+          && request.resource.data.keys().hasOnly([
+            'uid',
+            'nickname',
+            'role',
+            'status',
+            'joinedAt'
+          ])
+          && request.resource.data.uid == request.auth.uid
+          && request.resource.data.nickname is string
+          && request.resource.data.nickname.size() >= 2
+          && request.resource.data.nickname.size() <= 20
+          && (
+            request.resource.data.role == 'host'
+            || request.resource.data.role == 'player'
+          )
+          && request.resource.data.status == 'active'
+          && request.resource.data.joinedAt == request.time
+          && existsAfter(participantPath(tableCode, playerUid))
+          && getAfter(
+            participantPath(tableCode, playerUid)
+          ).data.uid == playerUid
+          && getAfter(
+            participantPath(tableCode, playerUid)
+          ).data.nickname == request.resource.data.nickname
+          && getAfter(
+            participantPath(tableCode, playerUid)
+          ).data.role == request.resource.data.role
+          && getAfter(
+            participantPath(tableCode, playerUid)
+          ).data.status == request.resource.data.status;
+
+        allow update: if isAuthenticated()
+          && playerUid == request.auth.uid
+          && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly([
+              'nickname',
+              'status'
+            ])
+          && request.resource.data.nickname is string
+          && request.resource.data.nickname.size() >= 2
+          && request.resource.data.nickname.size() <= 20
+          && request.resource.data.status == 'active'
+          && existsAfter(participantPath(tableCode, playerUid))
+          && getAfter(
+            participantPath(tableCode, playerUid)
+          ).data.nickname == request.resource.data.nickname
+          && getAfter(
+            participantPath(tableCode, playerUid)
+          ).data.status == request.resource.data.status;
+
+        allow get: if isAuthenticated()
+          && playerUid == request.auth.uid;
+
+        allow list: if isAuthenticated()
+          && isActiveParticipant(
+            tableCode,
+            request.auth.uid
+          );
+
+        allow delete: if false;
+      }
+
+      match /setup/{setupDocumentId} {
+        allow get: if setupDocumentId == 'board'
+          && isCurrentHost(tableCode);
+
+        allow create, update: if setupDocumentId == 'board'
+          && isCurrentHost(tableCode)
+          && isLobby(tableCode)
+          && hasValidBoardPreparation(tableCode);
+
+        allow list, delete: if false;
+      }
+
+      match /game/{gameDocumentId} {
+        allow create: if isCurrentHost(tableCode)
+          && get(tablePath(tableCode)).data.status == 'lobby'
+          && getAfter(tablePath(tableCode)).data.status
+            == 'playing'
+          && request.resource.data.startedAt == request.time
+          && (
+            (
+              gameDocumentId == 'board'
+              && request.resource.data.keys().hasOnly([
+                'gridSize',
+                'columnWords',
+                'rowWords',
+                'revealedCoordinates',
+                'startedAt'
+              ])
+              && request.resource.data.gridSize
+                == get(tablePath(tableCode)).data.gridSize
+              && request.resource.data.columnWords
+                == get(setupBoardPath(tableCode)).data.columnWords
+              && request.resource.data.rowWords
+                == get(setupBoardPath(tableCode)).data.rowWords
+              && request.resource.data.revealedCoordinates is list
+              && request.resource.data.revealedCoordinates.size()
+                == 0
+            )
+            ||
+            (
+              gameDocumentId == 'state'
+              && request.resource.data.keys().hasOnly([
+                'gridSize',
+                'availableCoordinates',
+                'discardedCoordinates',
+                'startedAt'
+              ])
+              && request.resource.data.gridSize
+                == get(tablePath(tableCode)).data.gridSize
+              && request.resource.data.availableCoordinates is list
+              && request.resource.data.discardedCoordinates is list
+              && request.resource.data.discardedCoordinates.size()
+                == 0
+            )
+          );
+
+        allow get: if isAuthenticated()
+          && (
+            (
+              gameDocumentId == 'board'
+              && isActiveParticipant(
+                tableCode,
+                request.auth.uid
+              )
+            )
+            ||
+            (
+              gameDocumentId == 'state'
+              && isActiveParticipant(
+                tableCode,
+                request.auth.uid
+              )
+            )
+          );
+
+        allow update: if isAuthenticated()
+          && isActiveParticipant(
+            tableCode,
+            request.auth.uid
+          )
+          && get(tablePath(tableCode)).data.status
+            == 'playing'
+          && (
+            (
+              gameDocumentId == 'board'
+              && request.resource.data.diff(resource.data)
+                .affectedKeys()
+                .hasOnly([
+                  'revealedCoordinates'
+                ])
+              && request.resource.data.revealedCoordinates
+                is list
+            )
+            ||
+            (
+              gameDocumentId == 'state'
+              && request.resource.data.diff(resource.data)
+                .affectedKeys()
+                .hasOnly([
+                  'availableCoordinates',
+                  'discardedCoordinates'
+                ])
+              && request.resource.data.availableCoordinates
+                is list
+              && request.resource.data.discardedCoordinates
+                is list
+            )
+          );
+
+        allow list, delete: if false;
+      }
+    }
+  }
+}

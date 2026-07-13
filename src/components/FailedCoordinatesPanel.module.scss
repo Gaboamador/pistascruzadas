@@ -1,0 +1,122 @@
+.panel {
+  padding: $space-lg;
+  background-color: $color-bg-elevated;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-lg;
+}
+
+.eyebrow {
+  margin: 0 0 $space-xs;
+  color: $color-accent-primary;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-family: $font-family-display;
+  font-size: $font-size-2xl;
+  line-height: $line-height-tight;
+}
+
+.counter {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  padding: $space-xs;
+  color: $color-danger;
+  font-weight: $font-weight-bold;
+  background-color: rgba($color-danger, 0.1);
+  border: 1px solid rgba($color-danger, 0.35);
+  border-radius: $radius-pill;
+}
+
+.description {
+  max-width: 42rem;
+  margin: $space-sm 0 $space-lg;
+  color: $color-text-secondary;
+  font-size: $font-size-sm;
+  line-height: $line-height-relaxed;
+}
+
+.coordinateList {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(7rem, 1fr)
+  );
+  gap: $space-xs;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: none;
+}
+
+.coordinateItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-xs;
+  min-height: 4rem;
+  padding: $space-sm;
+  background-color: rgba($color-danger, 0.08);
+  border: 1px solid rgba($color-danger, 0.3);
+  border-radius: $radius-md;
+}
+
+.order {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+  color: $color-text-muted;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  background-color: $color-bg-elevated-2;
+  border-radius: $radius-pill;
+}
+
+.coordinate {
+  color: $color-danger;
+  font-family: $font-family-display;
+  font-size: $font-size-xl;
+  line-height: 1;
+  letter-spacing: 0.05em;
+}
+
+.emptyMessage {
+  margin: $space-sm 0 0;
+  color: $color-text-muted;
+  font-size: $font-size-sm;
+  line-height: $line-height-normal;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .panel {
+    padding: $space-md;
+  }
+
+  .coordinateList {
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(5.5rem, 1fr)
+    );
+  }
+
+  .coordinateItem {
+    border-radius: $radius-sm;
+  }
+}
