@@ -7,7 +7,11 @@
 
 .content,
 .room {
-  width: min(100%, $layout-content-default);
+  width: min(
+    100%,
+    $layout-content-default
+  );
+  min-width: 0;
   margin: auto;
 }
 
@@ -22,6 +26,7 @@
 
 .header,
 .playersPanel,
+.requestsPanel,
 .footer {
   padding: $space-lg;
   background-color: $color-bg-elevated;
@@ -50,21 +55,32 @@
 .title {
   margin: 0;
   font-family: $font-family-display;
-  font-size: clamp($font-size-2xl, 8vw, $font-size-4xl);
+  font-size: clamp(
+    $font-size-2xl,
+    8vw,
+    $font-size-4xl
+  );
   line-height: $line-height-tight;
 }
 
 .code {
   margin: 0;
   font-family: $font-family-display;
-  font-size: clamp($font-size-2xl, 10vw, $font-size-4xl);
+  font-size: clamp(
+    $font-size-2xl,
+    10vw,
+    $font-size-4xl
+  );
   line-height: $line-height-tight;
   letter-spacing: 0.14em;
 }
 
 .description {
   max-width: 34rem;
-  margin: $space-md auto $space-xl;
+  margin:
+    $space-md
+    auto
+    $space-xl;
   color: $color-text-secondary;
   line-height: $line-height-relaxed;
 }
@@ -85,13 +101,61 @@
   display: inline-flex;
   align-items: center;
   min-height: 1.5rem;
-  padding: $space-2xs $space-xs;
+  padding:
+    $space-2xs
+    $space-xs;
   color: $color-accent-primary;
   font-size: $font-size-xs;
   font-weight: $font-weight-bold;
-  background-color: rgba($color-accent-primary, 0.12);
-  border: 1px solid rgba($color-accent-primary, 0.35);
+  background-color: rgba(
+    $color-accent-primary,
+    0.12
+  );
+  border: 1px solid rgba(
+    $color-accent-primary,
+    0.35
+  );
   border-radius: $radius-pill;
+}
+
+.finishedPanel {
+  padding: $space-lg;
+  text-align: center;
+  background-color: rgba(
+    $color-success,
+    0.1
+  );
+  border: 1px solid rgba(
+    $color-success,
+    0.4
+  );
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+}
+
+.finishedEyebrow {
+  margin: 0 0 $space-xs;
+  color: $color-success;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.finishedTitle {
+  margin: 0;
+  color: $color-text-primary;
+  font-family: $font-family-display;
+  font-size: $font-size-2xl;
+  line-height: $line-height-tight;
+}
+
+.finishedDescription {
+  max-width: 42rem;
+  margin: $space-sm auto 0;
+  color: $color-text-secondary;
+  font-size: $font-size-sm;
+  line-height: $line-height-relaxed;
 }
 
 .sectionHeader {
@@ -109,19 +173,36 @@
   line-height: $line-height-tight;
 }
 
-.playerCount {
+.playerCount,
+.requestCount {
   display: grid;
   place-items: center;
   min-width: 2.5rem;
   min-height: 2.5rem;
   padding: $space-xs;
-  color: $color-accent-primary-contrast;
   font-weight: $font-weight-bold;
-  background-color: $color-accent-primary;
   border-radius: $radius-pill;
 }
 
-.playerList {
+.playerCount {
+  color: $color-accent-primary-contrast;
+  background-color: $color-accent-primary;
+}
+
+.requestCount {
+  color: $color-warning;
+  background-color: rgba(
+    $color-warning,
+    0.12
+  );
+  border: 1px solid rgba(
+    $color-warning,
+    0.4
+  );
+}
+
+.playerList,
+.requestList {
   display: grid;
   gap: $space-xs;
   margin: 0;
@@ -129,26 +210,35 @@
   list-style: none;
 }
 
-.player {
+.player,
+.requestItem {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: $space-md;
   min-height: 3.5rem;
-  padding: $space-sm $space-md;
+  padding:
+    $space-sm
+    $space-md;
   background-color: $color-bg-elevated-2;
   border: 1px solid $color-border;
   border-radius: $radius-md;
 }
 
-.playerMain {
+.requestItem {
+  align-items: center;
+}
+
+.playerMain,
+.requestMain {
   display: flex;
   align-items: center;
   gap: $space-xs;
   min-width: 0;
 }
 
-.playerName {
+.playerName,
+.requestNickname {
   overflow: hidden;
   font-weight: $font-weight-bold;
   text-overflow: ellipsis;
@@ -159,6 +249,159 @@
   color: $color-text-muted;
   font-size: $font-size-xs;
   font-weight: $font-weight-medium;
+}
+
+.requestsDescription {
+  max-width: 44rem;
+  margin:
+    0
+    0
+    $space-md;
+  color: $color-text-secondary;
+  font-size: $font-size-sm;
+  line-height: $line-height-relaxed;
+}
+
+.requestsStatus,
+.requestsEmpty {
+  margin: 0;
+  color: $color-text-muted;
+  font-size: $font-size-sm;
+  line-height: $line-height-normal;
+}
+
+.requestsError {
+  margin: 0;
+  padding:
+    $space-sm
+    $space-md;
+  color: $color-danger;
+  font-size: $font-size-sm;
+  background-color: rgba(
+    $color-danger,
+    0.1
+  );
+  border: 1px solid rgba(
+    $color-danger,
+    0.4
+  );
+  border-radius: $radius-md;
+}
+
+.requestStatusBadge {
+  flex: 0 0 auto;
+  padding:
+    $space-2xs
+    $space-xs;
+  color: $color-warning;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  background-color: rgba(
+    $color-warning,
+    0.1
+  );
+  border: 1px solid rgba(
+    $color-warning,
+    0.35
+  );
+  border-radius: $radius-pill;
+}
+
+.requestActions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: $space-xs;
+}
+
+.rejectRequestButton,
+.approveRequestButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-xs;
+  min-height: 2.5rem;
+  padding:
+    $space-xs
+    $space-sm;
+  font: inherit;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  border-radius: $radius-md;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    opacity 160ms ease;
+
+  &:disabled {
+    cursor: wait;
+    opacity: 0.6;
+  }
+
+  svg {
+    flex: 0 0 auto;
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+.rejectRequestButton {
+  color: $color-danger;
+  background-color: rgba(
+    $color-danger,
+    0.08
+  );
+  border: 1px solid rgba(
+    $color-danger,
+    0.4
+  );
+
+  &:hover:not(:disabled) {
+    background-color: rgba(
+      $color-danger,
+      0.14
+    );
+    border-color: $color-danger;
+  }
+}
+
+.approveRequestButton {
+  color: $color-success;
+  background-color: rgba(
+    $color-success,
+    0.08
+  );
+  border: 1px solid rgba(
+    $color-success,
+    0.4
+  );
+
+  &:hover:not(:disabled) {
+    background-color: rgba(
+      $color-success,
+      0.14
+    );
+    border-color: $color-success;
+  }
+}
+
+.leaveError,
+.finishGameError {
+  margin: 0;
+  padding:
+    $space-sm
+    $space-md;
+  color: $color-danger;
+  font-size: $font-size-sm;
+  background-color: rgba(
+    $color-danger,
+    0.1
+  );
+  border: 1px solid rgba(
+    $color-danger,
+    0.4
+  );
+  border-radius: $radius-md;
 }
 
 .footer {
@@ -177,23 +420,177 @@
 .footerActions {
   display: flex;
   flex: 0 0 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: $space-sm;
+}
+
+.leaveButton,
+.finishGameButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-xs;
+  min-height: 2.75rem;
+  padding:
+    $space-sm
+    $space-md;
+  font: inherit;
+  font-weight: $font-weight-bold;
+  border-radius: $radius-md;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    opacity 160ms ease;
+
+  &:disabled {
+    cursor: wait;
+    opacity: 0.6;
+  }
+
+  svg {
+    flex: 0 0 auto;
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+.leaveButton {
+  color: $color-danger;
+  background-color: rgba(
+    $color-danger,
+    0.08
+  );
+  border: 1px solid rgba(
+    $color-danger,
+    0.4
+  );
+
+  &:hover:not(:disabled) {
+    background-color: rgba(
+      $color-danger,
+      0.14
+    );
+    border-color: $color-danger;
+  }
+}
+
+.finishGameButton {
+  color: $color-warning;
+  background-color: rgba(
+    $color-warning,
+    0.08
+  );
+  border: 1px solid rgba(
+    $color-warning,
+    0.4
+  );
+
+  &:hover:not(:disabled) {
+    background-color: rgba(
+      $color-warning,
+      0.14
+    );
+    border-color: $color-warning;
+  }
 }
 
 @media (max-width: $breakpoint-sm) {
   .page {
+    min-width: 0;
     padding: $space-sm;
+  }
+
+  .room {
+    min-width: 0;
+    gap: $space-sm;
+  }
+
+  .header,
+  .playersPanel,
+  .requestsPanel,
+  .footer,
+  .finishedPanel {
+    min-width: 0;
+    padding: $space-md;
+    border-radius: $radius-md;
   }
 
   .header,
   .footer {
     align-items: stretch;
     flex-direction: column;
+    gap: $space-md;
+  }
+
+  .header > *,
+  .footer > * {
+    min-width: 0;
+  }
+
+  .code {
+    max-width: 100%;
+    font-size: $font-size-2xl;
+    letter-spacing: 0.08em;
+    overflow-wrap: anywhere;
   }
 
   .identity {
+    min-width: 0;
     justify-items: start;
+    gap: $space-2xs;
     text-align: left;
+  }
+
+  .identity strong {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  .sectionHeader {
+    min-width: 0;
+    gap: $space-sm;
+  }
+
+  .sectionHeader > div {
+    min-width: 0;
+  }
+
+  .sectionTitle {
+    font-size: $font-size-xl;
+    overflow-wrap: anywhere;
+  }
+
+  .player,
+  .requestItem {
+    min-width: 0;
+    padding: $space-sm;
+  }
+
+  .playerMain,
+  .requestMain {
+    min-width: 0;
+  }
+
+  .requestItem {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .requestMain {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .requestActions {
+    display: grid;
+    width: 100%;
+  }
+
+  .rejectRequestButton,
+  .approveRequestButton {
+    width: 100%;
   }
 
   .footerActions {
@@ -201,7 +598,9 @@
     width: 100%;
   }
 
-  .footerActions :global(.button) {
+  .footerActions :global(.button),
+  .leaveButton,
+  .finishGameButton {
     width: 100%;
   }
 }

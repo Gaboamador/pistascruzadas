@@ -32,3 +32,9 @@ dist/
 .env.*
 
 public/version.json
+
+# Script local para exportar/copiar el proyecto
+_copiarProyectoReact.bat
+
+# Dumps del proyecto con fecha y hora en el nombre
+exportacion_codigo_*.txt

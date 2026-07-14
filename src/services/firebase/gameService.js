@@ -257,6 +257,8 @@ async function startGame({
       gridSize: tableData.gridSize,
       availableCoordinates,
       discardedCoordinates: [],
+      remainingCoordinateCount:
+        shuffledCoordinates.length,
       startedAt: serverTimestamp(),
     });
 

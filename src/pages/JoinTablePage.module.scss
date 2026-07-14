@@ -18,7 +18,11 @@
 .title {
   margin: 0;
   font-family: $font-family-display;
-  font-size: clamp($font-size-2xl, 8vw, $font-size-4xl);
+  font-size: clamp(
+    $font-size-2xl,
+    8vw,
+    $font-size-4xl
+  );
   line-height: $line-height-tight;
 }
 
@@ -62,8 +66,14 @@
   @include field-error;
 
   padding: $space-sm $space-md;
-  background-color: rgba($color-danger, 0.1);
-  border: 1px solid rgba($color-danger, 0.4);
+  background-color: rgba(
+    $color-danger,
+    0.1
+  );
+  border: 1px solid rgba(
+    $color-danger,
+    0.4
+  );
   border-radius: $radius-md;
 }
 
@@ -75,4 +85,116 @@
 .actions a[aria-disabled="true"] {
   pointer-events: none;
   opacity: 0.5;
+}
+
+.requestSummary {
+  display: grid;
+  gap: $space-xs;
+  margin: $space-xl 0 $space-md;
+  text-align: left;
+}
+
+.requestDetail {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-md;
+  min-height: 3.5rem;
+  padding: $space-sm $space-md;
+  background-color: $color-bg-elevated-2;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+}
+
+.requestLabel {
+  color: $color-text-muted;
+  font-size: $font-size-xs;
+}
+
+.requestCode {
+  font-family: $font-family-display;
+  letter-spacing: 0.14em;
+}
+
+.requestStatus {
+  margin: 0 0 $space-md;
+  padding: $space-sm $space-md;
+  color: $color-warning;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  background-color: rgba(
+    $color-warning,
+    0.1
+  );
+  border: 1px solid rgba(
+    $color-warning,
+    0.4
+  );
+  border-radius: $radius-md;
+}
+
+.requestApproved {
+  margin: 0 0 $space-md;
+  padding: $space-sm $space-md;
+  color: $color-success;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  background-color: rgba(
+    $color-success,
+    0.1
+  );
+  border: 1px solid rgba(
+    $color-success,
+    0.4
+  );
+  border-radius: $radius-md;
+}
+
+.requestRejected {
+  margin: 0 0 $space-md;
+  padding: $space-sm $space-md;
+  color: $color-danger;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  background-color: rgba(
+    $color-danger,
+    0.1
+  );
+  border: 1px solid rgba(
+    $color-danger,
+    0.4
+  );
+  border-radius: $radius-md;
+}
+
+.requestError {
+  margin: 0 0 $space-md;
+  padding: $space-sm $space-md;
+  color: $color-danger;
+  font-size: $font-size-sm;
+  line-height: $line-height-normal;
+  background-color: rgba(
+    $color-danger,
+    0.1
+  );
+  border: 1px solid rgba(
+    $color-danger,
+    0.4
+  );
+  border-radius: $radius-md;
+}
+
+.requestHelp {
+  margin: 0 0 $space-xl;
+  color: $color-text-muted;
+  font-size: $font-size-sm;
+  line-height: $line-height-relaxed;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .requestDetail {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: $space-2xs;
+  }
 }

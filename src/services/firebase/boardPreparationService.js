@@ -9,6 +9,22 @@ import { TABLE_STATUS } from '@/constants/table';
 import { db } from '@/services/firebase/firebase';
 import { generateBoardWords } from '@/utils/words';
 
+/*
+ * React StrictMode puede montar, desmontar y volver a montar
+ * los efectos durante el desarrollo.
+ *
+ * Sin deduplicación, dos ejecuciones simultáneas de
+ * ensureBoardPreparation podrían intentar crear o reemplazar
+ * el mismo documento setup/board mediante transacciones
+ * independientes.
+ *
+ * Esta colección conserva una única promesa activa por mesa
+ * y tamaño de grilla. Las llamadas concurrentes reutilizan
+ * la misma operación de Firestore.
+ */
+const pendingBoardPreparationPromises =
+  new Map();
+
 function getBoardReference(tableCode) {
   return doc(
     db,
@@ -19,14 +35,30 @@ function getBoardReference(tableCode) {
   );
 }
 
-function isValidBoardPreparation(boardData, gridSize) {
+function getBoardPreparationPromiseKey({
+  tableCode,
+  gridSize,
+}) {
+  return `${tableCode}:${gridSize}`;
+}
+
+function isValidBoardPreparation(
+  boardData,
+  gridSize,
+) {
   return Boolean(
     boardData
       && boardData.gridSize === gridSize
-      && Array.isArray(boardData.columnWords)
-      && Array.isArray(boardData.rowWords)
-      && boardData.columnWords.length === gridSize
-      && boardData.rowWords.length === gridSize,
+      && Array.isArray(
+        boardData.columnWords,
+      )
+      && Array.isArray(
+        boardData.rowWords,
+      )
+      && boardData.columnWords.length
+        === gridSize
+      && boardData.rowWords.length
+        === gridSize,
   );
 }
 
@@ -36,10 +68,13 @@ function validateHostTable({
   expectedGridSize,
 }) {
   if (!tableSnapshot.exists()) {
-    throw new Error('La mesa no existe.');
+    throw new Error(
+      'La mesa no existe.',
+    );
   }
 
-  const tableData = tableSnapshot.data();
+  const tableData =
+    tableSnapshot.data();
 
   if (tableData.hostUid !== uid) {
     throw new Error(
@@ -47,63 +82,150 @@ function validateHostTable({
     );
   }
 
-  if (tableData.status !== TABLE_STATUS.LOBBY) {
+  if (
+    tableData.status
+      !== TABLE_STATUS.LOBBY
+  ) {
     throw new Error(
       'El tablero sólo puede prepararse antes de iniciar la partida.',
     );
   }
 
-  if (tableData.gridSize !== expectedGridSize) {
+  if (
+    tableData.gridSize
+      !== expectedGridSize
+  ) {
     throw new Error(
       'El tamaño de la grilla cambió durante la operación.',
     );
   }
 }
 
-async function ensureBoardPreparation({
+async function createOrReadBoardPreparation({
   tableCode,
   uid,
   gridSize,
 }) {
-  const tableReference = doc(db, 'tables', tableCode);
-  const boardReference = getBoardReference(tableCode);
+  const tableReference = doc(
+    db,
+    'tables',
+    tableCode,
+  );
 
-  return runTransaction(db, async (transaction) => {
-    const tableSnapshot = await transaction.get(tableReference);
-    const boardSnapshot = await transaction.get(boardReference);
+  const boardReference =
+    getBoardReference(tableCode);
 
-    validateHostTable({
-      tableSnapshot,
-      uid,
-      expectedGridSize: gridSize,
-    });
+  return runTransaction(
+    db,
+    async (transaction) => {
+      const [
+        tableSnapshot,
+        boardSnapshot,
+      ] = await Promise.all([
+        transaction.get(
+          tableReference,
+        ),
+        transaction.get(
+          boardReference,
+        ),
+      ]);
 
-    if (
-      boardSnapshot.exists()
-      && isValidBoardPreparation(
-        boardSnapshot.data(),
-        gridSize,
-      )
-    ) {
-      const boardData = boardSnapshot.data();
+      validateHostTable({
+        tableSnapshot,
+        uid,
+        expectedGridSize:
+          gridSize,
+      });
 
-      return {
-        columnWords: boardData.columnWords,
-        rowWords: boardData.rowWords,
-      };
-    }
+      if (
+        boardSnapshot.exists()
+        && isValidBoardPreparation(
+          boardSnapshot.data(),
+          gridSize,
+        )
+      ) {
+        const boardData =
+          boardSnapshot.data();
 
-    const boardWords = generateBoardWords(gridSize);
+        return {
+          columnWords:
+            boardData.columnWords,
+          rowWords:
+            boardData.rowWords,
+        };
+      }
 
-    transaction.set(boardReference, {
+      const boardWords =
+        generateBoardWords(gridSize);
+
+      transaction.set(
+        boardReference,
+        {
+          gridSize,
+          columnWords:
+            boardWords.columnWords,
+          rowWords:
+            boardWords.rowWords,
+          updatedAt:
+            serverTimestamp(),
+        },
+      );
+
+      return boardWords;
+    },
+  );
+}
+
+function ensureBoardPreparation({
+  tableCode,
+  uid,
+  gridSize,
+}) {
+  const promiseKey =
+    getBoardPreparationPromiseKey({
+      tableCode,
       gridSize,
-      columnWords: boardWords.columnWords,
-      rowWords: boardWords.rowWords,
-      updatedAt: serverTimestamp(),
     });
 
-    return boardWords;
-  });
+  const pendingPromise =
+    pendingBoardPreparationPromises.get(
+      promiseKey,
+    );
+
+  if (pendingPromise) {
+    return pendingPromise;
+  }
+
+  const initializationPromise =
+    createOrReadBoardPreparation({
+      tableCode,
+      uid,
+      gridSize,
+    }).finally(() => {
+      /*
+       * Sólo se elimina la entrada si sigue apuntando
+       * a esta misma operación. Esto evita que una
+       * promesa anterior borre accidentalmente una
+       * inicialización posterior.
+       */
+      if (
+        pendingBoardPreparationPromises.get(
+          promiseKey,
+        )
+          === initializationPromise
+      ) {
+        pendingBoardPreparationPromises.delete(
+          promiseKey,
+        );
+      }
+    });
+
+  pendingBoardPreparationPromises.set(
+    promiseKey,
+    initializationPromise,
+  );
+
+  return initializationPromise;
 }
 
 async function saveBoardPreparation({
@@ -112,25 +234,44 @@ async function saveBoardPreparation({
   gridSize,
   boardWords,
 }) {
-  const tableReference = doc(db, 'tables', tableCode);
-  const boardReference = getBoardReference(tableCode);
+  const tableReference = doc(
+    db,
+    'tables',
+    tableCode,
+  );
 
-  await runTransaction(db, async (transaction) => {
-    const tableSnapshot = await transaction.get(tableReference);
+  const boardReference =
+    getBoardReference(tableCode);
 
-    validateHostTable({
-      tableSnapshot,
-      uid,
-      expectedGridSize: gridSize,
-    });
+  await runTransaction(
+    db,
+    async (transaction) => {
+      const tableSnapshot =
+        await transaction.get(
+          tableReference,
+        );
 
-    transaction.set(boardReference, {
-      gridSize,
-      columnWords: boardWords.columnWords,
-      rowWords: boardWords.rowWords,
-      updatedAt: serverTimestamp(),
-    });
-  });
+      validateHostTable({
+        tableSnapshot,
+        uid,
+        expectedGridSize:
+          gridSize,
+      });
+
+      transaction.set(
+        boardReference,
+        {
+          gridSize,
+          columnWords:
+            boardWords.columnWords,
+          rowWords:
+            boardWords.rowWords,
+          updatedAt:
+            serverTimestamp(),
+        },
+      );
+    },
+  );
 }
 
 function subscribeToBoardPreparation({
@@ -139,26 +280,37 @@ function subscribeToBoardPreparation({
   onBoardChanged,
   onError,
 }) {
-  const boardReference = getBoardReference(tableCode);
+  const boardReference =
+    getBoardReference(tableCode);
 
   return onSnapshot(
     boardReference,
     (snapshot) => {
       if (!snapshot.exists()) {
         onBoardChanged(null);
+
         return;
       }
 
-      const boardData = snapshot.data();
+      const boardData =
+        snapshot.data();
 
-      if (!isValidBoardPreparation(boardData, gridSize)) {
+      if (
+        !isValidBoardPreparation(
+          boardData,
+          gridSize,
+        )
+      ) {
         onBoardChanged(null);
+
         return;
       }
 
       onBoardChanged({
-        columnWords: boardData.columnWords,
-        rowWords: boardData.rowWords,
+        columnWords:
+          boardData.columnWords,
+        rowWords:
+          boardData.rowWords,
       });
     },
     onError,

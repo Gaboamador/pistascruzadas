@@ -1,11 +1,13 @@
 import {
   doc,
   runTransaction,
+  serverTimestamp,
 } from 'firebase/firestore';
 
 import {
   PARTICIPANT_STATUS,
   TABLE_STATUS,
+  GAME_FINISH_REASON,
 } from '@/constants/table';
 import { db } from '@/services/firebase/firebase';
 
@@ -160,6 +162,18 @@ async function resolveCurrentCoordinate({
       ? participantData.failedCoordinates
       : [];
 
+    const remainingCoordinateCount =
+      stateData.remainingCoordinateCount;
+
+    if (
+      !Number.isInteger(remainingCoordinateCount)
+      || remainingCoordinateCount <= 0
+    ) {
+      throw new Error(
+        'El contador de coordenadas pendientes es inválido.',
+      );
+    }
+
     if (
       revealedCoordinates.includes(currentCoordinate)
       || discardedCoordinates.includes(currentCoordinate)
@@ -173,6 +187,9 @@ async function resolveCurrentCoordinate({
       nextCoordinate = null,
       ...remainingCoordinates
     ] = availableCoordinates;
+
+    const nextRemainingCoordinateCount =
+      remainingCoordinateCount - 1;
 
     const participantUpdate = {
       currentCoordinate: nextCoordinate,
@@ -207,7 +224,17 @@ async function resolveCurrentCoordinate({
               currentCoordinate,
             ]
           : discardedCoordinates,
+      remainingCoordinateCount:
+        nextRemainingCoordinateCount,
     });
+
+    if (nextRemainingCoordinateCount === 0) {
+      transaction.update(tableReference, {
+        status: TABLE_STATUS.FINISHED,
+        finishedAt: serverTimestamp(),
+        finishReason: GAME_FINISH_REASON.COMPLETED,
+      });
+    }
   });
 }
 

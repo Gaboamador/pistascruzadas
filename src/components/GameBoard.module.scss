@@ -1,5 +1,10 @@
 .panel {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   padding: $space-lg;
+  overflow: hidden;
+
   background-color: $color-bg-elevated;
   border: 1px solid $color-border;
   border-radius: $radius-lg;
@@ -42,8 +47,15 @@
 }
 
 .boardScroller {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   overflow-x: auto;
+  overflow-y: hidden;
   padding-bottom: $space-xs;
+
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .board {
@@ -51,10 +63,16 @@
 
   display: grid;
   grid-template-columns:
-    minmax(7rem, 0.95fr)
-    repeat(var(--grid-size), minmax(6rem, 1fr));
+    minmax(7rem, max-content)
+    repeat(
+      var(--grid-size),
+      minmax(6rem, max-content)
+    );
+  justify-content: center;
   gap: $space-xs;
-  min-width: max-content;
+
+  width: max-content;
+  min-width: 100%;
 }
 
 .corner {
@@ -91,10 +109,14 @@
 }
 
 .axisWord {
-  overflow-wrap: anywhere;
   color: $color-text-primary;
   font-size: $font-size-sm;
   line-height: $line-height-normal;
+  text-transform: uppercase;
+
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
 }
 
 .boardRow {
@@ -141,24 +163,126 @@
 
 @media (max-width: $breakpoint-sm) {
   .panel {
-    padding: $space-md;
+    padding: $space-sm;
+    border-radius: $radius-md;
   }
 
   .header {
     align-items: flex-start;
     flex-direction: column;
+    gap: $space-sm;
+    margin-bottom: $space-md;
+  }
+
+  .title {
+    font-size: $font-size-lg;
+  }
+
+  .counter {
+    padding:
+      $space-2xs
+      $space-xs;
+
+    font-size: $font-size-xs;
   }
 
   .board {
-    grid-template-columns:
-      6.5rem
-      repeat(var(--grid-size), 5.5rem);
-    gap: $space-2xs;
+  grid-template-columns:
+    3.25rem
+    repeat(
+      var(--grid-size),
+      minmax(3.5rem, max-content)
+    );
+
+  gap: $space-2xs;
+}
+
+  .corner,
+  .columnHeader {
+    min-height: 4.5rem;
+  }
+
+  .rowHeader,
+  .coordinateCell {
+    min-height: 5.5rem;
   }
 
   .columnHeader,
-  .rowHeader,
-  .coordinateCell {
+  .rowHeader {
+    position: relative;
+    gap: $space-2xs;
+    padding: $space-2xs;
     border-radius: $radius-sm;
   }
+
+  .rowHeader {
+  position: relative;
+  padding:
+    $space-xs
+    $space-2xs;
+  overflow: hidden;
+}
+
+.rowHeader .axisLabel {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  font-size: $font-size-md;
+
+  transform: translateX(50%);
+}
+
+.columnHeader {
+  padding-top: $space-md;
+}
+
+.columnHeader .axisLabel {
+  position: absolute;
+  top: 0;
+  left: 50%;
+
+  font-size: $font-size-md;
+
+  transform: translateX(-50%);
+}
+
+.rowHeader .axisWord {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  max-width: none;
+
+  font-size: $font-size-xs;
+  line-height: 1;
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
+
+  transform:
+    translate(-50%, -50%)
+    rotate(-90deg);
+  transform-origin: center;
+}
+
+  .coordinateCell {
+    padding: $space-2xs;
+    font-size: $font-size-xs;
+    border-radius: $radius-sm;
+  }
+
+  .axisLabel {
+    font-size: $font-size-md;
+  }
+
+  .axisWord {
+  font-size: $font-size-xs;
+  line-height: $line-height-tight;
+  text-transform: uppercase;
+
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
+}
 }

@@ -1,0 +1,219 @@
+.backdrop {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+
+  display: grid;
+  place-items: center;
+
+  padding: $space-lg;
+
+  background-color: rgba(
+    $color-bg-page,
+    0.78
+  );
+  backdrop-filter: blur(4px);
+}
+
+.dialog {
+  width: min(100%, 30rem);
+  padding: $space-xl;
+
+  background-color: $color-bg-elevated;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-lg;
+}
+
+.iconContainer {
+  display: grid;
+  place-items: center;
+
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: $space-md;
+
+  color: $color-accent-primary;
+  background-color: rgba(
+    $color-accent-primary,
+    0.12
+  );
+  border: 1px solid rgba(
+    $color-accent-primary,
+    0.35
+  );
+  border-radius: 50%;
+
+  svg {
+    width: 1.35rem;
+    height: 1.35rem;
+  }
+}
+
+.content {
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+
+  color: $color-text-primary;
+  font-family: $font-family-display;
+  font-size: $font-size-xl;
+  line-height: $line-height-tight;
+}
+
+.description {
+  margin: $space-sm 0 0;
+
+  color: $color-text-secondary;
+  font-size: $font-size-sm;
+  line-height: $line-height-relaxed;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: $space-sm;
+
+  margin-top: $space-xl;
+}
+
+.confirmButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-xs;
+
+  min-height: 2.75rem;
+  padding: $space-sm $space-md;
+
+  color: $color-bg-page;
+  font: inherit;
+  font-weight: $font-weight-bold;
+
+  background-color: $color-accent-primary;
+  border: 1px solid transparent;
+  border-radius: $radius-md;
+
+  cursor: pointer;
+
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease,
+    filter 160ms ease;
+
+  &:hover:not(:disabled) {
+    filter: brightness(1.08);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  &:focus-visible {
+    outline: 3px solid rgba(
+      $color-accent-primary,
+      0.28
+    );
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: wait;
+    opacity: 0.58;
+  }
+}
+
+.dialogSuccess {
+  border-color: rgba(
+    $color-success,
+    0.45
+  );
+
+  .iconContainer {
+    color: $color-success;
+    background-color: rgba(
+      $color-success,
+      0.12
+    );
+    border-color: rgba(
+      $color-success,
+      0.35
+    );
+  }
+}
+
+.dialogWarning {
+  border-color: rgba(
+    $color-warning,
+    0.45
+  );
+
+  .iconContainer {
+    color: $color-warning;
+    background-color: rgba(
+      $color-warning,
+      0.12
+    );
+    border-color: rgba(
+      $color-warning,
+      0.35
+    );
+  }
+}
+
+.dialogDanger {
+  border-color: rgba(
+    $color-danger,
+    0.45
+  );
+
+  .iconContainer {
+    color: $color-danger;
+    background-color: rgba(
+      $color-danger,
+      0.12
+    );
+    border-color: rgba(
+      $color-danger,
+      0.35
+    );
+  }
+}
+
+.confirmButtonSuccess {
+  color: $color-bg-page;
+  background-color: $color-success;
+}
+
+.confirmButtonWarning {
+  color: $color-bg-page;
+  background-color: $color-warning;
+}
+
+.confirmButtonDanger {
+  color: $color-bg-page;
+  background-color: $color-danger;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .backdrop {
+    align-items: end;
+    padding: $space-sm;
+  }
+
+  .dialog {
+    padding: $space-lg;
+  }
+
+  .actions {
+    grid-template-columns: 1fr;
+  }
+
+  .actions :global(.button),
+  .confirmButton {
+    width: 100%;
+  }
+}

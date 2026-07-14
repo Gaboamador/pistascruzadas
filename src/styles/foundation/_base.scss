@@ -3,6 +3,8 @@
 html,
 body,
 #root {
+  width: 100%;
+  max-width: 100%;
   margin: 0;
   padding: 0;
   color-scheme: dark;
@@ -13,18 +15,19 @@ html {
   scrollbar-gutter: stable;
 }
 
-#root {
-  display: flex;
-  flex-direction: column;
-  min-height: 100svh;
-}
-
 body {
-  width: 100%;
+  min-width: 0;
   font-family: $font-family-text;
   color: $color-text-primary;
   background-color: $color-bg-page;
   user-select: none;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 100svh;
 }
 
 input,

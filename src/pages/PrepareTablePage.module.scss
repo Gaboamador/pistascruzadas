@@ -27,6 +27,8 @@
   border: 1px solid $color-border;
   border-radius: $radius-lg;
   box-shadow: $shadow-md;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .header,
@@ -205,16 +207,34 @@
   border-radius: $radius-md;
 }
 
+.boardScroller {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  padding-bottom: $space-xs;
+
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
 .board {
   --grid-size: 4;
 
   display: grid;
   grid-template-columns:
-    minmax(7rem, 0.95fr)
-    repeat(var(--grid-size), minmax(6rem, 1fr));
+    minmax(7rem, max-content)
+    repeat(
+      var(--grid-size),
+      minmax(6rem, max-content)
+    );
   gap: $space-xs;
-  overflow-x: auto;
-  padding-bottom: $space-xs;
+
+  width: max-content;
+  min-width: 100%;
 }
 
 .corner {
@@ -248,10 +268,14 @@
 }
 
 .axisWord {
-  overflow-wrap: anywhere;
   color: $color-text-primary;
   font-size: $font-size-sm;
   line-height: $line-height-normal;
+  text-transform: uppercase;
+
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
 }
 
 .rerollButton {
@@ -365,14 +389,25 @@
 
   .board {
     grid-template-columns:
-      6.5rem
-      repeat(var(--grid-size), 6rem);
+      minmax(5rem, max-content)
+      repeat(
+        var(--grid-size),
+        minmax(4.25rem, max-content)
+      );
+
     gap: $space-2xs;
+  }
+
+  .rowHeader,
+  .coordinateCell {
+    min-height: 4rem;
   }
 
   .columnHeader,
   .rowHeader,
   .coordinateCell {
+    gap: $space-2xs;
+    padding: $space-xs;
     border-radius: $radius-sm;
   }
 
@@ -388,4 +423,24 @@
 .startSection :global(.button) {
   width: 100%;
 }
+  .coordinateCell {
+    padding: $space-2xs;
+    font-size: $font-size-xs;
+    border-radius: $radius-sm;
+  }
+
+  .axisLabel {
+    font-size: $font-size-md;
+  }
+
+  .axisWord {
+    font-size: $font-size-xs;
+    line-height: $line-height-tight;
+    text-transform: uppercase;
+
+    white-space: nowrap;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
 }
