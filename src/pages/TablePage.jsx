@@ -618,18 +618,27 @@ function TablePage({ user }) {
       <StatusContent
         eyebrow="Error de conexión"
         title="No pudimos cargar la mesa"
-        description="Revisá tu conexión e intentá recargar la página."
+        description="La mesa puede no existir o puede haber ocurrido un problema de conexión."
         role="alert"
       >
-        <button
-          type="button"
-          className="button button--primary"
-          onClick={() =>
-            window.location.reload()
-          }
-        >
-          Reintentar
-        </button>
+        <div className={styles.statusActions}>
+          <button
+            type="button"
+            className="button button--primary"
+            onClick={() =>
+              window.location.reload()
+            }
+          >
+            Reintentar
+          </button>
+
+          <Link
+            to="/"
+            className="button button--secondary"
+          >
+            Volver al inicio
+          </Link>
+        </div>
       </StatusContent>
     );
   }
@@ -1333,7 +1342,7 @@ const handleConfirmFinish =
                 </Link>
               )}
 
-              {!isFinished && (
+              {table.status === TABLE_STATUS.LOBBY && (
                 <Link
                   to="/"
                   className="button button--secondary"

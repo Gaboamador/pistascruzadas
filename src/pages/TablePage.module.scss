@@ -496,6 +496,13 @@
   }
 }
 
+.statusActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-sm;
+  margin-top: $space-xl;
+}
+
 @media (max-width: $breakpoint-sm) {
   .page {
     min-width: 0;
@@ -517,11 +524,15 @@
     border-radius: $radius-md;
   }
 
-  .header,
-  .footer {
-    align-items: stretch;
-    flex-direction: column;
+  .header {
+    display: grid;
+    grid-template-columns:
+      minmax(0, 0.8fr)
+      minmax(0, 1.2fr);
+    align-items: center;
     gap: $space-md;
+
+    padding: $space-sm;
   }
 
   .header > *,
@@ -529,23 +540,60 @@
     min-width: 0;
   }
 
+  .eyebrow {
+    margin-bottom: $space-2xs;
+
+    font-size: 0.65rem;
+    line-height: 1.2;
+    letter-spacing: 0.08em;
+  }
+
   .code {
     max-width: 100%;
+    margin: 0;
+
     font-size: $font-size-2xl;
+    line-height: 1;
     letter-spacing: 0.08em;
+
     overflow-wrap: anywhere;
   }
 
   .identity {
     min-width: 0;
+
+    display: grid;
     justify-items: start;
+    align-content: center;
     gap: $space-2xs;
+
+    padding-left: $space-sm;
     text-align: left;
+
+    border-left: 1px solid $color-border;
+  }
+
+  .identityLabel {
+    font-size: 0.65rem;
+    line-height: 1.2;
   }
 
   .identity strong {
     max-width: 100%;
+
+    font-size: $font-size-md;
+    line-height: $line-height-tight;
+
     overflow-wrap: anywhere;
+  }
+
+  .hostBadge {
+    padding:
+      $space-2xs
+      $space-xs;
+
+    font-size: 0.65rem;
+    line-height: 1;
   }
 
   .sectionHeader {
@@ -593,14 +641,44 @@
     width: 100%;
   }
 
-  .footerActions {
-    display: grid;
-    width: 100%;
+  .footer {
+    align-items: stretch;
+    flex-direction: column;
+    gap: $space-md;
   }
 
-  .footerActions :global(.button),
-  .leaveButton,
-  .finishGameButton {
-    width: 100%;
-  }
+.footerActions {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: $space-xs;
+  width: 100%;
+}
+
+.footerActions :global(.button),
+.leaveButton,
+.finishGameButton {
+  width: 100%;
+  min-width: 0;
+  padding: 
+    $space-2xs
+    $space-xs;
+}
+
+.statusActions {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: $space-xs;
+  margin-top: $space-lg;
+}
+
+.statusActions :global(.button) {
+  width: 100%;
+  min-width: 0;
+  padding:
+    $space-xs
+    $space-sm;
+}
+
 }

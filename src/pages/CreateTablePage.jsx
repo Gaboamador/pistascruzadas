@@ -112,7 +112,7 @@ function CreateTablePage({ user }) {
                   ? 'host-nickname-error'
                   : 'host-nickname-help'
               }
-              placeholder="Ejemplo: Gabriel"
+              placeholder="Nombre visible"
             />
 
             {nicknameError ? (

@@ -879,7 +879,7 @@ function JoinTablePage({ user }) {
                   ? 'player-nickname-error'
                   : 'player-nickname-help'
               }
-              placeholder="Ejemplo: Gabriel"
+              placeholder="Nombre visible"
             />
 
             {errors.nickname ? (

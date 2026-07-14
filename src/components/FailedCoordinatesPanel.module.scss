@@ -106,17 +106,74 @@
 
 @media (max-width: $breakpoint-sm) {
   .panel {
-    padding: $space-md;
+    padding: $space-sm;
+    border-radius: $radius-md;
+  }
+
+  .header {
+    gap: $space-sm;
+  }
+
+  .eyebrow {
+    margin-bottom: $space-2xs;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+  }
+
+  .title {
+    font-size: $font-size-lg;
+  }
+
+  .counter {
+    min-width: 2rem;
+    min-height: 2rem;
+    padding: $space-2xs;
+
+    font-size: $font-size-sm;
+  }
+
+  .description {
+    margin:
+      $space-xs
+      0
+      $space-sm;
+
+    font-size: $font-size-xs;
+    line-height: $line-height-normal;
   }
 
   .coordinateList {
-    grid-template-columns: repeat(
-      auto-fill,
-      minmax(5.5rem, 1fr)
-    );
+    grid-template-columns:
+      repeat(
+        auto-fill,
+        minmax(4.5rem, 1fr)
+      );
+    gap: $space-2xs;
   }
 
   .coordinateItem {
+    min-height: 3rem;
+    gap: $space-2xs;
+    padding: $space-xs;
+
     border-radius: $radius-sm;
+  }
+
+  .order {
+    min-width: 1.25rem;
+    min-height: 1.25rem;
+
+    font-size: 0.65rem;
+  }
+
+  .coordinate {
+    font-size: $font-size-lg;
+  }
+
+  .emptyMessage {
+    margin-top: $space-xs;
+
+    font-size: $font-size-xs;
+    line-height: $line-height-normal;
   }
 }
