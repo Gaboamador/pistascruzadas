@@ -16,6 +16,7 @@ import {
   TABLE_STATUS,
 } from '@/constants/table';
 import useJoinRequest from '@/hooks/useJoinRequest';
+import useOnlineStatus from '@/hooks/useOnlineStatus';
 import {
   JOIN_TABLE_ENTRY_TYPES,
   JOIN_TABLE_ERROR_CODES,
@@ -522,6 +523,7 @@ function JoinRequestStatus({
 
 function JoinTablePage({ user }) {
   const navigate = useNavigate();
+  const isOnline = useOnlineStatus();
 
   const [tableCode, setTableCode] =
     useState('');
@@ -658,6 +660,14 @@ function JoinTablePage({ user }) {
     event.preventDefault();
 
     if (isSubmitting) {
+      return;
+    }
+
+    if (!isOnline) {
+      setSubmitError(
+        'Necesitás conexión a internet para unirte a una mesa.',
+      );
+
       return;
     }
 
@@ -813,7 +823,7 @@ function JoinTablePage({ user }) {
               autoCapitalize="characters"
               spellCheck="false"
               inputMode="text"
-              disabled={isSubmitting}
+              disabled={isSubmitting || !isOnline}
               aria-invalid={Boolean(
                 errors.tableCode,
               )}
@@ -870,7 +880,7 @@ function JoinTablePage({ user }) {
                 NICKNAME_MAX_LENGTH
               }
               autoComplete="nickname"
-              disabled={isSubmitting}
+              disabled={isSubmitting || !isOnline}
               aria-invalid={Boolean(
                 errors.nickname,
               )}
@@ -916,7 +926,7 @@ function JoinTablePage({ user }) {
             <button
               type="submit"
               className="button button--primary"
-              disabled={isSubmitting}
+              disabled={isSubmitting || !isOnline}
             >
               {isSubmitting
                 ? 'Ingresando…'

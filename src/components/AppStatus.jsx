@@ -11,11 +11,15 @@ import {
 } from 'react-icons/fi';
 import { registerSW } from 'virtual:pwa-register';
 
+import useOnlineStatus from '@/hooks/useOnlineStatus';
+
 import styles from '@/components/AppStatus.module.scss';
 
 const CONNECTION_RECOVERED_DURATION = 4000;
 
 function AppStatus() {
+  const isOnline = useOnlineStatus();
+
   const [
     isUpdateAvailable,
     setIsUpdateAvailable,
@@ -25,15 +29,6 @@ function AppStatus() {
     isUpdating,
     setIsUpdating,
   ] = useState(false);
-
-  const [
-    isOnline,
-    setIsOnline,
-  ] = useState(() =>
-    typeof navigator === 'undefined'
-      ? true
-      : navigator.onLine,
-  );
 
   const [
     showConnectionRecovered,
@@ -47,11 +42,7 @@ function AppStatus() {
     useRef(null);
 
   const hasBeenOfflineRef =
-    useRef(
-      typeof navigator !== 'undefined'
-        ? !navigator.onLine
-        : false,
-    );
+    useRef(!isOnline);
 
   useEffect(() => {
     if (!import.meta.env.PROD) {
@@ -78,10 +69,9 @@ function AppStatus() {
   }, []);
 
   useEffect(() => {
-    const handleOffline = () => {
+    if (!isOnline) {
       hasBeenOfflineRef.current = true;
 
-      setIsOnline(false);
       setShowConnectionRecovered(false);
 
       if (recoveredTimeoutRef.current) {
@@ -92,60 +82,41 @@ function AppStatus() {
         recoveredTimeoutRef.current =
           null;
       }
-    };
 
-    const handleOnline = () => {
-      setIsOnline(true);
+      return undefined;
+    }
 
-      if (!hasBeenOfflineRef.current) {
-        return;
-      }
+    if (!hasBeenOfflineRef.current) {
+      return undefined;
+    }
 
-      setShowConnectionRecovered(true);
+    setShowConnectionRecovered(true);
 
-      if (recoveredTimeoutRef.current) {
-        window.clearTimeout(
-          recoveredTimeoutRef.current,
-        );
-      }
+    if (recoveredTimeoutRef.current) {
+      window.clearTimeout(
+        recoveredTimeoutRef.current,
+      );
+    }
 
-      recoveredTimeoutRef.current =
-        window.setTimeout(() => {
-          setShowConnectionRecovered(false);
+    recoveredTimeoutRef.current =
+      window.setTimeout(() => {
+        setShowConnectionRecovered(false);
 
-          recoveredTimeoutRef.current =
-            null;
-        }, CONNECTION_RECOVERED_DURATION);
-    };
-
-    window.addEventListener(
-      'offline',
-      handleOffline,
-    );
-
-    window.addEventListener(
-      'online',
-      handleOnline,
-    );
+        recoveredTimeoutRef.current =
+          null;
+      }, CONNECTION_RECOVERED_DURATION);
 
     return () => {
-      window.removeEventListener(
-        'offline',
-        handleOffline,
-      );
-
-      window.removeEventListener(
-        'online',
-        handleOnline,
-      );
-
       if (recoveredTimeoutRef.current) {
         window.clearTimeout(
           recoveredTimeoutRef.current,
         );
+
+        recoveredTimeoutRef.current =
+          null;
       }
     };
-  }, []);
+  }, [isOnline]);
 
   const handleUpdate = async () => {
     if (
@@ -219,7 +190,9 @@ function AppStatus() {
           />
 
           <div className={styles.content}>
-            <strong>Conexión recuperada</strong>
+            <strong>
+              Conexión recuperada
+            </strong>
 
             <p>
               La aplicación volvió a estar conectada.

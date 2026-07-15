@@ -26,6 +26,7 @@ import {
   TABLE_STATUS,
 } from '@/constants/table';
 import usePendingJoinRequests from '@/hooks/usePendingJoinRequests';
+import useOnlineStatus from '@/hooks/useOnlineStatus';
 import useTableRoom from '@/hooks/useTableRoom';
 import {
   deleteFinishedTable,
@@ -125,6 +126,7 @@ function PendingJoinRequestsPanel({
   pendingJoinRequests,
   isLoading,
   error,
+  isOnline,
 }) {
   const [
     processingRequest,
@@ -155,10 +157,18 @@ function PendingJoinRequestsPanel({
     setConfirmationRequest(null);
   };
 
-  const openApproveConfirmation = (
+    const openApproveConfirmation = (
     joinRequest,
   ) => {
     if (isProcessingRequest) {
+      return;
+    }
+
+    if (!isOnline) {
+      setRequestActionError(
+        'Necesitás conexión a internet para aprobar solicitudes.',
+      );
+
       return;
     }
 
@@ -170,10 +180,18 @@ function PendingJoinRequestsPanel({
     });
   };
 
-  const openRejectConfirmation = (
+    const openRejectConfirmation = (
     joinRequest,
   ) => {
     if (isProcessingRequest) {
+      return;
+    }
+
+    if (!isOnline) {
+      setRequestActionError(
+        'Necesitás conexión a internet para rechazar solicitudes.',
+      );
+
       return;
     }
 
@@ -191,6 +209,16 @@ function PendingJoinRequestsPanel({
         isProcessingRequest
         || !confirmationRequest
       ) {
+        return;
+      }
+
+      if (!isOnline) {
+        setRequestActionError(
+          'Necesitás conexión a internet para resolver solicitudes.',
+        );
+
+        setConfirmationRequest(null);
+
         return;
       }
 
@@ -432,7 +460,7 @@ function PendingJoinRequestsPanel({
                               )
                             }
                             disabled={
-                              isProcessingRequest
+                              isProcessingRequest || !isOnline
                             }
                           >
                             <FiX
@@ -455,7 +483,7 @@ function PendingJoinRequestsPanel({
                               )
                             }
                             disabled={
-                              isProcessingRequest
+                              isProcessingRequest || !isOnline
                             }
                           >
                             <FiCheck
@@ -525,6 +553,7 @@ function PendingJoinRequestsPanel({
 
 function TablePage({ user }) {
   const navigate = useNavigate();
+  const isOnline = useOnlineStatus();
 
   const [
     isLeaving,
@@ -750,6 +779,10 @@ function TablePage({ user }) {
     || isFinishingGame
     || isDeletingTable;
 
+  const remoteActionsDisabled =
+    isAnyOperationRunning
+    || !isOnline;
+
   const closeActionConfirmation =
     () => {
       if (isAnyOperationRunning) {
@@ -759,12 +792,20 @@ function TablePage({ user }) {
       setConfirmationAction('');
     };
 
-  const openLeaveConfirmation =
+    const openLeaveConfirmation =
     () => {
       if (
         !canLeaveTable
         || isAnyOperationRunning
       ) {
+        return;
+      }
+
+      if (!isOnline) {
+        setLeaveError(
+          'Necesitás conexión a internet para abandonar la mesa.',
+        );
+
         return;
       }
 
@@ -777,12 +818,20 @@ function TablePage({ user }) {
       );
     };
 
-  const openFinishConfirmation =
+    const openFinishConfirmation =
     () => {
       if (
         !canFinishGame
         || isAnyOperationRunning
       ) {
+        return;
+      }
+
+      if (!isOnline) {
+        setFinishGameError(
+          'Necesitás conexión a internet para finalizar la partida.',
+        );
+
         return;
       }
 
@@ -795,12 +844,20 @@ function TablePage({ user }) {
       );
     };
 
-  const openCleanupConfirmation =
+    const openCleanupConfirmation =
     () => {
       if (
         !canDeleteFinishedTable
         || isAnyOperationRunning
       ) {
+        return;
+      }
+
+      if (!isOnline) {
+        setDeleteTableError(
+          'Necesitás conexión a internet para eliminar los datos de la partida.',
+        );
+
         return;
       }
 
@@ -819,6 +876,16 @@ function TablePage({ user }) {
         !canLeaveTable
         || isAnyOperationRunning
       ) {
+        return;
+      }
+
+      if (!isOnline) {
+        setLeaveError(
+          'Necesitás conexión a internet para abandonar la mesa.',
+        );
+
+        setConfirmationAction('');
+
         return;
       }
 
@@ -865,6 +932,16 @@ const handleConfirmFinish =
       return;
     }
 
+    if (!isOnline) {
+      setFinishGameError(
+        'Necesitás conexión a internet para finalizar la partida.',
+      );
+
+      setConfirmationAction('');
+
+      return;
+    }
+
     setFinishGameError('');
     setLeaveError('');
     setDeleteTableError('');
@@ -900,6 +977,16 @@ const handleConfirmFinish =
         !canDeleteFinishedTable
         || isAnyOperationRunning
       ) {
+        return;
+      }
+
+      if (!isOnline) {
+        setDeleteTableError(
+          'Necesitás conexión a internet para eliminar los datos de la partida.',
+        );
+
+        setConfirmationAction('');
+
         return;
       }
 
@@ -1177,6 +1264,7 @@ const handleConfirmFinish =
               error={
                 pendingJoinRequestsError
               }
+              isOnline={isOnline}
             />
           )}
 
@@ -1223,13 +1311,15 @@ const handleConfirmFinish =
                 styles.footerMessage
               }
             >
-              {isFinished
-                ? finishedContent.footer
-                : isPlaying
-                  ? 'Da tu pista verbalmente cuando estés listo.'
-                  : isHost
-                    ? 'Cuando todos hayan ingresado, prepará las palabras del tablero.'
-                    : 'Esperá a que el anfitrión prepare la partida.'}
+              {!isOnline
+                ? 'Sin conexión: podés consultar la mesa, pero no realizar cambios.'
+                : isFinished
+                  ? finishedContent.footer
+                  : isPlaying
+                    ? 'Da tu pista verbalmente cuando estés listo.'
+                    : isHost
+                      ? 'Cuando todos hayan ingresado, prepará las palabras del tablero.'
+                      : 'Esperá a que el anfitrión prepare la partida.'}
             </p>
 
             <div
@@ -1241,6 +1331,18 @@ const handleConfirmFinish =
                 <Link
                   to={`/mesa/${normalizedTableCode}/preparar`}
                   className="button button--primary"
+                  aria-disabled={
+                    !isOnline
+                    || isAnyOperationRunning
+                  }
+                  onClick={(event) => {
+                    if (
+                      !isOnline
+                      || isAnyOperationRunning
+                    ) {
+                      event.preventDefault();
+                    }
+                  }}
                 >
                   Preparar tablero
                 </Link>
@@ -1256,7 +1358,7 @@ const handleConfirmFinish =
                     openFinishConfirmation
                   }
                   disabled={
-                    isAnyOperationRunning
+                    remoteActionsDisabled
                   }
                 >
                   <FiFlag
@@ -1279,7 +1381,7 @@ const handleConfirmFinish =
                     openLeaveConfirmation
                   }
                   disabled={
-                    isAnyOperationRunning
+                    remoteActionsDisabled
                   }
                 >
                   <FiLogOut
@@ -1301,7 +1403,7 @@ const handleConfirmFinish =
                       openCleanupConfirmation
                     }
                     disabled={
-                      isAnyOperationRunning
+                      remoteActionsDisabled
                     }
                   >
                     <FiTrash2

@@ -6,6 +6,7 @@ import {
   GRID_SIZE_OPTIONS,
   NICKNAME_MAX_LENGTH,
 } from '@/constants/table';
+import useOnlineStatus from '@/hooks/useOnlineStatus';
 import { createTable } from '@/services/firebase/tableService';
 import {
   normalizeNickname,
@@ -16,6 +17,7 @@ import styles from '@/pages/CreateTablePage.module.scss';
 
 function CreateTablePage({ user }) {
   const navigate = useNavigate();
+  const isOnline = useOnlineStatus();
 
   const [nickname, setNickname] = useState('');
   const [gridSize, setGridSize] = useState(DEFAULT_GRID_SIZE);
@@ -39,6 +41,14 @@ function CreateTablePage({ user }) {
     event.preventDefault();
 
     if (isSubmitting) {
+      return;
+    }
+
+    if (!isOnline) {
+      setSubmitError(
+        'Necesitás conexión a internet para crear una mesa.',
+      );
+
       return;
     }
 
@@ -105,7 +115,7 @@ function CreateTablePage({ user }) {
               onChange={handleNicknameChange}
               maxLength={NICKNAME_MAX_LENGTH}
               autoComplete="nickname"
-              disabled={isSubmitting}
+              disabled={isSubmitting || !isOnline}
               aria-invalid={Boolean(nicknameError)}
               aria-describedby={
                 nicknameError
@@ -132,7 +142,7 @@ function CreateTablePage({ user }) {
 
           <fieldset
             className={styles.fieldset}
-            disabled={isSubmitting}
+            disabled={isSubmitting || !isOnline}
           >
             <legend className={styles.legend}>
               Tamaño de la grilla
@@ -180,7 +190,7 @@ function CreateTablePage({ user }) {
             <button
               type="submit"
               className="button button--primary"
-              disabled={isSubmitting}
+              disabled={isSubmitting || !isOnline}
             >
               {isSubmitting ? 'Creando mesa…' : 'Crear mesa'}
             </button>

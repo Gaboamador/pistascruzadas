@@ -7,6 +7,7 @@ import {
 import ConfirmModal, {
   CONFIRM_MODAL_TONES,
 } from '@/components/ConfirmModal';
+import useOnlineStatus from '@/hooks/useOnlineStatus';
 import {
   COORDINATE_RESULT,
   resolveCurrentCoordinate,
@@ -19,6 +20,8 @@ function PlayerCoordinateCard({
   uid,
   currentCoordinate,
 }) {
+  const isOnline = useOnlineStatus();
+  
   const [
     isResolving,
     setIsResolving,
@@ -47,6 +50,14 @@ function PlayerCoordinateCard({
       return;
     }
 
+    if (!isOnline) {
+      setError(
+        'Necesitás conexión a internet para resolver la coordenada.',
+      );
+
+      return;
+    }
+
     setError('');
     setPendingResult(result);
   };
@@ -61,11 +72,21 @@ function PlayerCoordinateCard({
 
   const handleConfirmResolve =
     async () => {
-      if (
+            if (
         !hasCoordinate
         || isResolving
         || !pendingResult
       ) {
+        return;
+      }
+
+      if (!isOnline) {
+        setError(
+          'Necesitás conexión a internet para resolver la coordenada.',
+        );
+
+        setPendingResult(null);
+
         return;
       }
 
@@ -143,7 +164,7 @@ function PlayerCoordinateCard({
                   COORDINATE_RESULT.FAILED,
                 )
               }
-              disabled={isResolving}
+              disabled={isResolving || !isOnline}
             >
               <FiX aria-hidden="true" />
 
@@ -160,7 +181,7 @@ function PlayerCoordinateCard({
                   COORDINATE_RESULT.CORRECT,
                 )
               }
-              disabled={isResolving}
+              disabled={isResolving || !isOnline}
             >
               <FiCheck
                 aria-hidden="true"

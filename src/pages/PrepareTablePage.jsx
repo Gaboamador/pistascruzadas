@@ -16,6 +16,7 @@ import {
   TABLE_STATUS,
 } from '@/constants/table';
 import useBoardPreparation from '@/hooks/useBoardPreparation';
+import useOnlineStatus from '@/hooks/useOnlineStatus';
 import useTableRoom from '@/hooks/useTableRoom';
 import { startGame } from '@/services/firebase/gameService';
 import {
@@ -226,6 +227,7 @@ function BoardPreparation({
   players,
 }) {
   const navigate = useNavigate();
+  const isOnline = useOnlineStatus();
 
   const {
     boardWords,
@@ -290,7 +292,7 @@ function BoardPreparation({
     && activePlayers.length
       <= coordinateCount;
 
-  const handleGridSizeChange =
+    const handleGridSizeChange =
     async (nextGridSize) => {
       if (
         isUpdatingGrid
@@ -298,6 +300,14 @@ function BoardPreparation({
         || nextGridSize
           === table.gridSize
       ) {
+        return;
+      }
+
+      if (!isOnline) {
+        setGridUpdateError(
+          'Necesitás conexión a internet para cambiar el tamaño de la grilla.',
+        );
+
         return;
       }
 
@@ -324,8 +334,18 @@ function BoardPreparation({
       }
     };
 
-  const handleRegenerateBoard =
+    const handleRegenerateBoard =
     () => {
+      if (!isOnline) {
+        setGridUpdateError(
+          'Necesitás conexión a internet para modificar las palabras.',
+        );
+
+        return;
+      }
+
+      setGridUpdateError('');
+
       updateBoardWords(() =>
         generateBoardWords(
           table.gridSize,
@@ -333,10 +353,20 @@ function BoardPreparation({
       );
     };
 
-  const handleRerollWord = (
+    const handleRerollWord = (
     axis,
     index,
   ) => {
+    if (!isOnline) {
+      setGridUpdateError(
+        'Necesitás conexión a internet para modificar las palabras.',
+      );
+
+      return;
+    }
+
+    setGridUpdateError('');
+
     updateBoardWords(
       (currentBoardWords) =>
         rerollBoardWord({
@@ -347,13 +377,21 @@ function BoardPreparation({
     );
   };
 
-  const openStartGameModal = () => {
+    const openStartGameModal = () => {
     if (
       isStartingGame
       || isSaving
       || isUpdatingGrid
       || !boardWords
     ) {
+      return;
+    }
+
+    if (!isOnline) {
+      setStartGameError(
+        'Necesitás conexión a internet para iniciar la partida.',
+      );
+
       return;
     }
 
@@ -378,7 +416,7 @@ function BoardPreparation({
       setIsStartModalOpen(false);
     };
 
-  const handleConfirmStartGame =
+    const handleConfirmStartGame =
     async () => {
       if (
         isStartingGame
@@ -387,6 +425,16 @@ function BoardPreparation({
         || !boardWords
         || !canStartGame
       ) {
+        return;
+      }
+
+      if (!isOnline) {
+        setStartGameError(
+          'Necesitás conexión a internet para iniciar la partida.',
+        );
+
+        setIsStartModalOpen(false);
+
         return;
       }
 
@@ -433,6 +481,10 @@ function BoardPreparation({
     || isSaving
     || isUpdatingGrid
     || isStartingGame;
+
+  const remoteControlsDisabled =
+    controlsDisabled
+    || !isOnline;
 
   return (
     <>
@@ -559,7 +611,7 @@ function BoardPreparation({
                           )
                         }
                         disabled={
-                          controlsDisabled
+                          remoteControlsDisabled
                           || isSelected
                         }
                         aria-pressed={
@@ -639,7 +691,7 @@ function BoardPreparation({
                   handleRegenerateBoard
                 }
                 disabled={
-                  controlsDisabled
+                  remoteControlsDisabled
                   || !boardWords
                 }
               >
@@ -725,7 +777,7 @@ function BoardPreparation({
                               )
                             }
                             disabled={
-                              controlsDisabled
+                              remoteControlsDisabled
                             }
                             aria-label={`Cambiar la palabra de la columna ${columnLabel}`}
                             title={`Cambiar ${word}`}
@@ -785,7 +837,7 @@ function BoardPreparation({
                               )
                             }
                             disabled={
-                              controlsDisabled
+                              remoteControlsDisabled
                             }
                             aria-label={`Cambiar la palabra de la fila ${rowIndex + 1}`}
                             title={`Cambiar ${boardWords.rowWords[rowIndex]}`}
@@ -861,7 +913,7 @@ function BoardPreparation({
                   openStartGameModal
                 }
                 disabled={
-                  controlsDisabled
+                  remoteControlsDisabled
                   || !boardWords
                   || !canStartGame
                 }
@@ -879,9 +931,11 @@ function BoardPreparation({
               role="status"
               aria-live="polite"
             >
-              {isSaving
-                ? 'Guardando cambios…'
-                : 'Preparación guardada'}
+              {!isOnline
+                ? 'Sin conexión: la preparación no puede modificarse'
+                : isSaving
+                  ? 'Guardando cambios…'
+                  : 'Preparación guardada'}
             </p>
           </section>
         </section>
