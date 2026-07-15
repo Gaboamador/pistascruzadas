@@ -16,6 +16,13 @@ export default defineConfig({
       registerType: 'prompt',
 
       /*
+      * El service worker se registra manualmente
+      * desde AppStatus para poder controlar
+      * el aviso de actualización.
+      */
+      injectRegister: null,
+
+      /*
        * No activamos el service worker durante npm run dev.
        * Así evitamos cachés que interfieran con el desarrollo.
        */

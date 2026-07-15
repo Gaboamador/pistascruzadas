@@ -2,7 +2,10 @@
   display: flex;
   flex: 1;
   width: 100%;
-  padding: $space-lg;
+
+  @include mobile-page-padding(
+    $space-lg
+  );
 }
 
 .content,
@@ -319,7 +322,7 @@
   align-items: center;
   justify-content: center;
   gap: $space-xs;
-  min-height: 2.5rem;
+  min-height: var(--touch-target-min);
   padding:
     $space-xs
     $space-sm;
@@ -505,9 +508,12 @@
 
 @media (max-width: $breakpoint-sm) {
   .page {
-    min-width: 0;
-    padding: $space-sm;
-  }
+  min-width: 0;
+
+  @include mobile-page-padding(
+    $space-sm
+  );
+}
 
   .room {
     min-width: 0;

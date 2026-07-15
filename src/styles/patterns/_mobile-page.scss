@@ -1,0 +1,23 @@
+@use "../tokens/spacing" as *;
+
+@mixin mobile-page-padding(
+  $base-padding
+) {
+  padding:
+    calc(
+      #{$base-padding}
+      + var(--safe-area-top)
+    )
+    calc(
+      #{$base-padding}
+      + var(--safe-area-right)
+    )
+    calc(
+      #{$base-padding}
+      + var(--safe-area-bottom)
+    )
+    calc(
+      #{$base-padding}
+      + var(--safe-area-left)
+    );
+}

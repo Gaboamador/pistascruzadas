@@ -317,7 +317,7 @@
 
   .actionButton {
     min-height:
-      2.5rem;
+      var(--touch-target-min);
     padding:
       $space-xs
       $space-sm;

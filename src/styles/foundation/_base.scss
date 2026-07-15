@@ -1,5 +1,44 @@
 @use "../refs" as *;
 
+:root {
+  /*
+   * Insets del sistema operativo.
+   *
+   * En navegadores normales suelen valer 0.
+   * En una PWA instalada permiten respetar
+   * notch, isla dinámica y barra inferior.
+   */
+  --safe-area-top:
+    env(
+      safe-area-inset-top,
+      0px
+    );
+
+  --safe-area-right:
+    env(
+      safe-area-inset-right,
+      0px
+    );
+
+  --safe-area-bottom:
+    env(
+      safe-area-inset-bottom,
+      0px
+    );
+
+  --safe-area-left:
+    env(
+      safe-area-inset-left,
+      0px
+    );
+
+  /*
+   * Tamaño mínimo recomendado para
+   * controles táctiles principales.
+   */
+  --touch-target-min: 2.75rem;
+}
+
 html,
 body,
 #root {
@@ -12,21 +51,45 @@ body,
 }
 
 html {
+  min-height: 100%;
   scrollbar-gutter: stable;
+
+  /*
+   * Evita desplazamientos laterales de toda
+   * la aplicación. El scroll horizontal de
+   * los tableros continúa funcionando porque
+   * se gestiona en sus propios contenedores.
+   */
+  overscroll-behavior-x: none;
 }
 
 body {
   min-width: 0;
+  min-height: 100%;
   font-family: $font-family-text;
   color: $color-text-primary;
   background-color: $color-bg-page;
   user-select: none;
+
+  /*
+   * Impide que un gesto horizontal arrastre
+   * toda la página o active navegación lateral.
+   *
+   * No bloqueamos el eje vertical para conservar
+   * el scroll normal y pull-to-refresh en navegador.
+   */
+  overscroll-behavior-x: none;
 }
 
 #root {
   display: flex;
   flex-direction: column;
   min-width: 0;
+
+  /*
+   * Fallback tradicional y unidad móvil estable.
+   */
+  min-height: 100vh;
   min-height: 100svh;
 }
 
@@ -44,13 +107,35 @@ select {
 }
 
 button,
+a,
+input,
+select,
+textarea,
+label {
+  /*
+   * Optimiza taps sin impedir que los inputs
+   * reciban foco ni que el tablero haga scroll.
+   */
+  touch-action: manipulation;
+}
+
+button,
 a {
   -webkit-tap-highlight-color: transparent;
 }
 
+img,
+svg {
+  /*
+   * Evita que una imagen o un icono se arrastren
+   * accidentalmente durante una interacción táctil.
+   */
+  -webkit-user-drag: none;
+}
+
 .input {
   width: 100%;
-  min-height: 2.75rem;
+  min-height: var(--touch-target-min);
   padding: $space-sm $space-md;
   color: $color-text-primary;
   background-color: $color-bg-elevated-2;
@@ -72,7 +157,15 @@ a {
 
   &:focus {
     border-color: $color-accent-primary;
-    box-shadow: 0 0 0 0.1875rem rgba($color-accent-primary, 0.18);
+    box-shadow:
+      0
+      0
+      0
+      0.1875rem
+      rgba(
+        $color-accent-primary,
+        0.18
+      );
   }
 
   &:disabled {
@@ -87,7 +180,15 @@ a {
 
   &:focus {
     border-color: $color-danger;
-    box-shadow: 0 0 0 0.1875rem rgba($color-danger, 0.16);
+    box-shadow:
+      0
+      0
+      0
+      0.1875rem
+      rgba(
+        $color-danger,
+        0.16
+      );
   }
 }
 
@@ -96,7 +197,7 @@ a {
   align-items: center;
   justify-content: center;
   gap: $space-xs;
-  min-height: 2.75rem;
+  min-height: var(--touch-target-min);
   padding: $space-sm $space-lg;
   border: 1px solid transparent;
   border-radius: $radius-md;
@@ -126,11 +227,13 @@ a {
   background-color: $color-accent-primary;
 
   &:not(:disabled):hover {
-    background-color: $color-accent-primary-hover;
+    background-color:
+      $color-accent-primary-hover;
   }
 
   &:not(:disabled):active {
-    background-color: $color-accent-primary-active;
+    background-color:
+      $color-accent-primary-active;
   }
 }
 
@@ -150,6 +253,29 @@ a {
 }
 
 :focus-visible {
-  outline: 0.1875rem solid rgba($color-accent-primary, 0.55);
+  outline:
+    0.1875rem
+    solid
+    rgba(
+      $color-accent-primary,
+      0.55
+    );
   outline-offset: 0.1875rem;
+}
+
+@media (
+  prefers-reduced-motion:
+    reduce
+) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration:
+      0.01ms !important;
+    animation-iteration-count:
+      1 !important;
+    transition-duration:
+      0.01ms !important;
+  }
 }

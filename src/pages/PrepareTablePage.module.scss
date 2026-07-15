@@ -2,7 +2,10 @@
   display: flex;
   flex: 1;
   width: 100%;
-  padding: $space-lg;
+
+  @include mobile-page-padding(
+    $space-lg
+  );
 }
 
 .content,
@@ -281,8 +284,8 @@
 .rerollButton {
   display: grid;
   place-items: center;
-  width: 2rem;
-  height: 2rem;
+  width: var(--touch-target-min);
+  height: var(--touch-target-min);
   padding: 0;
   color: $color-text-secondary;
   background-color: $color-bg-elevated-2;
@@ -368,7 +371,9 @@
 
 @media (max-width: $breakpoint-sm) {
   .page {
-    padding: $space-sm;
+    @include mobile-page-padding(
+      $space-sm
+    );
   }
 
   .header,

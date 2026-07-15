@@ -6,7 +6,23 @@
   display: grid;
   place-items: center;
 
-  padding: $space-lg;
+  padding:
+  calc(
+    $space-lg
+    + var(--safe-area-top)
+  )
+  calc(
+    $space-lg
+    + var(--safe-area-right)
+  )
+  calc(
+    $space-lg
+    + var(--safe-area-bottom)
+  )
+  calc(
+    $space-lg
+    + var(--safe-area-left)
+  );
 
   background-color: rgba(
     $color-bg-page,
@@ -200,9 +216,26 @@
 
 @media (max-width: $breakpoint-sm) {
   .backdrop {
-    align-items: end;
-    padding: $space-sm;
-  }
+  align-items: end;
+
+  padding:
+    calc(
+      $space-sm
+      + var(--safe-area-top)
+    )
+    calc(
+      $space-sm
+      + var(--safe-area-right)
+    )
+    calc(
+      $space-sm
+      + var(--safe-area-bottom)
+    )
+    calc(
+      $space-sm
+      + var(--safe-area-left)
+    );
+}
 
   .dialog {
     padding: $space-lg;
