@@ -1,0 +1,209 @@
+.container {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  z-index: 1100;
+  display: grid;
+  gap: $space-sm;
+  width: min(100%, 32rem);
+  padding:
+    $space-md
+    calc(
+      $space-md
+      + env(
+        safe-area-inset-right,
+        0px
+      )
+    )
+    calc(
+      $space-md
+      + env(
+        safe-area-inset-bottom,
+        0px
+      )
+    )
+    calc(
+      $space-md
+      + env(
+        safe-area-inset-left,
+        0px
+      )
+    );
+  pointer-events: none;
+}
+
+.notice {
+  display: grid;
+  grid-template-columns:
+    auto
+    minmax(0, 1fr);
+  align-items: center;
+  gap: $space-sm;
+  padding: $space-md;
+  color: $color-text-primary;
+  background-color: $color-bg-elevated;
+  border: 1px solid $color-border-strong;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+  pointer-events: auto;
+}
+
+.offlineNotice {
+  border-color:
+    rgba(
+      $color-danger,
+      0.62
+    );
+}
+
+.onlineNotice {
+  grid-template-columns:
+    auto
+    minmax(0, 1fr)
+    auto;
+  border-color:
+    rgba(
+      $color-success,
+      0.55
+    );
+}
+
+.updateNotice {
+  border-color:
+    rgba(
+      $color-accent-primary,
+      0.62
+    );
+}
+
+.icon {
+  width: 1.35rem;
+  height: 1.35rem;
+  color: $color-text-secondary;
+}
+
+.offlineNotice .icon {
+  color: $color-danger;
+}
+
+.onlineNotice .icon {
+  color: $color-success;
+}
+
+.updateNotice .icon {
+  color: $color-accent-primary;
+}
+
+.content {
+  min-width: 0;
+
+  strong {
+    display: block;
+    color: $color-text-primary;
+    font-size: $font-size-sm;
+    line-height: $line-height-tight;
+  }
+
+  p {
+    margin:
+      $space-xs
+      0
+      0;
+    color: $color-text-secondary;
+    font-size: $font-size-xs;
+    line-height: $line-height-normal;
+  }
+}
+
+.actions {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+  gap: $space-xs;
+}
+
+.laterButton,
+.updateButton,
+.closeButton {
+  font-family: $font-family-input;
+  font-weight: $font-weight-bold;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+}
+
+.laterButton,
+.updateButton {
+  min-height: 2.75rem;
+  padding:
+    $space-sm
+    $space-md;
+  border-radius: $radius-md;
+}
+
+.laterButton {
+  color: $color-text-primary;
+  background-color: $color-bg-elevated-2;
+  border: 1px solid $color-border;
+
+  &:hover:not(:disabled) {
+    border-color: $color-border-strong;
+  }
+}
+
+.updateButton {
+  color: $color-accent-primary-contrast;
+  background-color: $color-accent-primary;
+  border: 1px solid transparent;
+
+  &:hover:not(:disabled) {
+    background-color:
+      $color-accent-primary-hover;
+  }
+
+  &:active:not(:disabled) {
+    background-color:
+      $color-accent-primary-active;
+  }
+}
+
+.closeButton {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  color: $color-text-secondary;
+  background-color: transparent;
+  border: 0;
+  border-radius: $radius-md;
+
+  &:hover {
+    color: $color-text-primary;
+    background-color:
+      $color-bg-elevated-2;
+  }
+
+  svg {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+}
+
+@media (min-width: 40rem) {
+  .container {
+    right:
+      env(
+        safe-area-inset-right,
+        0px
+      );
+    width: 32rem;
+  }
+}

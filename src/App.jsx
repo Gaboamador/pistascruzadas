@@ -1,5 +1,9 @@
-import { Route, Routes } from 'react-router';
+import {
+  Route,
+  Routes,
+} from 'react-router';
 
+import AppStatus from '@/components/AppStatus';
 import AuthStatus from '@/components/AuthStatus';
 import useAnonymousAuth from '@/hooks/useAnonymousAuth';
 import CreateTablePage from '@/pages/CreateTablePage';
@@ -10,42 +14,78 @@ import PrepareTablePage from '@/pages/PrepareTablePage';
 import TablePage from '@/pages/TablePage';
 
 function App() {
-  const { user, isLoading, error } = useAnonymousAuth();
+  const {
+    user,
+    isLoading,
+    error,
+  } = useAnonymousAuth();
+
+  let content;
 
   if (isLoading) {
-    return <AuthStatus />;
-  }
+    content = <AuthStatus />;
+  } else if (error || !user) {
+    content = (
+      <AuthStatus error={error} />
+    );
+  } else {
+    content = (
+      <Routes>
+        <Route
+          path="/"
+          element={<HomePage />}
+        />
 
-  if (error || !user) {
-    return <AuthStatus error={error} />;
+        <Route
+          path="/crear-mesa"
+          element={
+            <CreateTablePage
+              user={user}
+            />
+          }
+        />
+
+        <Route
+          path="/unirse"
+          element={
+            <JoinTablePage
+              user={user}
+            />
+          }
+        />
+
+        <Route
+          path="/mesa/:tableCode"
+          element={
+            <TablePage
+              user={user}
+            />
+          }
+        />
+
+        <Route
+          path="/mesa/:tableCode/preparar"
+          element={
+            <PrepareTablePage
+              user={user}
+            />
+          }
+        />
+
+        <Route
+          path="*"
+          element={<NotFoundPage />}
+        />
+      </Routes>
+    );
   }
 
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
+    <>
+      {content}
 
-      <Route
-        path="/crear-mesa"
-        element={<CreateTablePage user={user} />}
-      />
-
-      <Route
-        path="/unirse"
-        element={<JoinTablePage user={user} />}
-      />
-
-      <Route
-        path="/mesa/:tableCode"
-        element={<TablePage user={user} />}
-      />
-
-      <Route
-        path="/mesa/:tableCode/preparar"
-        element={<PrepareTablePage user={user} />}
-      />
-
-      <Route path="*" element={<NotFoundPage />} />
-    </Routes>
+      <AppStatus />
+    </>
   );
 }
 
