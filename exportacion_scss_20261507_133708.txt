@@ -1,0 +1,3556 @@
+======================================== 
+EXPORTACION DE ARCHIVOS .SCSS 
+======================================== 
+Fecha: mi� 15/07/2026 13:37:08,21 
+Proyecto: C:\Users\amadorg\Documents\pprog\pistascruzadas 
+======================================== 
+ 
+==================== ARCHIVOS .SCSS EN src/ ==================== 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\components\AppStatus.module.scss ==================== 
+.container {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  z-index: 1100;
+  display: grid;
+  gap: $space-sm;
+  width: min(100%, 32rem);
+  padding:
+    $space-md
+    calc(
+      $space-md
+      + env(
+        safe-area-inset-right,
+        0px
+      )
+    )
+    calc(
+      $space-md
+      + env(
+        safe-area-inset-bottom,
+        0px
+      )
+    )
+    calc(
+      $space-md
+      + env(
+        safe-area-inset-left,
+        0px
+      )
+    );
+  pointer-events: none;
+}
+
+.notice {
+  display: grid;
+  grid-template-columns:
+    auto
+    minmax(0, 1fr);
+  align-items: center;
+  gap: $space-sm;
+  padding: $space-md;
+  color: $color-text-primary;
+  background-color: $color-bg-elevated;
+  border: 1px solid $color-border-strong;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+  pointer-events: auto;
+}
+
+.offlineNotice {
+  border-color:
+    rgba(
+      $color-danger,
+      0.62
+    );
+}
+
+.onlineNotice {
+  grid-template-columns:
+    auto
+    minmax(0, 1fr)
+    auto;
+  border-color:
+    rgba(
+      $color-success,
+      0.55
+    );
+}
+
+.updateNotice {
+  border-color:
+    rgba(
+      $color-accent-primary,
+      0.62
+    );
+}
+
+.icon {
+  width: 1.35rem;
+  height: 1.35rem;
+  color: $color-text-secondary;
+}
+
+.offlineNotice .icon {
+  color: $color-danger;
+}
+
+.onlineNotice .icon {
+  color: $color-success;
+}
+
+.updateNotice .icon {
+  color: $color-accent-primary;
+}
+
+.content {
+  min-width: 0;
+
+  strong {
+    display: block;
+    color: $color-text-primary;
+    font-size: $font-size-sm;
+    line-height: $line-height-tight;
+  }
+
+  p {
+    margin:
+      $space-xs
+      0
+      0;
+    color: $color-text-secondary;
+    font-size: $font-size-xs;
+    line-height: $line-height-normal;
+  }
+}
+
+.actions {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+  gap: $space-xs;
+}
+
+.laterButton,
+.updateButton,
+.closeButton {
+  font-family: $font-family-input;
+  font-weight: $font-weight-bold;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+}
+
+.laterButton,
+.updateButton {
+  min-height: 2.75rem;
+  padding:
+    $space-sm
+    $space-md;
+  border-radius: $radius-md;
+}
+
+.laterButton {
+  color: $color-text-primary;
+  background-color: $color-bg-elevated-2;
+  border: 1px solid $color-border;
+
+  &:hover:not(:disabled) {
+    border-color: $color-border-strong;
+  }
+}
+
+.updateButton {
+  color: $color-accent-primary-contrast;
+  background-color: $color-accent-primary;
+  border: 1px solid transparent;
+
+  &:hover:not(:disabled) {
+    background-color:
+      $color-accent-primary-hover;
+  }
+
+  &:active:not(:disabled) {
+    background-color:
+      $color-accent-primary-active;
+  }
+}
+
+.closeButton {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  color: $color-text-secondary;
+  background-color: transparent;
+  border: 0;
+  border-radius: $radius-md;
+
+  &:hover {
+    color: $color-text-primary;
+    background-color:
+      $color-bg-elevated-2;
+  }
+
+  svg {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+}
+
+@media (min-width: 40rem) {
+  .container {
+    width: 32rem;
+  }
+} 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\components\AuthStatus.module.scss ==================== 
+.page {
+  display: flex;
+  flex: 1;
+  width: 100%;
+
+  @include mobile-page-padding(
+    $space-lg
+  );
+}
+
+.status {
+  width: min(100%, $layout-content-narrow);
+  margin: auto;
+  padding: $space-xl;
+  text-align: center;
+  background-color: $color-bg-elevated;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+}
+
+.eyebrow {
+  margin: 0 0 $space-sm;
+  color: $color-accent-primary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-family: $font-family-display;
+  font-size: clamp($font-size-2xl, 8vw, $font-size-4xl);
+  line-height: $line-height-tight;
+}
+
+.description {
+  max-width: 34rem;
+  margin: $space-md auto 0;
+  color: $color-text-secondary;
+  line-height: $line-height-relaxed;
+}
+
+.description:has(+ button) {
+  margin-bottom: $space-xl;
+}
+
+@media (
+  max-width:
+    $breakpoint-sm
+) {
+  .page {
+    @include mobile-page-padding(
+      $space-sm
+    );
+  }
+
+  .status {
+    padding: $space-lg;
+  }
+} 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\components\ConfirmModal.module.scss ==================== 
+.backdrop {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+
+  display: grid;
+  place-items: center;
+
+  padding:
+  calc(
+    $space-lg
+    + var(--safe-area-top)
+  )
+  calc(
+    $space-lg
+    + var(--safe-area-right)
+  )
+  calc(
+    $space-lg
+    + var(--safe-area-bottom)
+  )
+  calc(
+    $space-lg
+    + var(--safe-area-left)
+  );
+
+  background-color: rgba(
+    $color-bg-page,
+    0.78
+  );
+  backdrop-filter: blur(4px);
+}
+
+.dialog {
+  width: min(100%, 30rem);
+  padding: $space-xl;
+
+  background-color: $color-bg-elevated;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-lg;
+}
+
+.iconContainer {
+  display: grid;
+  place-items: center;
+
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: $space-md;
+
+  color: $color-accent-primary;
+  background-color: rgba(
+    $color-accent-primary,
+    0.12
+  );
+  border: 1px solid rgba(
+    $color-accent-primary,
+    0.35
+  );
+  border-radius: 50%;
+
+  svg {
+    width: 1.35rem;
+    height: 1.35rem;
+  }
+}
+
+.content {
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+
+  color: $color-text-primary;
+  font-family: $font-family-display;
+  font-size: $font-size-xl;
+  line-height: $line-height-tight;
+}
+
+.description {
+  margin: $space-sm 0 0;
+
+  color: $color-text-secondary;
+  font-size: $font-size-sm;
+  line-height: $line-height-relaxed;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: $space-sm;
+
+  margin-top: $space-xl;
+}
+
+.confirmButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-xs;
+
+  min-height: 2.75rem;
+  padding: $space-sm $space-md;
+
+  color: $color-bg-page;
+  font: inherit;
+  font-weight: $font-weight-bold;
+
+  background-color: $color-accent-primary;
+  border: 1px solid transparent;
+  border-radius: $radius-md;
+
+  cursor: pointer;
+
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease,
+    filter 160ms ease;
+
+  &:hover:not(:disabled) {
+    filter: brightness(1.08);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  &:focus-visible {
+    outline: 3px solid rgba(
+      $color-accent-primary,
+      0.28
+    );
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: wait;
+    opacity: 0.58;
+  }
+}
+
+.dialogSuccess {
+  border-color: rgba(
+    $color-success,
+    0.45
+  );
+
+  .iconContainer {
+    color: $color-success;
+    background-color: rgba(
+      $color-success,
+      0.12
+    );
+    border-color: rgba(
+      $color-success,
+      0.35
+    );
+  }
+}
+
+.dialogWarning {
+  border-color: rgba(
+    $color-warning,
+    0.45
+  );
+
+  .iconContainer {
+    color: $color-warning;
+    background-color: rgba(
+      $color-warning,
+      0.12
+    );
+    border-color: rgba(
+      $color-warning,
+      0.35
+    );
+  }
+}
+
+.dialogDanger {
+  border-color: rgba(
+    $color-danger,
+    0.45
+  );
+
+  .iconContainer {
+    color: $color-danger;
+    background-color: rgba(
+      $color-danger,
+      0.12
+    );
+    border-color: rgba(
+      $color-danger,
+      0.35
+    );
+  }
+}
+
+.confirmButtonSuccess {
+  color: $color-bg-page;
+  background-color: $color-success;
+}
+
+.confirmButtonWarning {
+  color: $color-bg-page;
+  background-color: $color-warning;
+}
+
+.confirmButtonDanger {
+  color: $color-bg-page;
+  background-color: $color-danger;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .backdrop {
+  align-items: end;
+
+  padding:
+    calc(
+      $space-sm
+      + var(--safe-area-top)
+    )
+    calc(
+      $space-sm
+      + var(--safe-area-right)
+    )
+    calc(
+      $space-sm
+      + var(--safe-area-bottom)
+    )
+    calc(
+      $space-sm
+      + var(--safe-area-left)
+    );
+}
+
+  .dialog {
+    padding: $space-lg;
+  }
+
+  .actions {
+    grid-template-columns: 1fr;
+  }
+
+  .actions :global(.button),
+  .confirmButton {
+    width: 100%;
+  }
+} 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\components\FailedCoordinatesPanel.module.scss ==================== 
+.panel {
+  padding: $space-lg;
+  background-color: $color-bg-elevated;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-lg;
+}
+
+.eyebrow {
+  margin: 0 0 $space-xs;
+  color: $color-accent-primary;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-family: $font-family-display;
+  font-size: $font-size-2xl;
+  line-height: $line-height-tight;
+}
+
+.counter {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  padding: $space-xs;
+  color: $color-danger;
+  font-weight: $font-weight-bold;
+  background-color: rgba($color-danger, 0.1);
+  border: 1px solid rgba($color-danger, 0.35);
+  border-radius: $radius-pill;
+}
+
+.description {
+  max-width: 42rem;
+  margin: $space-sm 0 $space-lg;
+  color: $color-text-secondary;
+  font-size: $font-size-sm;
+  line-height: $line-height-relaxed;
+}
+
+.coordinateList {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(7rem, 1fr)
+  );
+  gap: $space-xs;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: none;
+}
+
+.coordinateItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-xs;
+  min-height: 4rem;
+  padding: $space-sm;
+  background-color: rgba($color-danger, 0.08);
+  border: 1px solid rgba($color-danger, 0.3);
+  border-radius: $radius-md;
+}
+
+.order {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+  color: $color-text-muted;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  background-color: $color-bg-elevated-2;
+  border-radius: $radius-pill;
+}
+
+.coordinate {
+  color: $color-danger;
+  font-family: $font-family-display;
+  font-size: $font-size-xl;
+  line-height: 1;
+  letter-spacing: 0.05em;
+}
+
+.emptyMessage {
+  margin: $space-sm 0 0;
+  color: $color-text-muted;
+  font-size: $font-size-sm;
+  line-height: $line-height-normal;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .panel {
+    padding: $space-sm;
+    border-radius: $radius-md;
+  }
+
+  .header {
+    gap: $space-sm;
+  }
+
+  .eyebrow {
+    margin-bottom: $space-2xs;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+  }
+
+  .title {
+    font-size: $font-size-lg;
+  }
+
+  .counter {
+    min-width: 2rem;
+    min-height: 2rem;
+    padding: $space-2xs;
+
+    font-size: $font-size-sm;
+  }
+
+  .description {
+    margin:
+      $space-xs
+      0
+      $space-sm;
+
+    font-size: $font-size-xs;
+    line-height: $line-height-normal;
+  }
+
+  .coordinateList {
+    grid-template-columns:
+      repeat(
+        auto-fill,
+        minmax(4.5rem, 1fr)
+      );
+    gap: $space-2xs;
+  }
+
+  .coordinateItem {
+    min-height: 3rem;
+    gap: $space-2xs;
+    padding: $space-xs;
+
+    border-radius: $radius-sm;
+  }
+
+  .order {
+    min-width: 1.25rem;
+    min-height: 1.25rem;
+
+    font-size: 0.65rem;
+  }
+
+  .coordinate {
+    font-size: $font-size-lg;
+  }
+
+  .emptyMessage {
+    margin-top: $space-xs;
+
+    font-size: $font-size-xs;
+    line-height: $line-height-normal;
+  }
+} 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\components\GameBoard.module.scss ==================== 
+.panel {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  padding: $space-lg;
+  overflow: hidden;
+
+  background-color: $color-bg-elevated;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-lg;
+  margin-bottom: $space-lg;
+}
+
+.eyebrow {
+  margin: 0 0 $space-xs;
+  color: $color-accent-primary;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-family: $font-family-display;
+  font-size: $font-size-2xl;
+  line-height: $line-height-tight;
+}
+
+.counter {
+  flex: 0 0 auto;
+  padding: $space-xs $space-sm;
+  color: $color-accent-primary;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  background-color: rgba($color-accent-primary, 0.12);
+  border: 1px solid rgba($color-accent-primary, 0.35);
+  border-radius: $radius-pill;
+}
+
+.boardScroller {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: $space-xs;
+
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.board {
+  --grid-size: 4;
+
+  display: grid;
+  grid-template-columns:
+    minmax(7rem, max-content)
+    repeat(
+      var(--grid-size),
+      minmax(6rem, max-content)
+    );
+  justify-content: center;
+  gap: $space-xs;
+
+  width: max-content;
+  min-width: 100%;
+}
+
+.corner {
+  min-height: 5.5rem;
+}
+
+.columnHeader,
+.rowHeader {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: $space-xs;
+  min-width: 0;
+  padding: $space-sm;
+  text-align: center;
+  background-color: rgba($color-accent-primary, 0.1);
+  border: 1px solid rgba($color-accent-primary, 0.35);
+  border-radius: $radius-md;
+}
+
+.columnHeader {
+  min-height: 5.5rem;
+}
+
+.rowHeader {
+  min-height: 4.75rem;
+}
+
+.axisLabel {
+  color: $color-accent-primary;
+  font-family: $font-family-display;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+}
+
+.axisWord {
+  color: $color-text-primary;
+  font-size: $font-size-sm;
+  line-height: $line-height-normal;
+  text-transform: uppercase;
+
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.boardRow {
+  display: contents;
+}
+
+.coordinateCell {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 4.75rem;
+  color: $color-text-muted;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  background-color: $color-bg-elevated-2;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.coordinateCellRevealed {
+  color: $color-accent-primary-contrast;
+  background-color: $color-success;
+  border-color: $color-success;
+  box-shadow: $shadow-sm;
+}
+
+.status {
+  display: grid;
+  place-items: center;
+  min-height: 12rem;
+  padding: $space-xl;
+  color: $color-text-secondary;
+  text-align: center;
+  background-color: $color-bg-elevated;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .panel {
+    padding: $space-sm;
+    border-radius: $radius-md;
+  }
+
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: $space-sm;
+    margin-bottom: $space-md;
+  }
+
+  .title {
+    font-size: $font-size-lg;
+  }
+
+  .counter {
+    padding:
+      $space-2xs
+      $space-xs;
+
+    font-size: $font-size-xs;
+  }
+
+  .board {
+  grid-template-columns:
+    3.25rem
+    repeat(
+      var(--grid-size),
+      minmax(3.5rem, max-content)
+    );
+
+  gap: $space-2xs;
+}
+
+  .corner,
+  .columnHeader {
+    min-height: 4.5rem;
+  }
+
+  .rowHeader,
+  .coordinateCell {
+    min-height: 5.5rem;
+  }
+
+  .columnHeader,
+  .rowHeader {
+    position: relative;
+    gap: $space-2xs;
+    padding: $space-2xs;
+    border-radius: $radius-sm;
+  }
+
+  .rowHeader {
+  position: relative;
+  padding:
+    $space-xs
+    $space-2xs;
+  overflow: hidden;
+}
+
+.rowHeader .axisLabel {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  font-size: $font-size-md;
+
+  transform: translateX(50%);
+}
+
+.columnHeader {
+  padding-top: $space-md;
+}
+
+.columnHeader .axisLabel {
+  position: absolute;
+  top: 0;
+  left: 50%;
+
+  font-size: $font-size-md;
+
+  transform: translateX(-50%);
+}
+
+.rowHeader .axisWord {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  max-width: none;
+
+  font-size: $font-size-xs;
+  line-height: 1;
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
+
+  transform:
+    translate(-50%, -50%)
+    rotate(-90deg);
+  transform-origin: center;
+}
+
+  .coordinateCell {
+    padding: $space-2xs;
+    font-size: $font-size-xs;
+    border-radius: $radius-sm;
+  }
+
+  .axisLabel {
+    font-size: $font-size-md;
+  }
+
+  .axisWord {
+  font-size: $font-size-xs;
+  line-height: $line-height-tight;
+  text-transform: uppercase;
+
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+}
+ 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\components\PlayerCoordinateCard.module.scss ==================== 
+.card {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto;
+  align-items: center;
+  gap: $space-xl;
+  padding: $space-lg;
+
+  background-color:
+    $color-bg-elevated;
+  border:
+    1px solid
+    $color-border;
+  border-radius:
+    $radius-lg;
+  box-shadow:
+    $shadow-md;
+}
+
+.cardActive {
+  border-color:
+    rgba(
+      $color-accent-primary,
+      0.55
+    );
+
+  box-shadow:
+    inset 0 0 0 1px
+      rgba(
+        $color-accent-primary,
+        0.15
+      ),
+    $shadow-md;
+}
+
+.content {
+  min-width: 0;
+}
+
+.eyebrow {
+  margin:
+    0
+    0
+    $space-xs;
+
+  color:
+    $color-accent-primary;
+  font-size:
+    $font-size-xs;
+  font-weight:
+    $font-weight-bold;
+  letter-spacing:
+    0.1em;
+  text-transform:
+    uppercase;
+}
+
+.title {
+  margin: 0;
+
+  font-family:
+    $font-family-display;
+  font-size:
+    $font-size-2xl;
+  line-height:
+    $line-height-tight;
+}
+
+.description {
+  max-width: 42rem;
+  margin:
+    $space-sm
+    0
+    0;
+
+  color:
+    $color-text-secondary;
+  font-size:
+    $font-size-sm;
+  line-height:
+    $line-height-relaxed;
+}
+
+.coordinate {
+  display: grid;
+  place-items: center;
+
+  min-width: 7rem;
+  min-height: 7rem;
+  padding:
+    $space-lg;
+
+  color:
+    $color-accent-primary-contrast;
+  font-family:
+    $font-family-display;
+  font-size:
+    clamp(
+      $font-size-3xl,
+      10vw,
+      4rem
+    );
+  font-weight:
+    $font-weight-bold;
+  line-height: 1;
+  letter-spacing:
+    0.08em;
+
+  background-color:
+    $color-accent-primary;
+  border-radius:
+    $radius-lg;
+  box-shadow:
+    $shadow-sm;
+}
+
+.actions {
+  display: grid;
+  grid-column:
+    1 / -1;
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+  gap:
+    $space-sm;
+}
+
+.actionButton {
+  display:
+    inline-flex;
+  align-items:
+    center;
+  justify-content:
+    center;
+  gap:
+    $space-xs;
+
+  min-height: 3rem;
+  padding:
+    $space-sm
+    $space-md;
+
+  color:
+    $color-text-primary;
+  font: inherit;
+  font-weight:
+    $font-weight-bold;
+
+  border:
+    1px solid
+    transparent;
+  border-radius:
+    $radius-md;
+
+  cursor: pointer;
+
+  transition:
+    filter 160ms ease,
+    opacity 160ms ease,
+    transform 160ms ease;
+
+  &:hover:not(:disabled) {
+    filter:
+      brightness(1.08);
+  }
+
+  &:active:not(:disabled) {
+    transform:
+      translateY(1px);
+  }
+
+  &:disabled {
+    cursor: wait;
+    opacity: 0.65;
+  }
+
+  svg {
+    flex:
+      0 0 auto;
+
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+}
+
+.failedButton {
+  color:
+    $color-danger;
+  background-color:
+    rgba(
+      $color-danger,
+      0.1
+    );
+  border-color:
+    rgba(
+      $color-danger,
+      0.4
+    );
+}
+
+.correctButton {
+  color:
+    $color-accent-primary-contrast;
+  background-color:
+    $color-success;
+  border-color:
+    $color-success;
+}
+
+.emptyMessage {
+  grid-column:
+    1 / -1;
+
+  margin: 0;
+
+  color:
+    $color-text-muted;
+  font-size:
+    $font-size-sm;
+}
+
+.error {
+  grid-column:
+    1 / -1;
+
+  margin: 0;
+  padding:
+    $space-sm
+    $space-md;
+
+  color:
+    $color-danger;
+  font-size:
+    $font-size-sm;
+
+  background-color:
+    rgba(
+      $color-danger,
+      0.1
+    );
+  border:
+    1px solid
+    rgba(
+      $color-danger,
+      0.4
+    );
+  border-radius:
+    $radius-md;
+}
+
+@media (
+  max-width:
+    $breakpoint-sm
+) {
+  .card {
+    grid-template-columns:
+      minmax(0, 1fr)
+      auto;
+    gap:
+      $space-sm;
+    padding:
+      $space-sm;
+
+    border-radius:
+      $radius-md;
+  }
+
+  .eyebrow {
+    margin-bottom:
+      $space-2xs;
+
+    font-size:
+      0.65rem;
+    letter-spacing:
+      0.08em;
+  }
+
+  .title {
+    font-size:
+      $font-size-lg;
+  }
+
+  .description {
+    margin-top:
+      $space-xs;
+
+    font-size:
+      $font-size-xs;
+    line-height:
+      $line-height-normal;
+  }
+
+  .coordinate {
+    min-width:
+      4.25rem;
+    min-height:
+      4.25rem;
+    padding:
+      $space-xs;
+
+    font-size:
+      $font-size-2xl;
+    letter-spacing:
+      0.04em;
+
+    border-radius:
+      $radius-md;
+  }
+
+  .actions {
+    gap:
+      $space-xs;
+  }
+
+  .actionButton {
+    min-height:
+      var(--touch-target-min);
+    padding:
+      $space-xs
+      $space-sm;
+
+    font-size:
+      $font-size-sm;
+
+    border-radius:
+      $radius-sm;
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  .emptyMessage {
+    font-size:
+      $font-size-xs;
+  }
+
+  .error {
+    padding:
+      $space-xs
+      $space-sm;
+
+    font-size:
+      $font-size-xs;
+    border-radius:
+      $radius-sm;
+  }
+}
+
+@media (
+  max-width: 24rem
+) {
+  .card {
+    grid-template-columns:
+      1fr;
+  }
+
+  .coordinate {
+    width: 100%;
+    min-height:
+      3.75rem;
+  }
+
+  .actions {
+    grid-template-columns:
+      1fr;
+  }
+} 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\pages\CreateTablePage.module.scss ==================== 
+.page {
+  @include centered-page;
+}
+
+.content {
+  @include centered-panel;
+}
+
+.eyebrow {
+  margin: 0 0 $space-sm;
+  color: $color-accent-primary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-family: $font-family-display;
+  font-size: clamp($font-size-2xl, 8vw, $font-size-4xl);
+  line-height: $line-height-tight;
+}
+
+.description {
+  max-width: 34rem;
+  margin: $space-md auto 0;
+  color: $color-text-secondary;
+  line-height: $line-height-relaxed;
+}
+
+.form {
+  @include form-stack;
+}
+
+.field {
+  @include form-field;
+}
+
+.label {
+  @include field-label;
+}
+
+.help {
+  @include field-help;
+}
+
+.error {
+  @include field-error;
+}
+
+.fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+
+  &:disabled {
+    opacity: 0.6;
+  }
+}
+
+.legend {
+  @include field-label;
+
+  margin-bottom: $space-xs;
+}
+
+.gridOptions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: $space-xs;
+}
+
+.gridOption {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+
+.radio {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.gridOptionContent {
+  display: grid;
+  gap: $space-2xs;
+  min-height: 5rem;
+  padding: $space-md $space-xs;
+  color: $color-text-secondary;
+  text-align: center;
+  background-color: $color-bg-elevated-2;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
+
+  strong {
+    color: $color-text-primary;
+    font-size: $font-size-lg;
+  }
+
+  span {
+    font-size: $font-size-xs;
+    line-height: $line-height-normal;
+  }
+}
+
+.gridOption:hover .gridOptionContent {
+  border-color: $color-border-strong;
+}
+
+.radio:checked + .gridOptionContent {
+  color: $color-text-primary;
+  background-color: rgba($color-accent-primary, 0.12);
+  border-color: $color-accent-primary;
+  box-shadow: inset 0 0 0 1px rgba($color-accent-primary, 0.25);
+}
+
+.radio:focus-visible + .gridOptionContent {
+  outline: 0.1875rem solid rgba($color-accent-primary, 0.55);
+  outline-offset: 0.1875rem;
+}
+
+.submitError {
+  @include field-error;
+
+  padding: $space-sm $space-md;
+  background-color: rgba($color-danger, 0.1);
+  border: 1px solid rgba($color-danger, 0.4);
+  border-radius: $radius-md;
+}
+
+.actions {
+  display: grid;
+  gap: $space-sm;
+}
+
+.actions a[aria-disabled="true"] {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .gridOptions {
+    grid-template-columns: 1fr;
+  }
+
+  .gridOptionContent {
+    min-height: auto;
+  }
+} 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\pages\HomePage.module.scss ==================== 
+.page {
+  @include centered-page;
+}
+
+.intro {
+  @include centered-panel;
+}
+
+.eyebrow {
+  margin: 0 0 $space-sm;
+  color: $color-accent-primary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-family: $font-family-display;
+  font-size: clamp($font-size-2xl, 8vw, $font-size-4xl);
+  line-height: $line-height-tight;
+}
+
+.description {
+  max-width: 34rem;
+  margin: $space-md auto 0;
+  color: $color-text-secondary;
+  line-height: $line-height-relaxed;
+}
+
+.actions {
+  display: grid;
+  gap: $space-sm;
+  width: min(100%, 22rem);
+  margin: $space-xl auto 0;
+} 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\pages\JoinTablePage.module.scss ==================== 
+.page {
+  @include centered-page;
+}
+
+.content {
+  @include centered-panel;
+}
+
+.eyebrow {
+  margin: 0 0 $space-sm;
+  color: $color-accent-primary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-family: $font-family-display;
+  font-size: clamp(
+    $font-size-2xl,
+    8vw,
+    $font-size-4xl
+  );
+  line-height: $line-height-tight;
+}
+
+.description {
+  max-width: 34rem;
+  margin: $space-md auto 0;
+  color: $color-text-secondary;
+  line-height: $line-height-relaxed;
+}
+
+.form {
+  @include form-stack;
+}
+
+.field {
+  @include form-field;
+}
+
+.label {
+  @include field-label;
+}
+
+.help {
+  @include field-help;
+}
+
+.error {
+  @include field-error;
+}
+
+.codeInput {
+  font-family: $font-family-display;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.18em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.submitError {
+  @include field-error;
+
+  padding: $space-sm $space-md;
+  background-color: rgba(
+    $color-danger,
+    0.1
+  );
+  border: 1px solid rgba(
+    $color-danger,
+    0.4
+  );
+  border-radius: $radius-md;
+}
+
+.actions {
+  display: grid;
+  gap: $space-sm;
+}
+
+.actions a[aria-disabled="true"] {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.requestSummary {
+  display: grid;
+  gap: $space-xs;
+  margin: $space-xl 0 $space-md;
+  text-align: left;
+}
+
+.requestDetail {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-md;
+  min-height: 3.5rem;
+  padding: $space-sm $space-md;
+  background-color: $color-bg-elevated-2;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+}
+
+.requestLabel {
+  color: $color-text-muted;
+  font-size: $font-size-xs;
+}
+
+.requestCode {
+  font-family: $font-family-display;
+  letter-spacing: 0.14em;
+}
+
+.requestStatus {
+  margin: 0 0 $space-md;
+  padding: $space-sm $space-md;
+  color: $color-warning;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  background-color: rgba(
+    $color-warning,
+    0.1
+  );
+  border: 1px solid rgba(
+    $color-warning,
+    0.4
+  );
+  border-radius: $radius-md;
+}
+
+.requestApproved {
+  margin: 0 0 $space-md;
+  padding: $space-sm $space-md;
+  color: $color-success;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  background-color: rgba(
+    $color-success,
+    0.1
+  );
+  border: 1px solid rgba(
+    $color-success,
+    0.4
+  );
+  border-radius: $radius-md;
+}
+
+.requestRejected {
+  margin: 0 0 $space-md;
+  padding: $space-sm $space-md;
+  color: $color-danger;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  background-color: rgba(
+    $color-danger,
+    0.1
+  );
+  border: 1px solid rgba(
+    $color-danger,
+    0.4
+  );
+  border-radius: $radius-md;
+}
+
+.requestError {
+  margin: 0 0 $space-md;
+  padding: $space-sm $space-md;
+  color: $color-danger;
+  font-size: $font-size-sm;
+  line-height: $line-height-normal;
+  background-color: rgba(
+    $color-danger,
+    0.1
+  );
+  border: 1px solid rgba(
+    $color-danger,
+    0.4
+  );
+  border-radius: $radius-md;
+}
+
+.requestHelp {
+  margin: 0 0 $space-xl;
+  color: $color-text-muted;
+  font-size: $font-size-sm;
+  line-height: $line-height-relaxed;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .requestDetail {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: $space-2xs;
+  }
+} 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\pages\NotFoundPage.module.scss ==================== 
+.page {
+  @include centered-page;
+}
+
+.content {
+  @include centered-panel;
+}
+
+.code {
+  margin: 0 0 $space-xs;
+  color: $color-accent-primary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.12em;
+}
+
+.title {
+  margin: 0;
+  font-family: $font-family-display;
+  font-size: clamp($font-size-2xl, 8vw, $font-size-4xl);
+  line-height: $line-height-tight;
+}
+
+.description {
+  max-width: 34rem;
+  margin: $space-md auto $space-xl;
+  color: $color-text-secondary;
+  line-height: $line-height-relaxed;
+} 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\pages\PrepareTablePage.module.scss ==================== 
+.page {
+  display: flex;
+  flex: 1;
+  width: 100%;
+
+  @include mobile-page-padding(
+    $space-lg
+  );
+}
+
+.content,
+.layout {
+  width: min(100%, $layout-content-default);
+  margin: auto;
+}
+
+.content {
+  @include centered-panel;
+}
+
+.layout {
+  display: grid;
+  gap: $space-lg;
+}
+
+.header,
+.panel {
+  padding: $space-lg;
+  background-color: $color-bg-elevated;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.header,
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-lg;
+}
+
+.eyebrow,
+.sectionEyebrow {
+  margin: 0 0 $space-xs;
+  color: $color-accent-primary;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-family: $font-family-display;
+  font-size: clamp($font-size-2xl, 8vw, $font-size-4xl);
+  line-height: $line-height-tight;
+}
+
+.code {
+  margin: 0;
+  font-family: $font-family-display;
+  font-size: clamp($font-size-2xl, 10vw, $font-size-4xl);
+  line-height: $line-height-tight;
+  letter-spacing: 0.14em;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-family: $font-family-display;
+  font-size: $font-size-2xl;
+  line-height: $line-height-tight;
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: $space-xs;
+}
+
+.statBadge {
+  flex: 0 0 auto;
+  padding: $space-xs $space-sm;
+  color: $color-accent-primary;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  background-color: rgba($color-accent-primary, 0.12);
+  border: 1px solid rgba($color-accent-primary, 0.35);
+  border-radius: $radius-pill;
+}
+
+.gridSizeSection {
+  display: grid;
+  gap: $space-md;
+  margin-top: $space-xl;
+  padding: $space-lg;
+  background-color: $color-bg-elevated-2;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+}
+
+.gridSizeTitle {
+  margin: 0;
+  color: $color-text-primary;
+  font-family: $font-family-display;
+  font-size: $font-size-lg;
+  line-height: $line-height-tight;
+}
+
+.gridSizeHelp {
+  margin: $space-xs 0 0;
+  color: $color-text-muted;
+  font-size: $font-size-xs;
+  line-height: $line-height-normal;
+}
+
+.gridSizeOptions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: $space-xs;
+}
+
+.gridSizeButton {
+  display: grid;
+  gap: $space-2xs;
+  min-width: 0;
+  min-height: 4.5rem;
+  padding: $space-sm;
+  color: $color-text-secondary;
+  text-align: center;
+  background-color: $color-bg-elevated;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  cursor: pointer;
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+
+  strong {
+    color: $color-text-primary;
+    font-size: $font-size-lg;
+  }
+
+  span {
+    font-size: $font-size-xs;
+    line-height: $line-height-normal;
+  }
+
+  &:hover:not(:disabled) {
+    border-color: $color-border-strong;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.gridSizeButtonSelected {
+  color: $color-text-primary;
+  background-color: rgba($color-accent-primary, 0.12);
+  border-color: $color-accent-primary;
+  box-shadow: inset 0 0 0 1px rgba($color-accent-primary, 0.25);
+  opacity: 1;
+}
+
+.operationError {
+  margin: $space-md 0 0;
+  padding: $space-sm $space-md;
+  color: $color-danger;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  line-height: $line-height-normal;
+  background-color: rgba($color-danger, 0.1);
+  border: 1px solid rgba($color-danger, 0.4);
+  border-radius: $radius-md;
+}
+
+.preparationToolbar {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: $space-lg;
+  margin: $space-md 0 $space-xl;
+}
+
+.description {
+  max-width: 44rem;
+  margin: 0;
+  color: $color-text-secondary;
+  line-height: $line-height-relaxed;
+}
+
+.content .description {
+  margin: $space-md auto $space-xl;
+}
+
+.boardLoading {
+  display: grid;
+  place-items: center;
+  min-height: 12rem;
+  padding: $space-xl;
+  color: $color-text-secondary;
+  background-color: $color-bg-elevated-2;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+}
+
+.boardScroller {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  padding-bottom: $space-xs;
+
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.board {
+  --grid-size: 4;
+
+  display: grid;
+  grid-template-columns:
+    minmax(7rem, max-content)
+    repeat(
+      var(--grid-size),
+      minmax(6rem, max-content)
+    );
+  gap: $space-xs;
+
+  width: max-content;
+  min-width: 100%;
+}
+
+.corner {
+  min-height: 7.5rem;
+}
+
+.columnHeader,
+.rowHeader {
+  position: relative;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: $space-xs;
+  min-width: 0;
+  padding: $space-sm;
+  text-align: center;
+  background-color: rgba($color-accent-primary, 0.1);
+  border: 1px solid rgba($color-accent-primary, 0.35);
+  border-radius: $radius-md;
+}
+
+.columnHeader {
+  min-height: 7.5rem;
+}
+
+.axisLabel {
+  color: $color-accent-primary;
+  font-family: $font-family-display;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+}
+
+.axisWord {
+  color: $color-text-primary;
+  font-size: $font-size-sm;
+  line-height: $line-height-normal;
+  text-transform: uppercase;
+
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.rerollButton {
+  display: grid;
+  place-items: center;
+  width: var(--touch-target-min);
+  height: var(--touch-target-min);
+  padding: 0;
+  color: $color-text-secondary;
+  background-color: $color-bg-elevated-2;
+  border: 1px solid $color-border;
+  border-radius: $radius-pill;
+  cursor: pointer;
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease;
+
+  &:hover {
+    color: $color-accent-primary;
+    border-color: $color-accent-primary;
+  }
+
+  &:active {
+    transform: rotate(45deg);
+  }
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+.boardRow {
+  display: contents;
+}
+
+.rowHeader {
+  min-height: 5.5rem;
+}
+
+.coordinateCell {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 5.5rem;
+  color: $color-text-muted;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  background-color: $color-bg-elevated-2;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+}
+
+.startSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-lg;
+  margin-top: $space-xl;
+  padding: $space-lg;
+  background-color: rgba($color-accent-primary, 0.08);
+  border: 1px solid rgba($color-accent-primary, 0.3);
+  border-radius: $radius-md;
+}
+
+.startTitle {
+  margin: 0;
+  color: $color-text-primary;
+  font-family: $font-family-display;
+  font-size: $font-size-lg;
+  line-height: $line-height-tight;
+}
+
+.startDescription {
+  max-width: 42rem;
+  margin: $space-xs 0 0;
+  color: $color-text-secondary;
+  font-size: $font-size-sm;
+  line-height: $line-height-normal;
+}
+
+.saveStatus {
+  margin: $space-lg 0 0;
+  color: $color-text-muted;
+  font-size: $font-size-xs;
+  line-height: $line-height-normal;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .page {
+    @include mobile-page-padding(
+      $space-sm
+    );
+  }
+
+  .header,
+  .panelHeader,
+  .preparationToolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .header :global(.button),
+  .preparationToolbar :global(.button) {
+    width: 100%;
+  }
+
+  .stats {
+    justify-content: flex-start;
+  }
+
+  .board {
+    grid-template-columns:
+      minmax(5rem, max-content)
+      repeat(
+        var(--grid-size),
+        minmax(4.25rem, max-content)
+      );
+
+    gap: $space-2xs;
+  }
+
+  .rowHeader,
+  .coordinateCell {
+    min-height: 4rem;
+  }
+
+  .columnHeader,
+  .rowHeader,
+  .coordinateCell {
+    gap: $space-2xs;
+    padding: $space-xs;
+    border-radius: $radius-sm;
+  }
+
+  .gridSizeOptions {
+    grid-template-columns: 1fr;
+  }
+
+  .startSection {
+  align-items: stretch;
+  flex-direction: column;
+}
+
+.startSection :global(.button) {
+  width: 100%;
+}
+  .coordinateCell {
+    padding: $space-2xs;
+    font-size: $font-size-xs;
+    border-radius: $radius-sm;
+  }
+
+  .axisLabel {
+    font-size: $font-size-md;
+  }
+
+  .axisWord {
+    font-size: $font-size-xs;
+    line-height: $line-height-tight;
+    text-transform: uppercase;
+
+    white-space: nowrap;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+}
+ 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\pages\TablePage.module.scss ==================== 
+.page {
+  display: flex;
+  flex: 1;
+  width: 100%;
+
+  @include mobile-page-padding(
+    $space-lg
+  );
+}
+
+.content,
+.room {
+  width: min(
+    100%,
+    $layout-content-default
+  );
+  min-width: 0;
+  margin: auto;
+}
+
+.content {
+  @include centered-panel;
+}
+
+.room {
+  display: grid;
+  gap: $space-lg;
+}
+
+.header,
+.playersPanel,
+.requestsPanel,
+.footer {
+  padding: $space-lg;
+  background-color: $color-bg-elevated;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-lg;
+}
+
+.eyebrow,
+.sectionEyebrow {
+  margin: 0 0 $space-xs;
+  color: $color-accent-primary;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-family: $font-family-display;
+  font-size: clamp(
+    $font-size-2xl,
+    8vw,
+    $font-size-4xl
+  );
+  line-height: $line-height-tight;
+}
+
+.code {
+  margin: 0;
+  font-family: $font-family-display;
+  font-size: clamp(
+    $font-size-2xl,
+    10vw,
+    $font-size-4xl
+  );
+  line-height: $line-height-tight;
+  letter-spacing: 0.14em;
+}
+
+.description {
+  max-width: 34rem;
+  margin:
+    $space-md
+    auto
+    $space-xl;
+  color: $color-text-secondary;
+  line-height: $line-height-relaxed;
+}
+
+.identity {
+  display: grid;
+  justify-items: end;
+  gap: $space-2xs;
+  text-align: right;
+}
+
+.identityLabel {
+  color: $color-text-muted;
+  font-size: $font-size-xs;
+}
+
+.hostBadge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
+  padding:
+    $space-2xs
+    $space-xs;
+  color: $color-accent-primary;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  background-color: rgba(
+    $color-accent-primary,
+    0.12
+  );
+  border: 1px solid rgba(
+    $color-accent-primary,
+    0.35
+  );
+  border-radius: $radius-pill;
+}
+
+.finishedPanel {
+  padding: $space-lg;
+  text-align: center;
+  background-color: rgba(
+    $color-success,
+    0.1
+  );
+  border: 1px solid rgba(
+    $color-success,
+    0.4
+  );
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+}
+
+.finishedEyebrow {
+  margin: 0 0 $space-xs;
+  color: $color-success;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.finishedTitle {
+  margin: 0;
+  color: $color-text-primary;
+  font-family: $font-family-display;
+  font-size: $font-size-2xl;
+  line-height: $line-height-tight;
+}
+
+.finishedDescription {
+  max-width: 42rem;
+  margin: $space-sm auto 0;
+  color: $color-text-secondary;
+  font-size: $font-size-sm;
+  line-height: $line-height-relaxed;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-md;
+  margin-bottom: $space-md;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-family: $font-family-display;
+  font-size: $font-size-2xl;
+  line-height: $line-height-tight;
+}
+
+.playerCount,
+.requestCount {
+  display: grid;
+  place-items: center;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  padding: $space-xs;
+  font-weight: $font-weight-bold;
+  border-radius: $radius-pill;
+}
+
+.playerCount {
+  color: $color-accent-primary-contrast;
+  background-color: $color-accent-primary;
+}
+
+.requestCount {
+  color: $color-warning;
+  background-color: rgba(
+    $color-warning,
+    0.12
+  );
+  border: 1px solid rgba(
+    $color-warning,
+    0.4
+  );
+}
+
+.playerList,
+.requestList {
+  display: grid;
+  gap: $space-xs;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.player,
+.requestItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-md;
+  min-height: 3.5rem;
+  padding:
+    $space-sm
+    $space-md;
+  background-color: $color-bg-elevated-2;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+}
+
+.requestItem {
+  align-items: center;
+}
+
+.playerMain,
+.requestMain {
+  display: flex;
+  align-items: center;
+  gap: $space-xs;
+  min-width: 0;
+}
+
+.playerName,
+.requestNickname {
+  overflow: hidden;
+  font-weight: $font-weight-bold;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.youLabel {
+  color: $color-text-muted;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+}
+
+.requestsDescription {
+  max-width: 44rem;
+  margin:
+    0
+    0
+    $space-md;
+  color: $color-text-secondary;
+  font-size: $font-size-sm;
+  line-height: $line-height-relaxed;
+}
+
+.requestsStatus,
+.requestsEmpty {
+  margin: 0;
+  color: $color-text-muted;
+  font-size: $font-size-sm;
+  line-height: $line-height-normal;
+}
+
+.requestsError {
+  margin: 0;
+  padding:
+    $space-sm
+    $space-md;
+  color: $color-danger;
+  font-size: $font-size-sm;
+  background-color: rgba(
+    $color-danger,
+    0.1
+  );
+  border: 1px solid rgba(
+    $color-danger,
+    0.4
+  );
+  border-radius: $radius-md;
+}
+
+.requestStatusBadge {
+  flex: 0 0 auto;
+  padding:
+    $space-2xs
+    $space-xs;
+  color: $color-warning;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  background-color: rgba(
+    $color-warning,
+    0.1
+  );
+  border: 1px solid rgba(
+    $color-warning,
+    0.35
+  );
+  border-radius: $radius-pill;
+}
+
+.requestActions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: $space-xs;
+}
+
+.rejectRequestButton,
+.approveRequestButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-xs;
+  min-height: var(--touch-target-min);
+  padding:
+    $space-xs
+    $space-sm;
+  font: inherit;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  border-radius: $radius-md;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    opacity 160ms ease;
+
+  &:disabled {
+    cursor: wait;
+    opacity: 0.6;
+  }
+
+  svg {
+    flex: 0 0 auto;
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+.rejectRequestButton {
+  color: $color-danger;
+  background-color: rgba(
+    $color-danger,
+    0.08
+  );
+  border: 1px solid rgba(
+    $color-danger,
+    0.4
+  );
+
+  &:hover:not(:disabled) {
+    background-color: rgba(
+      $color-danger,
+      0.14
+    );
+    border-color: $color-danger;
+  }
+}
+
+.approveRequestButton {
+  color: $color-success;
+  background-color: rgba(
+    $color-success,
+    0.08
+  );
+  border: 1px solid rgba(
+    $color-success,
+    0.4
+  );
+
+  &:hover:not(:disabled) {
+    background-color: rgba(
+      $color-success,
+      0.14
+    );
+    border-color: $color-success;
+  }
+}
+
+.leaveError,
+.finishGameError {
+  margin: 0;
+  padding:
+    $space-sm
+    $space-md;
+  color: $color-danger;
+  font-size: $font-size-sm;
+  background-color: rgba(
+    $color-danger,
+    0.1
+  );
+  border: 1px solid rgba(
+    $color-danger,
+    0.4
+  );
+  border-radius: $radius-md;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-lg;
+}
+
+.footerMessage {
+  margin: 0;
+  color: $color-text-secondary;
+  line-height: $line-height-normal;
+}
+
+.footerActions {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: $space-sm;
+}
+
+.leaveButton,
+.finishGameButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-xs;
+  min-height: 2.75rem;
+  padding:
+    $space-sm
+    $space-md;
+  font: inherit;
+  font-weight: $font-weight-bold;
+  border-radius: $radius-md;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    opacity 160ms ease;
+
+  &:disabled {
+    cursor: wait;
+    opacity: 0.6;
+  }
+
+  svg {
+    flex: 0 0 auto;
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+.leaveButton {
+  color: $color-danger;
+  background-color: rgba(
+    $color-danger,
+    0.08
+  );
+  border: 1px solid rgba(
+    $color-danger,
+    0.4
+  );
+
+  &:hover:not(:disabled) {
+    background-color: rgba(
+      $color-danger,
+      0.14
+    );
+    border-color: $color-danger;
+  }
+}
+
+.finishGameButton {
+  color: $color-warning;
+  background-color: rgba(
+    $color-warning,
+    0.08
+  );
+  border: 1px solid rgba(
+    $color-warning,
+    0.4
+  );
+
+  &:hover:not(:disabled) {
+    background-color: rgba(
+      $color-warning,
+      0.14
+    );
+    border-color: $color-warning;
+  }
+}
+
+.statusActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-sm;
+  margin-top: $space-xl;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .page {
+  min-width: 0;
+
+  @include mobile-page-padding(
+    $space-sm
+  );
+}
+
+  .room {
+    min-width: 0;
+    gap: $space-sm;
+  }
+
+  .header,
+  .playersPanel,
+  .requestsPanel,
+  .footer,
+  .finishedPanel {
+    min-width: 0;
+    padding: $space-md;
+    border-radius: $radius-md;
+  }
+
+  .header {
+    display: grid;
+    grid-template-columns:
+      minmax(0, 0.8fr)
+      minmax(0, 1.2fr);
+    align-items: center;
+    gap: $space-md;
+
+    padding: $space-sm;
+  }
+
+  .header > *,
+  .footer > * {
+    min-width: 0;
+  }
+
+  .eyebrow {
+    margin-bottom: $space-2xs;
+
+    font-size: 0.65rem;
+    line-height: 1.2;
+    letter-spacing: 0.08em;
+  }
+
+  .code {
+    max-width: 100%;
+    margin: 0;
+
+    font-size: $font-size-2xl;
+    line-height: 1;
+    letter-spacing: 0.08em;
+
+    overflow-wrap: anywhere;
+  }
+
+  .identity {
+    min-width: 0;
+
+    display: grid;
+    justify-items: start;
+    align-content: center;
+    gap: $space-2xs;
+
+    padding-left: $space-sm;
+    text-align: left;
+
+    border-left: 1px solid $color-border;
+  }
+
+  .identityLabel {
+    font-size: 0.65rem;
+    line-height: 1.2;
+  }
+
+  .identity strong {
+    max-width: 100%;
+
+    font-size: $font-size-md;
+    line-height: $line-height-tight;
+
+    overflow-wrap: anywhere;
+  }
+
+  .hostBadge {
+    padding:
+      $space-2xs
+      $space-xs;
+
+    font-size: 0.65rem;
+    line-height: 1;
+  }
+
+  .sectionHeader {
+    min-width: 0;
+    gap: $space-sm;
+  }
+
+  .sectionHeader > div {
+    min-width: 0;
+  }
+
+  .sectionTitle {
+    font-size: $font-size-xl;
+    overflow-wrap: anywhere;
+  }
+
+  .player,
+  .requestItem {
+    min-width: 0;
+    padding: $space-sm;
+  }
+
+  .playerMain,
+  .requestMain {
+    min-width: 0;
+  }
+
+  .requestItem {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .requestMain {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .requestActions {
+    display: grid;
+    width: 100%;
+  }
+
+  .rejectRequestButton,
+  .approveRequestButton {
+    width: 100%;
+  }
+
+  .footer {
+    align-items: stretch;
+    flex-direction: column;
+    gap: $space-md;
+  }
+
+.footerActions {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: $space-xs;
+  width: 100%;
+}
+
+.footerActions :global(.button),
+.leaveButton,
+.finishGameButton {
+  width: 100%;
+  min-width: 0;
+  padding: 
+    $space-2xs
+    $space-xs;
+}
+
+.statusActions {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: $space-xs;
+  margin-top: $space-lg;
+}
+
+.statusActions :global(.button) {
+  width: 100%;
+  min-width: 0;
+  padding:
+    $space-xs
+    $space-sm;
+}
+
+} 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\styles\main.scss ==================== 
+@use "index"; 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\styles\_index.scss ==================== 
+@use "foundation/reset";
+@use "foundation/fonts";
+@use "foundation/base"; 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\styles\_refs.scss ==================== 
+@forward "tokens/colors";
+@forward "tokens/layout";
+@forward "tokens/radius";
+@forward "tokens/shadows";
+@forward "tokens/spacing";
+@forward "tokens/typography";
+
+@forward "patterns/centered-panel";
+@forward "patterns/form";
+@forward "patterns/mobile-page"; 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\styles\foundation\_base.scss ==================== 
+@use "../refs" as *;
+
+:root {
+  /*
+   * Insets del sistema operativo.
+   *
+   * En navegadores normales suelen valer 0.
+   * En una PWA instalada permiten respetar
+   * notch, isla dinámica y barra inferior.
+   */
+  --safe-area-top:
+    env(
+      safe-area-inset-top,
+      0px
+    );
+
+  --safe-area-right:
+    env(
+      safe-area-inset-right,
+      0px
+    );
+
+  --safe-area-bottom:
+    env(
+      safe-area-inset-bottom,
+      0px
+    );
+
+  --safe-area-left:
+    env(
+      safe-area-inset-left,
+      0px
+    );
+
+  /*
+   * Tamaño mínimo recomendado para
+   * controles táctiles principales.
+   */
+  --touch-target-min: 2.75rem;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  color-scheme: dark;
+  font-size: $font-size-md;
+}
+
+html {
+  min-height: 100%;
+  scrollbar-gutter: stable;
+
+  /*
+   * Evita desplazamientos laterales de toda
+   * la aplicación. El scroll horizontal de
+   * los tableros continúa funcionando porque
+   * se gestiona en sus propios contenedores.
+   */
+  overscroll-behavior-x: none;
+}
+
+body {
+  min-width: 0;
+  min-height: 100%;
+  font-family: $font-family-text;
+  color: $color-text-primary;
+  background-color: $color-bg-page;
+  user-select: none;
+
+  /*
+   * Impide que un gesto horizontal arrastre
+   * toda la página o active navegación lateral.
+   *
+   * No bloqueamos el eje vertical para conservar
+   * el scroll normal y pull-to-refresh en navegador.
+   */
+  overscroll-behavior-x: none;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+
+  /*
+   * Fallback tradicional y unidad móvil estable.
+   */
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
+input,
+textarea,
+[contenteditable="true"] {
+  user-select: text;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: $font-family-input;
+}
+
+button,
+a,
+input,
+select,
+textarea,
+label {
+  /*
+   * Optimiza taps sin impedir que los inputs
+   * reciban foco ni que el tablero haga scroll.
+   */
+  touch-action: manipulation;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+img,
+svg {
+  /*
+   * Evita que una imagen o un icono se arrastren
+   * accidentalmente durante una interacción táctil.
+   */
+  -webkit-user-drag: none;
+}
+
+.input {
+  width: 100%;
+  min-height: var(--touch-target-min);
+  padding: $space-sm $space-md;
+  color: $color-text-primary;
+  background-color: $color-bg-elevated-2;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  outline: none;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+
+  &::placeholder {
+    color: $color-text-muted;
+  }
+
+  &:hover:not(:disabled) {
+    border-color: $color-border-strong;
+  }
+
+  &:focus {
+    border-color: $color-accent-primary;
+    box-shadow:
+      0
+      0
+      0
+      0.1875rem
+      rgba(
+        $color-accent-primary,
+        0.18
+      );
+  }
+
+  &:disabled {
+    color: $color-text-disabled;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.input--error {
+  border-color: $color-danger;
+
+  &:focus {
+    border-color: $color-danger;
+    box-shadow:
+      0
+      0
+      0
+      0.1875rem
+      rgba(
+        $color-danger,
+        0.16
+      );
+  }
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-xs;
+  min-height: var(--touch-target-min);
+  padding: $space-sm $space-lg;
+  border: 1px solid transparent;
+  border-radius: $radius-md;
+  font-weight: $font-weight-bold;
+  line-height: 1;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease,
+    transform 160ms ease;
+
+  &:not(:disabled):active {
+    transform: translateY(1px);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.button--primary {
+  color: $color-accent-primary-contrast;
+  background-color: $color-accent-primary;
+  border: 2px solid $color-text-primary;
+  box-shadow: 2px 2px 0 rgba($color-text-primary, 0.22);
+
+  &:not(:disabled):hover {
+    background-color:
+      $color-accent-primary-hover;
+  }
+
+  &:not(:disabled):active {
+    background-color:
+      $color-accent-primary-active;
+  }
+}
+
+.button--secondary {
+  color: $color-text-primary;
+  background-color: $color-bg-elevated-2;
+  border-color: $color-border;
+
+  &:not(:disabled):hover {
+    border-color: $color-border-strong;
+  }
+}
+
+.button--danger {
+  color: $color-text-primary;
+  background-color: $color-danger;
+}
+
+:focus-visible {
+  outline:
+    0.1875rem
+    solid
+    rgba(
+      $color-accent-primary,
+      0.55
+    );
+  outline-offset: 0.1875rem;
+}
+
+@media (
+  prefers-reduced-motion:
+    reduce
+) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration:
+      0.01ms !important;
+    animation-iteration-count:
+      1 !important;
+    transition-duration:
+      0.01ms !important;
+  }
+} 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\styles\foundation\_fonts.scss ==================== 
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+} 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\styles\foundation\_reset.scss ==================== 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin-block-start: 0;
+}
+
+img,
+picture,
+svg,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  border: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+} 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\styles\patterns\_centered-panel.scss ==================== 
+@use "../tokens/colors" as *;
+@use "../tokens/layout" as *;
+@use "../tokens/radius" as *;
+@use "../tokens/shadows" as *;
+@use "../tokens/spacing" as *;
+@use "mobile-page" as *;
+
+@mixin centered-page {
+  display: flex;
+  flex: 1;
+  width: 100%;
+
+  @include mobile-page-padding(
+    $space-lg
+  );
+
+  @media (
+    max-width:
+      $breakpoint-sm
+  ) {
+    @include mobile-page-padding(
+      $space-sm
+    );
+  }
+}
+
+@mixin centered-panel {
+  width: min(
+    100%,
+    $layout-content-narrow
+  );
+  margin: auto;
+  padding: $space-xl;
+  text-align: center;
+  background-color: $color-bg-elevated;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+} 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\styles\patterns\_form.scss ==================== 
+@use "../tokens/colors" as *;
+@use "../tokens/radius" as *;
+@use "../tokens/spacing" as *;
+@use "../tokens/typography" as *;
+
+@mixin form-stack {
+  display: grid;
+  gap: $space-lg;
+  width: 100%;
+  margin-top: $space-xl;
+  text-align: left;
+}
+
+@mixin form-field {
+  display: grid;
+  gap: $space-xs;
+}
+
+@mixin field-label {
+  color: $color-text-primary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+}
+
+@mixin field-help {
+  margin: 0;
+  color: $color-text-muted;
+  font-size: $font-size-xs;
+  line-height: $line-height-normal;
+}
+
+@mixin field-error {
+  margin: 0;
+  color: $color-danger;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  line-height: $line-height-normal;
+} 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\styles\patterns\_mobile-page.scss ==================== 
+@use "../tokens/spacing" as *;
+
+@mixin mobile-page-padding(
+  $base-padding
+) {
+  padding:
+    calc(
+      #{$base-padding}
+      + var(--safe-area-top)
+    )
+    calc(
+      #{$base-padding}
+      + var(--safe-area-right)
+    )
+    calc(
+      #{$base-padding}
+      + var(--safe-area-bottom)
+    )
+    calc(
+      #{$base-padding}
+      + var(--safe-area-left)
+    );
+} 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\styles\tokens\_colors.scss ==================== 
+$color-bg-page: #e2dcba;
+$color-bg-elevated: #eee9cf;
+$color-bg-elevated-2: #f5f1dc;
+$color-bg-overlay: rgba(35, 37, 34, 0.62);
+
+$color-border: #b8b18f;
+$color-border-strong: #77745f;
+
+$color-text-primary: #25272a;
+$color-text-secondary: #55584f;
+$color-text-muted: #797b6d;
+$color-text-disabled: #a19f8c;
+
+$color-accent-primary: #e9c69e;
+$color-accent-primary-hover: #dfb88b;
+$color-accent-primary-active: #d5aa7c;
+$color-accent-primary-contrast: #25272a;
+
+$color-accent-secondary: #77a8af;
+$color-accent-secondary-hover: #699aa2;
+$color-accent-secondary-active: #5c8c94;
+$color-accent-secondary-contrast: #202a2c;
+
+$color-accent-tertiary: #a1a976;
+$color-accent-tertiary-hover: #949d68;
+$color-accent-tertiary-active: #858f5a;
+$color-accent-tertiary-contrast: #25291d;
+
+$color-success: #a1a976;
+$color-danger: #cc727b;
+$color-warning: #e9c69e;
+$color-info: #77a8af; 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\styles\tokens\_layout.scss ==================== 
+$layout-content-narrow: 40rem;
+$layout-content-default: 72rem;
+$layout-content-wide: 90rem;
+
+$breakpoint-sm: 30rem;
+$breakpoint-md: 48rem;
+$breakpoint-lg: 64rem;
+$breakpoint-xl: 80rem; 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\styles\tokens\_radius.scss ==================== 
+$radius-xs: 0.25rem;
+$radius-sm: 0.5rem;
+$radius-md: 0.75rem;
+$radius-lg: 1rem;
+$radius-pill: 999px; 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\styles\tokens\_shadows.scss ==================== 
+$shadow-sm: 0 0.125rem 0.375rem rgba(0, 0, 0, 0.16);
+$shadow-md: 0 0.75rem 2rem rgba(0, 0, 0, 0.24);
+$shadow-lg: 0 1.25rem 3rem rgba(0, 0, 0, 0.32); 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\styles\tokens\_spacing.scss ==================== 
+$space-3xs: 0.125rem;
+$space-2xs: 0.25rem;
+$space-xs: 0.5rem;
+$space-sm: 0.75rem;
+$space-md: 1rem;
+$space-lg: 1.5rem;
+$space-xl: 2rem;
+$space-2xl: 3rem;
+$space-3xl: 4rem;
+$space-4xl: 6rem; 
+ 
+ 
+==================== C:\Users\amadorg\Documents\pprog\pistascruzadas\src\styles\tokens\_typography.scss ==================== 
+$font-family-display:
+  Inter,
+  system-ui,
+  -apple-system,
+  BlinkMacSystemFont,
+  "Segoe UI",
+  sans-serif;
+
+$font-family-text:
+  Inter,
+  system-ui,
+  -apple-system,
+  BlinkMacSystemFont,
+  "Segoe UI",
+  sans-serif;
+
+$font-family-input: $font-family-text;
+
+$font-size-xs: 0.75rem;
+$font-size-sm: 0.875rem;
+$font-size-md: 1rem;
+$font-size-lg: 1.125rem;
+$font-size-xl: 1.25rem;
+$font-size-2xl: 1.5rem;
+$font-size-3xl: 2rem;
+$font-size-4xl: 2.5rem;
+
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+$line-height-tight: 1.15;
+$line-height-normal: 1.5;
+$line-height-relaxed: 1.7; 
+ 
+======================================== 
+FIN DE LA EXPORTACION 
+======================================== 

@@ -1,22 +1,62 @@
-$color-bg-page: #11131a;
-$color-bg-elevated: #1a1d27;
-$color-bg-elevated-2: #232735;
-$color-bg-overlay: rgba(0, 0, 0, 0.68);
+$color-brand-background: #e2dcba;
+$color-brand-primary: #e9c69e;
+$color-brand-secondary: #77a8af;
+$color-brand-tertiary: #a1a976;
+$color-brand-danger: #cc727b;
 
-$color-border: #343949;
-$color-border-strong: #4b5266;
+/*
+ * Colores observados en las cartas físicas.
+ * Se usan únicamente para reproducir su lenguaje visual.
+ */
+$color-card-cream: #efeed5;
+$color-card-coordinate: #7bdac9;
+$color-card-border: #e69696;
+$color-card-ink: #2b2521;
 
-$color-text-primary: #f5f6fa;
-$color-text-secondary: #b8becd;
-$color-text-muted: #858da0;
-$color-text-disabled: #646b7c;
+$color-bg-page: $color-brand-background;
+$color-bg-elevated: #eee9cf;
+$color-bg-elevated-2: #f7f3df;
+$color-bg-overlay: rgba(43, 37, 33, 0.58);
 
-$color-accent-primary: #9d8cff;
-$color-accent-primary-hover: #ae9fff;
-$color-accent-primary-active: #8b79ed;
-$color-accent-primary-contrast: #11131a;
+$color-border: #b7af8b;
+$color-border-strong: #77705b;
 
-$color-success: #59c98c;
-$color-danger: #ef6b73;
-$color-warning: #f2bd5c;
-$color-info: #61a9ed;
+$color-text-primary: #2b2521;
+$color-text-secondary: #565147;
+$color-text-muted: #777164;
+$color-text-disabled: #a39d89;
+
+/*
+ * El color oficial se conserva como superficie.
+ * La variante principal, más oscura, se usa en texto y bordes
+ * para asegurar contraste sobre fondos claros.
+ */
+$color-accent-primary: #795a3f;
+$color-accent-primary-surface: $color-brand-primary;
+$color-accent-primary-hover: #dfb88b;
+$color-accent-primary-active: #d5aa7c;
+$color-accent-primary-contrast: $color-card-ink;
+
+$color-accent-secondary: #356d75;
+$color-accent-secondary-surface: $color-brand-secondary;
+$color-accent-secondary-hover: #699aa2;
+$color-accent-secondary-active: #5c8c94;
+$color-accent-secondary-contrast: #17282b;
+
+$color-accent-tertiary: #626a38;
+$color-accent-tertiary-surface: $color-brand-tertiary;
+$color-accent-tertiary-hover: #949d68;
+$color-accent-tertiary-active: #858f5a;
+$color-accent-tertiary-contrast: #25291d;
+
+$color-success: #626a38;
+$color-success-surface: $color-brand-tertiary;
+
+$color-danger: #8f3644;
+$color-danger-surface: $color-brand-danger;
+
+$color-warning: #795a3f;
+$color-warning-surface: $color-brand-primary;
+
+$color-info: #356d75;
+$color-info-surface: $color-brand-secondary;

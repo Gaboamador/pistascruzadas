@@ -160,8 +160,8 @@
 
 .updateButton {
   color: $color-accent-primary-contrast;
-  background-color: $color-accent-primary;
-  border: 1px solid transparent;
+  background-color: $color-accent-primary-surface;
+  border: 1px solid $color-accent-primary;
 
   &:hover:not(:disabled) {
     background-color:

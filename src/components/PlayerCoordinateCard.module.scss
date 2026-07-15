@@ -92,7 +92,7 @@
     $space-lg;
 
   color:
-    $color-accent-primary-contrast;
+    $color-card-ink;
   font-family:
     $font-family-display;
   font-size:
@@ -108,10 +108,20 @@
     0.08em;
 
   background-color:
-    $color-accent-primary;
+    $color-card-coordinate;
+  border:
+    0.3rem solid
+    $color-card-cream;
   border-radius:
     $radius-lg;
   box-shadow:
+    0 0 0 0.18rem
+      $color-card-ink,
+    inset 0 0 0 1px
+      rgba(
+        $color-card-ink,
+        0.14
+      ),
     $shadow-sm;
 }
 
@@ -203,9 +213,9 @@
 
 .correctButton {
   color:
-    $color-accent-primary-contrast;
+    $color-accent-tertiary-contrast;
   background-color:
-    $color-success;
+    $color-success-surface;
   border-color:
     $color-success;
 }

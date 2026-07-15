@@ -189,7 +189,8 @@
 
 .playerCount {
   color: $color-accent-primary-contrast;
-  background-color: $color-accent-primary;
+  background-color: $color-accent-primary-surface;
+  border: 1px solid $color-accent-primary;
 }
 
 .requestCount {

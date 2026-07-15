@@ -109,8 +109,8 @@
   font: inherit;
   font-weight: $font-weight-bold;
 
-  background-color: $color-accent-primary;
-  border: 1px solid transparent;
+  background-color: $color-accent-primary-surface;
+  border: 1px solid $color-accent-primary;
   border-radius: $radius-md;
 
   cursor: pointer;
@@ -201,17 +201,17 @@
 
 .confirmButtonSuccess {
   color: $color-bg-page;
-  background-color: $color-success;
+  background-color: $color-success-surface;
 }
 
 .confirmButtonWarning {
   color: $color-bg-page;
-  background-color: $color-warning;
+  background-color: $color-warning-surface;
 }
 
 .confirmButtonDanger {
   color: $color-bg-page;
-  background-color: $color-danger;
+  background-color: $color-danger-surface;
 }
 
 @media (max-width: $breakpoint-sm) {

@@ -254,8 +254,11 @@
   min-width: 0;
   padding: $space-sm;
   text-align: center;
-  background-color: rgba($color-accent-primary, 0.1);
-  border: 1px solid rgba($color-accent-primary, 0.35);
+  background-color: $color-card-cream;
+  border: 0.25rem solid $color-card-border;
+  box-shadow:
+    inset 0 0 0 1px rgba($color-card-ink, 0.12),
+    $shadow-sm;
   border-radius: $radius-md;
 }
 
@@ -264,7 +267,7 @@
 }
 
 .axisLabel {
-  color: $color-accent-primary;
+  color: $color-card-ink;
   font-family: $font-family-display;
   font-size: $font-size-lg;
   font-weight: $font-weight-bold;
