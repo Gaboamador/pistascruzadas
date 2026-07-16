@@ -54,10 +54,10 @@
 }
 
 .codeInput {
-  font-family: $font-family-display;
+  font-family: $font-family-condensed;
   font-size: $font-size-lg;
   font-weight: $font-weight-bold;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
   text-align: center;
   text-transform: uppercase;
 }
@@ -112,8 +112,9 @@
 }
 
 .requestCode {
-  font-family: $font-family-display;
-  letter-spacing: 0.14em;
+  font-family: $font-family-condensed;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.12em;
 }
 
 .requestStatus {

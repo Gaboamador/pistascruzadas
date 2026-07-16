@@ -1,0 +1,529 @@
+@use "../tokens/colors" as *;
+@use "../tokens/layout" as *;
+@use "../tokens/radius" as *;
+@use "../tokens/shadows" as *;
+@use "../tokens/spacing" as *;
+@use "../tokens/typography" as *;
+@use "coordinate-card" as *;
+
+@mixin game-board-pattern {
+  .boardScroller {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    padding-bottom:
+      $space-xs;
+
+    overscroll-behavior-inline:
+      contain;
+
+    -webkit-overflow-scrolling:
+      touch;
+  }
+
+  .board {
+    --grid-size: 4;
+
+    display: grid;
+
+    grid-template-columns:
+      minmax(7rem, max-content)
+      repeat(
+        var(--grid-size),
+        minmax(6rem, max-content)
+      );
+
+    justify-content: center;
+
+    gap:
+      $space-xs;
+
+    width:
+      max-content;
+
+    min-width:
+      100%;
+  }
+
+  .corner {
+    min-height:
+      5.5rem;
+  }
+
+  .columnHeader,
+  .rowHeader {
+    position: relative;
+
+    display: grid;
+
+    gap: 0;
+
+    min-width: 0;
+  }
+
+  .columnHeader {
+    grid-template-rows:
+      minmax(0, 1fr)
+      auto;
+
+    min-height:
+      5.5rem;
+  }
+
+  .rowHeader {
+    grid-template-columns:
+      minmax(2.75rem, 0.42fr)
+      minmax(0, 1fr);
+
+    min-height:
+      4.75rem;
+  }
+
+  .axisLabelCard,
+  .axisWordCard {
+    position: relative;
+
+    display: grid;
+    place-items: center;
+
+    min-width: 0;
+
+    text-align: center;
+
+    border:
+      0.25rem solid
+      $color-card-border;
+
+    border-radius: 0;
+  }
+
+  .axisLabelCard {
+    z-index: 2;
+
+    padding:
+      $space-sm;
+
+    background-color:
+      $color-card-cream;
+  }
+
+  /*
+   * En las columnas, la tarjeta de palabra
+   * queda visualmente apoyada debajo de la
+   * tarjeta de letra.
+   */
+  .columnHeader
+  .axisLabelCard {
+    box-shadow:
+      0
+      0.3rem
+      0.35rem
+      rgba(
+        $color-card-ink,
+        0.22
+      ),
+      inset
+      0
+      0
+      0
+      1px
+      rgba(
+        $color-card-ink,
+        0.1
+      );
+  }
+
+  /*
+   * En las filas, la tarjeta de palabra
+   * queda visualmente apoyada a la derecha
+   * de la tarjeta numérica.
+   */
+  .rowHeader
+  .axisLabelCard {
+    box-shadow:
+      0.3rem
+      0
+      0.35rem
+      rgba(
+        $color-card-ink,
+        0.22
+      ),
+      inset
+      0
+      0
+      0
+      1px
+      rgba(
+        $color-card-ink,
+        0.1
+      );
+  }
+
+  .axisWordCard {
+    z-index: 1;
+
+    min-height:
+      2rem;
+
+    padding:
+      $space-xs
+      $space-sm;
+
+    overflow: hidden;
+
+    background-color:
+      $color-card-coordinate;
+
+    box-shadow:
+      inset
+      0
+      0
+      0
+      1px
+      rgba(
+        $color-card-ink,
+        0.1
+      );
+  }
+
+  .axisLabel {
+    color:
+      $color-card-ink;
+
+    font-family:
+      $font-family-brand;
+
+    font-size:
+      $font-size-lg;
+
+    font-weight:
+      $font-weight-bold;
+
+    line-height: 1;
+  }
+
+  /*
+   * Pieza blanca que contiene la palabra.
+   *
+   * En las columnas se muestra normalmente.
+   * En las filas mobile se rota la pieza
+   * completa, conservando su silueta.
+   */
+  .axisWord {
+    position: relative;
+    z-index: 1;
+
+    display: inline-grid;
+    place-items: center;
+
+    min-width: 0;
+
+    padding:
+      $space-2xs
+      $space-sm;
+
+    color:
+      $color-card-ink;
+
+    font-family:
+      $font-family-game;
+
+    font-size:
+      $font-size-sm;
+
+    font-style: normal;
+
+    font-weight:
+      $font-weight-regular;
+
+    line-height: 1;
+
+    letter-spacing: 0;
+
+    text-transform:
+      uppercase;
+
+    white-space:
+      nowrap;
+
+    overflow-wrap:
+      normal;
+
+    word-break:
+      normal;
+
+    font-synthesis:
+      none;
+
+    isolation:
+      isolate;
+
+    &::before {
+      position: absolute;
+      z-index: -1;
+
+      inset: 0;
+
+      content: "";
+
+      background-color:
+        #fff;
+
+      clip-path:
+        polygon(
+          3% 8%,
+          97% 0,
+          100% 88%,
+          94% 100%,
+          5% 94%,
+          0 12%
+        );
+    }
+  }
+
+  /*
+   * Este elemento sólo contiene el texto.
+   * No se posiciona ni se transforma por separado.
+   */
+  .axisWordText {
+    display:
+      inline-block;
+
+    color:
+      inherit;
+
+    font:
+      inherit;
+
+    line-height:
+      inherit;
+
+    letter-spacing:
+      inherit;
+
+    text-transform:
+      inherit;
+
+    white-space:
+      nowrap;
+  }
+
+  .boardRow {
+    display:
+      contents;
+  }
+
+  /*
+   * Tarjeta de coordenada compartida.
+   */
+  .coordinateCell {
+    @include coordinate-card;
+  }
+
+  @media (
+    max-width:
+      $breakpoint-sm
+  ) {
+    .board {
+      grid-template-columns:
+        3.25rem
+        repeat(
+          var(--grid-size),
+          minmax(
+            3.5rem,
+            max-content
+          )
+        );
+
+      gap:
+        $space-2xs;
+    }
+
+    .corner,
+    .columnHeader {
+      min-height:
+        4.5rem;
+    }
+
+    .columnHeader,
+    .rowHeader {
+      gap: 0;
+    }
+
+    .rowHeader {
+      grid-template-columns:
+        minmax(
+          1.3rem,
+          0.42fr
+        )
+        minmax(
+          1.55rem,
+          0.58fr
+        );
+
+      min-height:
+        5.5rem;
+
+      overflow:
+        hidden;
+    }
+
+    .axisLabelCard {
+      padding:
+        $space-2xs;
+    }
+
+    .axisWordCard {
+      min-height: 0;
+
+      padding:
+        $space-2xs;
+
+      overflow:
+        hidden;
+    }
+
+    .axisLabel {
+      font-size:
+        $font-size-md;
+    }
+
+    /*
+     * Configuración general de las palabras
+     * en mobile. Se aplica normalmente a las
+     * palabras de columna.
+     */
+    .axisWord {
+      padding:
+        $space-3xs
+        $space-xs;
+
+      font-size:
+        $font-size-xs;
+
+      line-height: 1;
+    }
+
+    /*
+     * La celda turquesa funciona como viewport
+     * de la pieza blanca rotada.
+     */
+    .rowHeader
+    .axisWordCard {
+      position:
+        relative;
+
+      display:
+        block;
+
+      min-width: 0;
+      min-height: 0;
+
+      padding: 0;
+
+      overflow:
+        hidden;
+    }
+
+    /*
+     * La palabra y el fondo blanco se renderizan
+     * juntos al doble de tamaño y luego se reducen.
+     *
+     * El tamaño visual final equivale a
+     * $font-size-xs, pero el navegador rasteriza
+     * inicialmente los glifos con mayor definición.
+     */
+    .rowHeader
+    .axisWord {
+      position:
+        absolute;
+
+      top: 50%;
+      left: 50%;
+
+      display:
+        inline-grid;
+
+      width:
+        max-content;
+
+      min-width:
+        max-content;
+
+      max-width:
+        none;
+
+      height:
+        auto;
+
+      padding:
+        calc(
+          #{$space-3xs}
+          * 2
+        )
+        calc(
+          #{$space-xs}
+          * 2
+        );
+
+      overflow:
+        visible;
+
+      font-size:
+        calc(
+          #{$font-size-xs}
+          * 2
+        );
+
+      line-height: 1;
+
+      white-space:
+        nowrap;
+
+      transform:
+        translate(
+          -50%,
+          -50%
+        )
+        rotate(-90deg)
+        scale(0.5);
+
+      transform-origin:
+        center center;
+    }
+
+    /*
+     * Evita que el span interior altere las
+     * dimensiones intrínsecas de la pieza.
+     */
+    .rowHeader
+    .axisWordText {
+      display:
+        block;
+
+      width:
+        max-content;
+
+      white-space:
+        nowrap;
+    }
+
+    .coordinateCell {
+      --coordinate-scale:
+        1.1rem;
+
+      min-height:
+        5.5rem;
+
+      padding:
+        $space-2xs;
+
+      border-radius:
+        $radius-sm;
+    }
+  }
+}

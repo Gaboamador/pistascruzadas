@@ -68,14 +68,16 @@
 
 .code {
   margin: 0;
-  font-family: $font-family-display;
-  font-size: clamp(
-    $font-size-2xl,
-    10vw,
-    $font-size-4xl
-  );
+  font-family: $font-family-condensed;
+  font-size:
+    clamp(
+      $font-size-2xl,
+      10vw,
+      $font-size-4xl
+    );
+  font-weight: $font-weight-bold;
   line-height: $line-height-tight;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
 }
 
 .description {
@@ -236,7 +238,7 @@
 .playerMain,
 .requestMain {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: $space-xs;
   min-width: 0;
 }

@@ -9,11 +9,14 @@
 
   background-color:
     $color-bg-elevated;
+
   border:
     1px solid
     $color-border;
+
   border-radius:
     $radius-lg;
+
   box-shadow:
     $shadow-md;
 }
@@ -26,11 +29,15 @@
     );
 
   box-shadow:
-    inset 0 0 0 1px
-      rgba(
-        $color-accent-primary,
-        0.15
-      ),
+    inset
+    0
+    0
+    0
+    1px
+    rgba(
+      $color-accent-primary,
+      0.15
+    ),
     $shadow-md;
 }
 
@@ -46,12 +53,16 @@
 
   color:
     $color-accent-primary;
+
   font-size:
     $font-size-xs;
+
   font-weight:
     $font-weight-bold;
+
   letter-spacing:
     0.1em;
+
   text-transform:
     uppercase;
 }
@@ -61,14 +72,17 @@
 
   font-family:
     $font-family-display;
+
   font-size:
     $font-size-2xl;
+
   line-height:
     $line-height-tight;
 }
 
 .description {
   max-width: 42rem;
+
   margin:
     $space-sm
     0
@@ -76,64 +90,65 @@
 
   color:
     $color-text-secondary;
+
   font-size:
     $font-size-sm;
+
   line-height:
     $line-height-relaxed;
 }
 
 .coordinate {
-  display: grid;
-  place-items: center;
+  @include coordinate-card;
+
+  /*
+   * Tarjeta privada más grande,
+   * pero con la misma proporción interna.
+   */
+  --coordinate-scale:
+    1.6rem;
 
   min-width: 7rem;
   min-height: 7rem;
-  padding:
-    $space-lg;
+  padding: $space-lg;
 
-  color:
-    $color-card-ink;
-  font-family:
-    $font-family-display;
-  font-size:
-    clamp(
-      $font-size-3xl,
-      10vw,
-      4rem
-    );
-  font-weight:
-    $font-weight-bold;
-  line-height: 1;
-  letter-spacing:
-    0.08em;
+  border-width:
+    0.3rem;
 
-  background-color:
-    $color-card-coordinate;
-  border:
-    0.3rem solid
-    $color-card-cream;
   border-radius:
     $radius-lg;
+
   box-shadow:
-    0 0 0 0.18rem
+    0
+    0.35rem
+    0.8rem
+    rgba(
       $color-card-ink,
-    inset 0 0 0 1px
-      rgba(
-        $color-card-ink,
-        0.14
-      ),
-    $shadow-sm;
+      0.18
+    ),
+    inset
+    0
+    0
+    0
+    1px
+    rgba(
+      $color-card-ink,
+      0.1
+    );
 }
 
 .actions {
   display: grid;
+
   grid-column:
     1 / -1;
+
   grid-template-columns:
     repeat(
       2,
       minmax(0, 1fr)
     );
+
   gap:
     $space-sm;
 }
@@ -141,27 +156,34 @@
 .actionButton {
   display:
     inline-flex;
+
   align-items:
     center;
+
   justify-content:
     center;
+
   gap:
     $space-xs;
 
   min-height: 3rem;
+
   padding:
     $space-sm
     $space-md;
 
   color:
     $color-text-primary;
+
   font: inherit;
+
   font-weight:
     $font-weight-bold;
 
   border:
     1px solid
     transparent;
+
   border-radius:
     $radius-md;
 
@@ -199,11 +221,13 @@
 .failedButton {
   color:
     $color-danger;
+
   background-color:
     rgba(
       $color-danger,
       0.1
     );
+
   border-color:
     rgba(
       $color-danger,
@@ -214,8 +238,10 @@
 .correctButton {
   color:
     $color-accent-tertiary-contrast;
+
   background-color:
     $color-success-surface;
+
   border-color:
     $color-success;
 }
@@ -228,6 +254,7 @@
 
   color:
     $color-text-muted;
+
   font-size:
     $font-size-sm;
 }
@@ -237,12 +264,14 @@
     1 / -1;
 
   margin: 0;
+
   padding:
     $space-sm
     $space-md;
 
   color:
     $color-danger;
+
   font-size:
     $font-size-sm;
 
@@ -251,12 +280,14 @@
       $color-danger,
       0.1
     );
+
   border:
     1px solid
     rgba(
       $color-danger,
       0.4
     );
+
   border-radius:
     $radius-md;
 }
@@ -269,8 +300,10 @@
     grid-template-columns:
       minmax(0, 1fr)
       auto;
+
     gap:
       $space-sm;
+
     padding:
       $space-sm;
 
@@ -284,6 +317,7 @@
 
     font-size:
       0.65rem;
+
     letter-spacing:
       0.08em;
   }
@@ -299,27 +333,22 @@
 
     font-size:
       $font-size-xs;
+
     line-height:
       $line-height-normal;
   }
 
-  .coordinate {
-    min-width:
-      4.25rem;
-    min-height:
-      4.25rem;
-    padding:
-      $space-xs;
+.coordinate {
+  --coordinate-scale:
+    1.1rem;
 
-    font-size:
-      $font-size-2xl;
-    letter-spacing:
-      0.04em;
+  min-width: 4.25rem;
+  min-height: 4.25rem;
+  padding: $space-xs;
 
-    border-radius:
-      $radius-md;
-  }
-
+  border-radius:
+    $radius-md;
+}
   .actions {
     gap:
       $space-xs;
@@ -328,6 +357,7 @@
   .actionButton {
     min-height:
       var(--touch-target-min);
+
     padding:
       $space-xs
       $space-sm;
@@ -356,6 +386,7 @@
 
     font-size:
       $font-size-xs;
+
     border-radius:
       $radius-sm;
   }
@@ -370,9 +401,13 @@
   }
 
   .coordinate {
+    --coordinate-scale:
+      1.15rem;
+
     width: 100%;
+
     min-height:
-      3.75rem;
+      4.25rem;
   }
 
   .actions {

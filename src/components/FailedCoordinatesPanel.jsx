@@ -42,20 +42,53 @@ function FailedCoordinatesPanel({
 
           <ol className={styles.coordinateList}>
             {failedCoordinates.map(
-              (coordinate, index) => (
-                <li
-                  key={`${coordinate}-${index}`}
-                  className={styles.coordinateItem}
-                >
-                  <span className={styles.order}>
-                    {index + 1}
-                  </span>
+              (coordinate, index) => {
+                const coordinateLetter =
+                  coordinate.charAt(0);
 
-                  <strong className={styles.coordinate}>
-                    {coordinate}
-                  </strong>
-                </li>
-              ),
+                const coordinateNumber =
+                  coordinate.slice(1);
+
+                return (
+                  <li
+                    key={`${coordinate}-${index}`}
+                    className={styles.coordinateItem}
+                  >
+                    <span className={styles.order}>
+                      {index + 1}
+                    </span>
+
+                    <strong
+                      className={styles.coordinate}
+                      aria-label={`Coordenada fallada ${coordinate}`}
+                    >
+                      <span
+                        className={
+                          styles.coordinateLetter
+                        }
+                        aria-hidden="true"
+                      >
+                        {coordinateLetter}
+                      </span>
+
+                      <span
+                        className={
+                          styles.coordinateBadge
+                        }
+                        aria-hidden="true"
+                      >
+                        <span
+                          className={
+                            styles.coordinateNumber
+                          }
+                        >
+                          {coordinateNumber}
+                        </span>
+                      </span>
+                    </strong>
+                  </li>
+                );
+              },
             )}
           </ol>
         </>

@@ -1,3 +1,5 @@
+@include game-board-pattern;
+
 .panel {
   width: 100%;
   min-width: 0;
@@ -46,97 +48,7 @@
   border-radius: $radius-pill;
 }
 
-.boardScroller {
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding-bottom: $space-xs;
-
-  overscroll-behavior-inline: contain;
-  -webkit-overflow-scrolling: touch;
-}
-
-.board {
-  --grid-size: 4;
-
-  display: grid;
-  grid-template-columns:
-    minmax(7rem, max-content)
-    repeat(
-      var(--grid-size),
-      minmax(6rem, max-content)
-    );
-  justify-content: center;
-  gap: $space-xs;
-
-  width: max-content;
-  min-width: 100%;
-}
-
-.corner {
-  min-height: 5.5rem;
-}
-
-.columnHeader,
-.rowHeader {
-  display: grid;
-  align-content: center;
-  justify-items: center;
-  gap: $space-xs;
-  min-width: 0;
-  padding: $space-sm;
-  text-align: center;
-  background-color: $color-card-cream;
-  border: 0.25rem solid $color-card-border;
-  box-shadow:
-    inset 0 0 0 1px rgba($color-card-ink, 0.12),
-    $shadow-sm;
-  border-radius: $radius-md;
-}
-
-.columnHeader {
-  min-height: 5.5rem;
-}
-
-.rowHeader {
-  min-height: 4.75rem;
-}
-
-.axisLabel {
-  color: $color-card-ink;
-  font-family: $font-family-display;
-  font-size: $font-size-lg;
-  font-weight: $font-weight-bold;
-}
-
-.axisWord {
-  color: $color-text-primary;
-  font-size: $font-size-sm;
-  line-height: $line-height-normal;
-  text-transform: uppercase;
-
-  white-space: nowrap;
-  overflow-wrap: normal;
-  word-break: normal;
-}
-
-.boardRow {
-  display: contents;
-}
-
 .coordinateCell {
-  display: grid;
-  place-items: center;
-  min-width: 0;
-  min-height: 4.75rem;
-  color: $color-text-muted;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-bold;
-  background-color: $color-bg-elevated-2;
-  border: 1px solid $color-border;
-  border-radius: $radius-md;
   transition:
     color 160ms ease,
     background-color 160ms ease,
@@ -145,10 +57,23 @@
 }
 
 .coordinateCellRevealed {
-  color: $color-accent-primary-contrast;
-  background-color: $color-success-surface;
-  border-color: $color-success;
-  box-shadow: $shadow-sm;
+  background-color:
+    $color-success-surface;
+
+  border-color:
+    $color-card-cream;
+
+  box-shadow:
+    inset
+    0
+    0
+    0
+    1px
+    rgba(
+      $color-success,
+      0.18
+    ),
+    $shadow-sm;
 }
 
 .status {
@@ -188,104 +113,4 @@
 
     font-size: $font-size-xs;
   }
-
-  .board {
-  grid-template-columns:
-    3.25rem
-    repeat(
-      var(--grid-size),
-      minmax(3.5rem, max-content)
-    );
-
-  gap: $space-2xs;
-}
-
-  .corner,
-  .columnHeader {
-    min-height: 4.5rem;
-  }
-
-  .rowHeader,
-  .coordinateCell {
-    min-height: 5.5rem;
-  }
-
-  .columnHeader,
-  .rowHeader {
-    position: relative;
-    gap: $space-2xs;
-    padding: $space-2xs;
-    border-radius: $radius-sm;
-  }
-
-  .rowHeader {
-  position: relative;
-  padding:
-    $space-xs
-    $space-2xs;
-  overflow: hidden;
-}
-
-.rowHeader .axisLabel {
-  position: absolute;
-  top: 0;
-  left: 0;
-
-  font-size: $font-size-md;
-
-  transform: translateX(50%);
-}
-
-.columnHeader {
-  padding-top: $space-md;
-}
-
-.columnHeader .axisLabel {
-  position: absolute;
-  top: 0;
-  left: 50%;
-
-  font-size: $font-size-md;
-
-  transform: translateX(-50%);
-}
-
-.rowHeader .axisWord {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-
-  max-width: none;
-
-  font-size: $font-size-xs;
-  line-height: 1;
-  white-space: nowrap;
-  overflow-wrap: normal;
-  word-break: normal;
-
-  transform:
-    translate(-50%, -50%)
-    rotate(-90deg);
-  transform-origin: center;
-}
-
-  .coordinateCell {
-    padding: $space-2xs;
-    font-size: $font-size-xs;
-    border-radius: $radius-sm;
-  }
-
-  .axisLabel {
-    font-size: $font-size-md;
-  }
-
-  .axisWord {
-  font-size: $font-size-xs;
-  line-height: $line-height-tight;
-  text-transform: uppercase;
-
-  white-space: nowrap;
-  overflow-wrap: normal;
-  word-break: normal;
-}
 }

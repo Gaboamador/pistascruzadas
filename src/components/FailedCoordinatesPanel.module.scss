@@ -14,122 +14,246 @@
 }
 
 .eyebrow {
-  margin: 0 0 $space-xs;
-  color: $color-accent-primary;
-  font-size: $font-size-xs;
-  font-weight: $font-weight-bold;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  margin:
+    0
+    0
+    $space-xs;
+
+  color:
+    $color-accent-primary;
+
+  font-size:
+    $font-size-xs;
+
+  font-weight:
+    $font-weight-bold;
+
+  letter-spacing:
+    0.1em;
+
+  text-transform:
+    uppercase;
 }
 
 .title {
   margin: 0;
-  font-family: $font-family-display;
-  font-size: $font-size-2xl;
-  line-height: $line-height-tight;
+
+  font-family:
+    $font-family-display;
+
+  font-size:
+    $font-size-2xl;
+
+  line-height:
+    $line-height-tight;
 }
 
 .counter {
   display: grid;
   place-items: center;
-  flex: 0 0 auto;
+
+  flex:
+    0 0 auto;
+
   min-width: 2.5rem;
   min-height: 2.5rem;
   padding: $space-xs;
-  color: $color-danger;
-  font-weight: $font-weight-bold;
-  background-color: rgba($color-danger, 0.1);
-  border: 1px solid rgba($color-danger, 0.35);
-  border-radius: $radius-pill;
+
+  color:
+    $color-danger;
+
+  font-weight:
+    $font-weight-bold;
+
+  background-color:
+    rgba(
+      $color-danger,
+      0.1
+    );
+
+  border:
+    1px solid
+    rgba(
+      $color-danger,
+      0.35
+    );
+
+  border-radius:
+    $radius-pill;
 }
 
 .description {
   max-width: 42rem;
-  margin: $space-sm 0 $space-lg;
-  color: $color-text-secondary;
-  font-size: $font-size-sm;
-  line-height: $line-height-relaxed;
+
+  margin:
+    $space-sm
+    0
+    $space-lg;
+
+  color:
+    $color-text-secondary;
+
+  font-size:
+    $font-size-sm;
+
+  line-height:
+    $line-height-relaxed;
 }
 
 .coordinateList {
   display: grid;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(7rem, 1fr)
-  );
-  gap: $space-xs;
+
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(7rem, 1fr)
+    );
+
+  gap:
+    $space-xs;
+
   margin: 0;
   padding: 0;
+
   list-style: none;
-  counter-reset: none;
 }
 
 .coordinateItem {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: $space-xs;
-  min-height: 4rem;
-  padding: $space-sm;
-  background-color: rgba($color-danger, 0.08);
-  border: 1px solid rgba($color-danger, 0.3);
-  border-radius: $radius-md;
+  position: relative;
+
+  display: grid;
+  place-items: center;
+
+  min-height: 5rem;
+  padding:
+    $space-sm;
+
+  background-color:
+    rgba(
+      $color-danger,
+      0.08
+    );
+
+  border:
+    1px solid
+    rgba(
+      $color-danger,
+      0.3
+    );
+
+  border-radius:
+    $radius-md;
 }
 
 .order {
+  position: absolute;
+  z-index: 3;
+
+  top:
+    $space-2xs;
+
+  left:
+    $space-2xs;
+
   display: grid;
   place-items: center;
-  flex: 0 0 auto;
+
   min-width: 1.5rem;
   min-height: 1.5rem;
-  color: $color-text-muted;
-  font-size: $font-size-xs;
-  font-weight: $font-weight-bold;
-  background-color: $color-bg-elevated-2;
-  border-radius: $radius-pill;
+
+  color:
+    $color-text-muted;
+
+  font-size:
+    $font-size-xs;
+
+  font-weight:
+    $font-weight-bold;
+
+  background-color:
+    $color-bg-elevated-2;
+
+  border:
+    1px solid
+    $color-border;
+
+  border-radius:
+    $radius-pill;
 }
 
 .coordinate {
-  color: $color-danger;
-  font-family: $font-family-display;
-  font-size: $font-size-xl;
-  line-height: 1;
-  letter-spacing: 0.05em;
+  @include coordinate-card;
+
+  --coordinate-scale:
+    1rem;
+
+  width: 4rem;
+  min-width: 4rem;
+  min-height: 4rem;
+
+  padding:
+    $space-2xs;
+
+  text-decoration: none;
 }
 
 .emptyMessage {
-  margin: $space-sm 0 0;
-  color: $color-text-muted;
-  font-size: $font-size-sm;
-  line-height: $line-height-normal;
+  margin:
+    $space-sm
+    0
+    0;
+
+  color:
+    $color-text-muted;
+
+  font-size:
+    $font-size-sm;
+
+  line-height:
+    $line-height-normal;
 }
 
-@media (max-width: $breakpoint-sm) {
+@media (
+  max-width:
+    $breakpoint-sm
+) {
   .panel {
-    padding: $space-sm;
-    border-radius: $radius-md;
+    padding:
+      $space-sm;
+
+    border-radius:
+      $radius-md;
   }
 
   .header {
-    gap: $space-sm;
+    gap:
+      $space-sm;
   }
 
   .eyebrow {
-    margin-bottom: $space-2xs;
-    font-size: 0.65rem;
-    letter-spacing: 0.08em;
+    margin-bottom:
+      $space-2xs;
+
+    font-size:
+      0.65rem;
+
+    letter-spacing:
+      0.08em;
   }
 
   .title {
-    font-size: $font-size-lg;
+    font-size:
+      $font-size-lg;
   }
 
   .counter {
     min-width: 2rem;
     min-height: 2rem;
-    padding: $space-2xs;
+    padding:
+      $space-2xs;
 
-    font-size: $font-size-sm;
+    font-size:
+      $font-size-sm;
   }
 
   .description {
@@ -138,42 +262,58 @@
       0
       $space-sm;
 
-    font-size: $font-size-xs;
-    line-height: $line-height-normal;
+    font-size:
+      $font-size-xs;
+
+    line-height:
+      $line-height-normal;
   }
 
   .coordinateList {
     grid-template-columns:
       repeat(
         auto-fill,
-        minmax(4.5rem, 1fr)
+        minmax(5rem, 1fr)
       );
-    gap: $space-2xs;
+
+    gap:
+      $space-2xs;
   }
 
   .coordinateItem {
-    min-height: 3rem;
-    gap: $space-2xs;
-    padding: $space-xs;
+    min-height: 4.25rem;
+    padding:
+      $space-xs;
 
-    border-radius: $radius-sm;
+    border-radius:
+      $radius-sm;
   }
 
   .order {
     min-width: 1.25rem;
     min-height: 1.25rem;
 
-    font-size: 0.65rem;
+    font-size:
+      0.65rem;
   }
 
-  .coordinate {
-    font-size: $font-size-lg;
-  }
+.coordinate {
+  --coordinate-scale:
+    0.9rem;
+
+  width: 3.5rem;
+  min-width: 3.5rem;
+  min-height: 3.5rem;
+}
 
   .emptyMessage {
-    margin-top: $space-xs;
+    margin-top:
+      $space-xs;
 
-    font-size: $font-size-xs;
-    line-height: $line-height-normal;
+    font-size:
+      $font-size-xs;
+
+    line-height:
+      $line-height-normal;
   }
 }

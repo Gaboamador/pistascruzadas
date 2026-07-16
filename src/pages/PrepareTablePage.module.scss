@@ -1,3 +1,5 @@
+@include game-board-pattern;
+
 .page {
   display: flex;
   flex: 1;
@@ -10,7 +12,10 @@
 
 .content,
 .layout {
-  width: min(100%, $layout-content-default);
+  width: min(
+    100%,
+    $layout-content-default
+  );
   margin: auto;
 }
 
@@ -25,13 +30,22 @@
 
 .header,
 .panel {
-  padding: $space-lg;
-  background-color: $color-bg-elevated;
-  border: 1px solid $color-border;
-  border-radius: $radius-lg;
-  box-shadow: $shadow-md;
   min-width: 0;
+  padding: $space-lg;
   overflow: hidden;
+
+  background-color:
+    $color-bg-elevated;
+
+  border:
+    1px solid
+    $color-border;
+
+  border-radius:
+    $radius-lg;
+
+  box-shadow:
+    $shadow-md;
 }
 
 .header,
@@ -44,34 +58,78 @@
 
 .eyebrow,
 .sectionEyebrow {
-  margin: 0 0 $space-xs;
-  color: $color-accent-primary;
-  font-size: $font-size-xs;
-  font-weight: $font-weight-bold;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  margin:
+    0
+    0
+    $space-xs;
+
+  color:
+    $color-accent-primary;
+
+  font-size:
+    $font-size-xs;
+
+  font-weight:
+    $font-weight-bold;
+
+  letter-spacing:
+    0.1em;
+
+  text-transform:
+    uppercase;
 }
 
 .title {
   margin: 0;
-  font-family: $font-family-display;
-  font-size: clamp($font-size-2xl, 8vw, $font-size-4xl);
-  line-height: $line-height-tight;
+
+  font-family:
+    $font-family-display;
+
+  font-size:
+    clamp(
+      $font-size-2xl,
+      8vw,
+      $font-size-4xl
+    );
+
+  line-height:
+    $line-height-tight;
 }
 
 .code {
   margin: 0;
-  font-family: $font-family-display;
-  font-size: clamp($font-size-2xl, 10vw, $font-size-4xl);
-  line-height: $line-height-tight;
-  letter-spacing: 0.14em;
+
+  font-family:
+    $font-family-condensed;
+
+  font-size:
+    clamp(
+      $font-size-2xl,
+      10vw,
+      $font-size-4xl
+    );
+
+  font-weight:
+    $font-weight-bold;
+
+  line-height:
+    $line-height-tight;
+
+  letter-spacing:
+    0.12em;
 }
 
 .sectionTitle {
   margin: 0;
-  font-family: $font-family-display;
-  font-size: $font-size-2xl;
-  line-height: $line-height-tight;
+
+  font-family:
+    $font-family-display;
+
+  font-size:
+    $font-size-2xl;
+
+  line-height:
+    $line-height-tight;
 }
 
 .stats {
@@ -82,59 +140,133 @@
 }
 
 .statBadge {
-  flex: 0 0 auto;
-  padding: $space-xs $space-sm;
-  color: $color-accent-primary;
-  font-size: $font-size-xs;
-  font-weight: $font-weight-bold;
-  background-color: rgba($color-accent-primary, 0.12);
-  border: 1px solid rgba($color-accent-primary, 0.35);
-  border-radius: $radius-pill;
+  flex:
+    0 0 auto;
+
+  padding:
+    $space-xs
+    $space-sm;
+
+  color:
+    $color-accent-primary;
+
+  font-size:
+    $font-size-xs;
+
+  font-weight:
+    $font-weight-bold;
+
+  background-color:
+    rgba(
+      $color-accent-primary,
+      0.12
+    );
+
+  border:
+    1px solid
+    rgba(
+      $color-accent-primary,
+      0.35
+    );
+
+  border-radius:
+    $radius-pill;
 }
 
 .gridSizeSection {
   display: grid;
   gap: $space-md;
-  margin-top: $space-xl;
-  padding: $space-lg;
-  background-color: $color-bg-elevated-2;
-  border: 1px solid $color-border;
-  border-radius: $radius-md;
+
+  margin-top:
+    $space-xl;
+
+  padding:
+    $space-lg;
+
+  background-color:
+    $color-bg-elevated-2;
+
+  border:
+    1px solid
+    $color-border;
+
+  border-radius:
+    $radius-md;
 }
 
 .gridSizeTitle {
   margin: 0;
-  color: $color-text-primary;
-  font-family: $font-family-display;
-  font-size: $font-size-lg;
-  line-height: $line-height-tight;
+
+  color:
+    $color-text-primary;
+
+  font-family:
+    $font-family-display;
+
+  font-size:
+    $font-size-lg;
+
+  line-height:
+    $line-height-tight;
 }
 
 .gridSizeHelp {
-  margin: $space-xs 0 0;
-  color: $color-text-muted;
-  font-size: $font-size-xs;
-  line-height: $line-height-normal;
+  margin:
+    $space-xs
+    0
+    0;
+
+  color:
+    $color-text-muted;
+
+  font-size:
+    $font-size-xs;
+
+  line-height:
+    $line-height-normal;
 }
 
 .gridSizeOptions {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: $space-xs;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap:
+    $space-xs;
 }
 
 .gridSizeButton {
   display: grid;
   gap: $space-2xs;
+
   min-width: 0;
   min-height: 4.5rem;
-  padding: $space-sm;
-  color: $color-text-secondary;
-  text-align: center;
-  background-color: $color-bg-elevated;
-  border: 1px solid $color-border;
-  border-radius: $radius-md;
+
+  padding:
+    $space-sm;
+
+  color:
+    $color-text-secondary;
+
+  text-align:
+    center;
+
+  background-color:
+    $color-bg-elevated;
+
+  border:
+    1px solid
+    $color-border;
+
+  border-radius:
+    $radius-md;
+
   cursor: pointer;
+
   transition:
     color 160ms ease,
     background-color 160ms ease,
@@ -142,42 +274,96 @@
     box-shadow 160ms ease;
 
   strong {
-    color: $color-text-primary;
-    font-size: $font-size-lg;
+    color:
+      $color-text-primary;
+
+    font-size:
+      $font-size-lg;
   }
 
   span {
-    font-size: $font-size-xs;
-    line-height: $line-height-normal;
+    font-size:
+      $font-size-xs;
+
+    line-height:
+      $line-height-normal;
   }
 
   &:hover:not(:disabled) {
-    border-color: $color-border-strong;
+    border-color:
+      $color-border-strong;
   }
 
   &:disabled {
-    cursor: not-allowed;
+    cursor:
+      not-allowed;
   }
 }
 
 .gridSizeButtonSelected {
-  color: $color-text-primary;
-  background-color: rgba($color-accent-primary, 0.12);
-  border-color: $color-accent-primary;
-  box-shadow: inset 0 0 0 1px rgba($color-accent-primary, 0.25);
+  color:
+    $color-text-primary;
+
+  background-color:
+    rgba(
+      $color-accent-primary,
+      0.12
+    );
+
+  border-color:
+    $color-accent-primary;
+
+  box-shadow:
+    inset
+    0
+    0
+    0
+    1px
+    rgba(
+      $color-accent-primary,
+      0.25
+    );
+
   opacity: 1;
 }
 
 .operationError {
-  margin: $space-md 0 0;
-  padding: $space-sm $space-md;
-  color: $color-danger;
-  font-size: $font-size-xs;
-  font-weight: $font-weight-medium;
-  line-height: $line-height-normal;
-  background-color: rgba($color-danger, 0.1);
-  border: 1px solid rgba($color-danger, 0.4);
-  border-radius: $radius-md;
+  margin:
+    $space-md
+    0
+    0;
+
+  padding:
+    $space-sm
+    $space-md;
+
+  color:
+    $color-danger;
+
+  font-size:
+    $font-size-xs;
+
+  font-weight:
+    $font-weight-medium;
+
+  line-height:
+    $line-height-normal;
+
+  background-color:
+    rgba(
+      $color-danger,
+      0.1
+    );
+
+  border:
+    1px solid
+    rgba(
+      $color-danger,
+      0.4
+    );
+
+  border-radius:
+    $radius-md;
 }
 
 .preparationToolbar {
@@ -185,129 +371,121 @@
   align-items: end;
   justify-content: space-between;
   gap: $space-lg;
-  margin: $space-md 0 $space-xl;
+
+  margin:
+    $space-md
+    0
+    $space-xl;
 }
 
 .description {
   max-width: 44rem;
   margin: 0;
-  color: $color-text-secondary;
-  line-height: $line-height-relaxed;
+
+  color:
+    $color-text-secondary;
+
+  line-height:
+    $line-height-relaxed;
 }
 
-.content .description {
-  margin: $space-md auto $space-xl;
+.content
+.description {
+  margin:
+    $space-md
+    auto
+    $space-xl;
 }
 
 .boardLoading {
   display: grid;
   place-items: center;
+
   min-height: 12rem;
-  padding: $space-xl;
-  color: $color-text-secondary;
-  background-color: $color-bg-elevated-2;
-  border: 1px solid $color-border;
-  border-radius: $radius-md;
+
+  padding:
+    $space-xl;
+
+  color:
+    $color-text-secondary;
+
+  background-color:
+    $color-bg-elevated-2;
+
+  border:
+    1px solid
+    $color-border;
+
+  border-radius:
+    $radius-md;
 }
 
-.boardScroller {
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
-
-  overflow-x: auto;
-  overflow-y: hidden;
-
-  padding-bottom: $space-xs;
-
-  overscroll-behavior-inline: contain;
-  -webkit-overflow-scrolling: touch;
-}
-
-.board {
-  --grid-size: 4;
-
-  display: grid;
-  grid-template-columns:
-    minmax(7rem, max-content)
-    repeat(
-      var(--grid-size),
-      minmax(6rem, max-content)
-    );
-  gap: $space-xs;
-
-  width: max-content;
-  min-width: 100%;
-}
-
-.corner {
-  min-height: 7.5rem;
+.axisWordCard {
+  padding-right:
+    2rem;
 }
 
 .columnHeader,
 .rowHeader {
   position: relative;
-  display: grid;
-  align-content: center;
-  justify-items: center;
-  gap: $space-xs;
-  min-width: 0;
-  padding: $space-sm;
-  text-align: center;
-  background-color: $color-card-cream;
-  border: 0.25rem solid $color-card-border;
-  box-shadow:
-    inset 0 0 0 1px rgba($color-card-ink, 0.12),
-    $shadow-sm;
-  border-radius: $radius-md;
-}
-
-.columnHeader {
-  min-height: 7.5rem;
-}
-
-.axisLabel {
-  color: $color-card-ink;
-  font-family: $font-family-display;
-  font-size: $font-size-lg;
-  font-weight: $font-weight-bold;
-}
-
-.axisWord {
-  color: $color-text-primary;
-  font-size: $font-size-sm;
-  line-height: $line-height-normal;
-  text-transform: uppercase;
-
-  white-space: nowrap;
-  overflow-wrap: normal;
-  word-break: normal;
 }
 
 .rerollButton {
+  position: absolute;
+  right: $space-2xs;
+  bottom: $space-2xs;
+  z-index: 3;
+
   display: grid;
   place-items: center;
-  width: var(--touch-target-min);
-  height: var(--touch-target-min);
+
+  width: 1.75rem;
+  height: 1.75rem;
   padding: 0;
-  color: $color-text-secondary;
-  background-color: $color-bg-elevated-2;
-  border: 1px solid $color-border;
-  border-radius: $radius-pill;
+
+  color:
+    $color-text-secondary;
+
+  background-color:
+    rgba(
+      $color-bg-elevated-2,
+      0.92
+    );
+
+  border:
+    1px solid
+    $color-border;
+
+  border-radius:
+    $radius-pill;
+
   cursor: pointer;
+
   transition:
     color 160ms ease,
     background-color 160ms ease,
     border-color 160ms ease,
     transform 160ms ease;
 
-  &:hover {
-    color: $color-accent-primary;
-    border-color: $color-accent-primary;
+  &:hover:not(:disabled) {
+    color:
+      $color-accent-primary;
+
+    border-color:
+      $color-accent-primary;
   }
 
-  &:active {
-    transform: rotate(45deg);
+  &:active:not(:disabled) {
+    transform:
+      rotate(45deg);
+  }
+
+  &:disabled {
+    cursor:
+      not-allowed;
+
+    opacity:
+      0.65;
   }
 
   svg {
@@ -316,63 +494,89 @@
   }
 }
 
-.boardRow {
-  display: contents;
-}
-
-.rowHeader {
-  min-height: 5.5rem;
-}
-
-.coordinateCell {
-  display: grid;
-  place-items: center;
-  min-width: 0;
-  min-height: 5.5rem;
-  color: $color-text-muted;
-  font-size: $font-size-xs;
-  font-weight: $font-weight-bold;
-  background-color: $color-bg-elevated-2;
-  border: 1px solid $color-border;
-  border-radius: $radius-md;
-}
-
 .startSection {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: $space-lg;
-  margin-top: $space-xl;
-  padding: $space-lg;
-  background-color: rgba($color-accent-primary, 0.08);
-  border: 1px solid rgba($color-accent-primary, 0.3);
-  border-radius: $radius-md;
+
+  margin-top:
+    $space-xl;
+
+  padding:
+    $space-lg;
+
+  background-color:
+    rgba(
+      $color-accent-primary,
+      0.08
+    );
+
+  border:
+    1px solid
+    rgba(
+      $color-accent-primary,
+      0.3
+    );
+
+  border-radius:
+    $radius-md;
 }
 
 .startTitle {
   margin: 0;
-  color: $color-text-primary;
-  font-family: $font-family-display;
-  font-size: $font-size-lg;
-  line-height: $line-height-tight;
+
+  color:
+    $color-text-primary;
+
+  font-family:
+    $font-family-display;
+
+  font-size:
+    $font-size-lg;
+
+  line-height:
+    $line-height-tight;
 }
 
 .startDescription {
   max-width: 42rem;
-  margin: $space-xs 0 0;
-  color: $color-text-secondary;
-  font-size: $font-size-sm;
-  line-height: $line-height-normal;
+
+  margin:
+    $space-xs
+    0
+    0;
+
+  color:
+    $color-text-secondary;
+
+  font-size:
+    $font-size-sm;
+
+  line-height:
+    $line-height-normal;
 }
 
 .saveStatus {
-  margin: $space-lg 0 0;
-  color: $color-text-muted;
-  font-size: $font-size-xs;
-  line-height: $line-height-normal;
+  margin:
+    $space-lg
+    0
+    0;
+
+  color:
+    $color-text-muted;
+
+  font-size:
+    $font-size-xs;
+
+  line-height:
+    $line-height-normal;
 }
 
-@media (max-width: $breakpoint-sm) {
+@media (
+  max-width:
+    $breakpoint-sm
+) {
   .page {
     @include mobile-page-padding(
       $space-sm
@@ -386,69 +590,78 @@
     flex-direction: column;
   }
 
-  .header :global(.button),
-  .preparationToolbar :global(.button) {
+  .header
+  :global(.button),
+  .preparationToolbar
+  :global(.button) {
     width: 100%;
   }
 
   .stats {
-    justify-content: flex-start;
-  }
-
-  .board {
-    grid-template-columns:
-      minmax(5rem, max-content)
-      repeat(
-        var(--grid-size),
-        minmax(4.25rem, max-content)
-      );
-
-    gap: $space-2xs;
-  }
-
-  .rowHeader,
-  .coordinateCell {
-    min-height: 4rem;
-  }
-
-  .columnHeader,
-  .rowHeader,
-  .coordinateCell {
-    gap: $space-2xs;
-    padding: $space-xs;
-    border-radius: $radius-sm;
+    justify-content:
+      flex-start;
   }
 
   .gridSizeOptions {
-    grid-template-columns: 1fr;
+    grid-template-columns:
+      1fr;
   }
 
   .startSection {
-  align-items: stretch;
-  flex-direction: column;
-}
-
-.startSection :global(.button) {
-  width: 100%;
-}
-  .coordinateCell {
-    padding: $space-2xs;
-    font-size: $font-size-xs;
-    border-radius: $radius-sm;
+    align-items: stretch;
+    flex-direction: column;
   }
 
-  .axisLabel {
-    font-size: $font-size-md;
+  .startSection
+  :global(.button) {
+    width: 100%;
   }
 
-  .axisWord {
-    font-size: $font-size-xs;
-    line-height: $line-height-tight;
-    text-transform: uppercase;
-
-    white-space: nowrap;
-    overflow-wrap: normal;
-    word-break: normal;
+  .axisWordCard {
+    padding-right:
+      $space-2xs;
   }
 
+  .columnHeader
+  .axisWordCard {
+    padding-right:
+      1.65rem;
+  }
+
+  .rerollButton {
+    width: 1.4rem;
+    height: 1.4rem;
+
+    svg {
+      width: 0.8rem;
+      height: 0.8rem;
+    }
+  }
+
+  /*
+   * En los encabezados de fila, el botón queda
+   * dentro del sector derecho correspondiente
+   * a la tarjeta de palabra.
+   *
+   * No se centra sobre todo el rowHeader porque
+   * eso lo dejaba sobre la separación con la
+   * tarjeta numérica.
+   */
+  .rowHeader
+  .rerollButton {
+    right:
+      $space-3xs;
+
+    bottom:
+      $space-3xs;
+
+    z-index: 4;
+
+    transform: none;
+
+    &:active:not(:disabled) {
+      transform:
+        rotate(45deg);
+    }
+  }
 }

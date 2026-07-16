@@ -20,15 +20,18 @@ function PlayerCoordinateCard({
   uid,
   currentCoordinate,
 }) {
-  const isOnline = useOnlineStatus();
-  
+  const isOnline =
+    useOnlineStatus();
+
   const [
     isResolving,
     setIsResolving,
   ] = useState(false);
 
-  const [error, setError] =
-    useState('');
+  const [
+    error,
+    setError,
+  ] = useState('');
 
   const [
     pendingResult,
@@ -38,41 +41,53 @@ function PlayerCoordinateCard({
   const hasCoordinate =
     Boolean(currentCoordinate);
 
+  const coordinateLetter =
+    hasCoordinate
+      ? currentCoordinate.charAt(0)
+      : '';
+
+  const coordinateNumber =
+    hasCoordinate
+      ? currentCoordinate.slice(1)
+      : '';
+
   const isCorrectResult =
     pendingResult
       === COORDINATE_RESULT.CORRECT;
 
-  const openResolveModal = (result) => {
-    if (
-      !hasCoordinate
-      || isResolving
-    ) {
-      return;
-    }
+  const openResolveModal =
+    (result) => {
+      if (
+        !hasCoordinate
+        || isResolving
+      ) {
+        return;
+      }
 
-    if (!isOnline) {
-      setError(
-        'Necesitás conexión a internet para resolver la coordenada.',
-      );
+      if (!isOnline) {
+        setError(
+          'Necesitás conexión a internet para resolver la coordenada.',
+        );
 
-      return;
-    }
+        return;
+      }
 
-    setError('');
-    setPendingResult(result);
-  };
+      setError('');
+      setPendingResult(result);
+    };
 
-  const closeResolveModal = () => {
-    if (isResolving) {
-      return;
-    }
+  const closeResolveModal =
+    () => {
+      if (isResolving) {
+        return;
+      }
 
-    setPendingResult(null);
-  };
+      setPendingResult(null);
+    };
 
   const handleConfirmResolve =
     async () => {
-            if (
+      if (
         !hasCoordinate
         || isResolving
         || !pendingResult
@@ -97,7 +112,8 @@ function PlayerCoordinateCard({
         await resolveCurrentCoordinate({
           tableCode,
           uid,
-          result: pendingResult,
+          result:
+            pendingResult,
         });
 
         setPendingResult(null);
@@ -108,7 +124,8 @@ function PlayerCoordinateCard({
         );
 
         setError(
-          resolveError instanceof Error
+          resolveError
+            instanceof Error
             ? resolveError.message
             : 'No se pudo procesar la coordenada.',
         );
@@ -148,10 +165,47 @@ function PlayerCoordinateCard({
         <div
           className={styles.coordinate}
           aria-live="polite"
+          aria-label={
+            hasCoordinate
+              ? `Tu coordenada es ${currentCoordinate}`
+              : 'No tenés una coordenada asignada'
+          }
         >
-          {hasCoordinate
-            ? currentCoordinate
-            : '—'}
+          {hasCoordinate ? (
+            <>
+              <span
+                className={
+                  styles.coordinateLetter
+                }
+                aria-hidden="true"
+              >
+                {
+                  coordinateLetter
+                }
+              </span>
+
+              <span
+                className={
+                  styles.coordinateBadge
+                }
+                aria-hidden="true"
+              >
+                <span
+                  className={
+                    styles.coordinateNumber
+                  }
+                >
+                  {
+                    coordinateNumber
+                  }
+                </span>
+              </span>
+            </>
+          ) : (
+            <span aria-hidden="true">
+              —
+            </span>
+          )}
         </div>
 
         {hasCoordinate ? (
@@ -164,9 +218,14 @@ function PlayerCoordinateCard({
                   COORDINATE_RESULT.FAILED,
                 )
               }
-              disabled={isResolving || !isOnline}
+              disabled={
+                isResolving
+                || !isOnline
+              }
             >
-              <FiX aria-hidden="true" />
+              <FiX
+                aria-hidden="true"
+              />
 
               {isResolving
                 ? 'Procesando…'
@@ -181,7 +240,10 @@ function PlayerCoordinateCard({
                   COORDINATE_RESULT.CORRECT,
                 )
               }
-              disabled={isResolving || !isOnline}
+              disabled={
+                isResolving
+                || !isOnline
+              }
             >
               <FiCheck
                 aria-hidden="true"
@@ -193,7 +255,11 @@ function PlayerCoordinateCard({
             </button>
           </div>
         ) : (
-          <p className={styles.emptyMessage}>
+          <p
+            className={
+              styles.emptyMessage
+            }
+          >
             No quedan coordenadas disponibles para asignarte.
           </p>
         )}
@@ -209,7 +275,11 @@ function PlayerCoordinateCard({
       </section>
 
       <ConfirmModal
-        isOpen={Boolean(pendingResult)}
+        isOpen={
+          Boolean(
+            pendingResult,
+          )
+        }
         title={
           isCorrectResult
             ? 'Confirmar acierto'
@@ -231,7 +301,9 @@ function PlayerCoordinateCard({
             ? CONFIRM_MODAL_TONES.SUCCESS
             : CONFIRM_MODAL_TONES.DANGER
         }
-        isProcessing={isResolving}
+        isProcessing={
+          isResolving
+        }
         onConfirm={
           handleConfirmResolve
         }

@@ -88,7 +88,8 @@ function PrepareTablePage({ user }) {
     tableExists,
     hasAccess,
   } = useTableRoom({
-    tableCode: normalizedTableCode,
+    tableCode:
+      normalizedTableCode,
     uid: user.uid,
   });
 
@@ -168,7 +169,8 @@ function PrepareTablePage({ user }) {
   const isHost =
     participant.role
       === PARTICIPANT_ROLE.HOST
-    && table.hostUid === user.uid;
+    && table.hostUid
+      === user.uid;
 
   if (!isHost) {
     return (
@@ -227,7 +229,8 @@ function BoardPreparation({
   players,
 }) {
   const navigate = useNavigate();
-  const isOnline = useOnlineStatus();
+  const isOnline =
+    useOnlineStatus();
 
   const {
     boardWords,
@@ -238,7 +241,8 @@ function BoardPreparation({
   } = useBoardPreparation({
     tableCode,
     uid,
-    gridSize: table.gridSize,
+    gridSize:
+      table.gridSize,
   });
 
   const [
@@ -269,7 +273,8 @@ function BoardPreparation({
   const axisIndexes =
     Array.from(
       {
-        length: table.gridSize,
+        length:
+          table.gridSize,
       },
       (_, index) => index,
     );
@@ -292,7 +297,7 @@ function BoardPreparation({
     && activePlayers.length
       <= coordinateCount;
 
-    const handleGridSizeChange =
+  const handleGridSizeChange =
     async (nextGridSize) => {
       if (
         isUpdatingGrid
@@ -318,7 +323,8 @@ function BoardPreparation({
         await updateTableGridSize({
           tableCode,
           uid,
-          gridSize: nextGridSize,
+          gridSize:
+            nextGridSize,
         });
       } catch (updateError) {
         console.error(
@@ -334,7 +340,7 @@ function BoardPreparation({
       }
     };
 
-    const handleRegenerateBoard =
+  const handleRegenerateBoard =
     () => {
       if (!isOnline) {
         setGridUpdateError(
@@ -353,7 +359,7 @@ function BoardPreparation({
       );
     };
 
-    const handleRerollWord = (
+  const handleRerollWord = (
     axis,
     index,
   ) => {
@@ -377,35 +383,36 @@ function BoardPreparation({
     );
   };
 
-    const openStartGameModal = () => {
-    if (
-      isStartingGame
-      || isSaving
-      || isUpdatingGrid
-      || !boardWords
-    ) {
-      return;
-    }
+  const openStartGameModal =
+    () => {
+      if (
+        isStartingGame
+        || isSaving
+        || isUpdatingGrid
+        || !boardWords
+      ) {
+        return;
+      }
 
-    if (!isOnline) {
-      setStartGameError(
-        'Necesitás conexión a internet para iniciar la partida.',
-      );
+      if (!isOnline) {
+        setStartGameError(
+          'Necesitás conexión a internet para iniciar la partida.',
+        );
 
-      return;
-    }
+        return;
+      }
 
-    if (!canStartGame) {
-      setStartGameError(
-        `No se puede iniciar: hay ${activePlayers.length} jugadores activos y sólo ${coordinateCount} coordenadas.`,
-      );
+      if (!canStartGame) {
+        setStartGameError(
+          `No se puede iniciar: hay ${activePlayers.length} jugadores activos y sólo ${coordinateCount} coordenadas.`,
+        );
 
-      return;
-    }
+        return;
+      }
 
-    setStartGameError('');
-    setIsStartModalOpen(true);
-  };
+      setStartGameError('');
+      setIsStartModalOpen(true);
+    };
 
   const closeStartGameModal =
     () => {
@@ -416,7 +423,7 @@ function BoardPreparation({
       setIsStartModalOpen(false);
     };
 
-    const handleConfirmStartGame =
+  const handleConfirmStartGame =
     async () => {
       if (
         isStartingGame
@@ -467,7 +474,8 @@ function BoardPreparation({
         );
 
         setStartGameError(
-          startError instanceof Error
+          startError
+            instanceof Error
             ? startError.message
             : 'No se pudo iniciar la partida.',
         );
@@ -519,7 +527,9 @@ function BoardPreparation({
 
           <section className={styles.panel}>
             <div
-              className={styles.panelHeader}
+              className={
+                styles.panelHeader
+              }
             >
               <div>
                 <p
@@ -535,8 +545,10 @@ function BoardPreparation({
                     styles.sectionTitle
                   }
                 >
-                  Tablero {table.gridSize}{' '}
-                  × {table.gridSize}
+                  Tablero{' '}
+                  {table.gridSize}{' '}
+                  ×{' '}
+                  {table.gridSize}
                 </h2>
               </div>
 
@@ -598,7 +610,9 @@ function BoardPreparation({
 
                     return (
                       <button
-                        key={option.value}
+                        key={
+                          option.value
+                        }
                         type="button"
                         className={`${styles.gridSizeButton} ${
                           isSelected
@@ -619,7 +633,9 @@ function BoardPreparation({
                         }
                       >
                         <strong>
-                          {option.label}
+                          {
+                            option.label
+                          }
                         </strong>
 
                         <span>
@@ -714,9 +730,15 @@ function BoardPreparation({
                 Preparando palabras…
               </div>
             ) : (
-              <div className={styles.boardScroller}>
+              <div
+                className={
+                  styles.boardScroller
+                }
+              >
                 <div
-                  className={styles.board}
+                  className={
+                    styles.board
+                  }
                   style={{
                     '--grid-size':
                       table.gridSize,
@@ -749,21 +771,33 @@ function BoardPreparation({
                             styles.columnHeader
                           }
                         >
-                          <span
+                          <div
                             className={
-                              styles.axisLabel
+                              styles.axisLabelCard
                             }
                           >
-                            {columnLabel}
-                          </span>
+                            <span
+                              className={
+                                styles.axisLabel
+                              }
+                            >
+                              {
+                                columnLabel
+                              }
+                            </span>
+                          </div>
 
-                          <strong
+                          <div
                             className={
-                              styles.axisWord
+                              styles.axisWordCard
                             }
                           >
-                            {word}
-                          </strong>
+                            <strong className={styles.axisWord}>
+                              <span className={styles.axisWordText}>
+                                {word}
+                              </span>
+                            </strong>
+                          </div>
 
                           <button
                             type="button"
@@ -792,89 +826,129 @@ function BoardPreparation({
                   )}
 
                   {axisIndexes.map(
-                    (rowIndex) => (
-                      <div
-                        key={`row-${rowIndex}`}
-                        className={
-                          styles.boardRow
-                        }
-                      >
+                    (rowIndex) => {
+                      const rowLabel =
+                        rowIndex + 1;
+
+                      return (
                         <div
+                          key={`row-${rowIndex}`}
                           className={
-                            styles.rowHeader
+                            styles.boardRow
                           }
                         >
-                          <span
+                          <div
                             className={
-                              styles.axisLabel
+                              styles.rowHeader
                             }
                           >
-                            {rowIndex + 1}
-                          </span>
-
-                          <strong
-                            className={
-                              styles.axisWord
-                            }
-                          >
-                            {
-                              boardWords
-                                .rowWords[
-                                  rowIndex
-                                ]
-                            }
-                          </strong>
-
-                          <button
-                            type="button"
-                            className={
-                              styles.rerollButton
-                            }
-                            onClick={() =>
-                              handleRerollWord(
-                                'row',
-                                rowIndex,
-                              )
-                            }
-                            disabled={
-                              remoteControlsDisabled
-                            }
-                            aria-label={`Cambiar la palabra de la fila ${rowIndex + 1}`}
-                            title={`Cambiar ${boardWords.rowWords[rowIndex]}`}
-                          >
-                            <FiRefreshCw
-                              aria-hidden="true"
-                            />
-                          </button>
-                        </div>
-
-                        {axisIndexes.map(
-                          (
-                            columnIndex,
-                          ) => {
-                            const coordinate =
-                              `${getColumnLabel(
-                                columnIndex,
-                              )}${rowIndex + 1}`;
-
-                            return (
-                              <div
-                                key={
-                                  coordinate
-                                }
+                            <div
+                              className={
+                                styles.axisLabelCard
+                              }
+                            >
+                              <span
                                 className={
-                                  styles.coordinateCell
+                                  styles.axisLabel
                                 }
                               >
                                 {
-                                  coordinate
+                                  rowLabel
                                 }
-                              </div>
-                            );
-                          },
-                        )}
-                      </div>
-                    ),
+                              </span>
+                            </div>
+
+                            <div
+                              className={
+                                styles.axisWordCard
+                              }
+                            >
+                              <strong className={styles.axisWord}>
+                                <span className={styles.axisWordText}>
+                                  {boardWords.rowWords[rowIndex]}
+                                </span>
+                              </strong>
+                            </div>
+
+                            <button
+                              type="button"
+                              className={
+                                styles.rerollButton
+                              }
+                              onClick={() =>
+                                handleRerollWord(
+                                  'row',
+                                  rowIndex,
+                                )
+                              }
+                              disabled={
+                                remoteControlsDisabled
+                              }
+                              aria-label={`Cambiar la palabra de la fila ${rowLabel}`}
+                              title={`Cambiar ${boardWords.rowWords[rowIndex]}`}
+                            >
+                              <FiRefreshCw
+                                aria-hidden="true"
+                              />
+                            </button>
+                          </div>
+
+                          {axisIndexes.map(
+                            (
+                              columnIndex,
+                            ) => {
+                              const columnLabel =
+                                getColumnLabel(
+                                  columnIndex,
+                                );
+
+                              const coordinate =
+                                `${columnLabel}${rowLabel}`;
+
+                              return (
+                                <div
+                                  key={
+                                    coordinate
+                                  }
+                                  className={
+                                    styles.coordinateCell
+                                  }
+                                  aria-label={`Coordenada ${coordinate}`}
+                                >
+                                  <span
+                                    className={
+                                      styles.coordinateLetter
+                                    }
+                                    aria-hidden="true"
+                                  >
+                                    {
+                                      columnLabel
+                                    }
+                                  </span>
+
+                                  <span
+                                    className={
+                                      styles.coordinateBadge
+                                    }
+                                    aria-hidden="true"
+                                  >
+                                    <span
+                                      className={
+                                        styles.coordinateNumber
+                                      }
+                                    >
+                                      {
+                                        rowLabel
+                                      }
+                                    </span>
+                                  </span>
+                                </div>
+                              );
+                            },
+                          )}
+                        </div>
+                      );
+                    },
                   )}
                 </div>
               </div>
@@ -942,7 +1016,9 @@ function BoardPreparation({
       </main>
 
       <ConfirmModal
-        isOpen={isStartModalOpen}
+        isOpen={
+          isStartModalOpen
+        }
         title="Iniciar la partida"
         description={`Se repartirán coordenadas entre ${activePlayers.length} jugadores activos. Las palabras y el tamaño de la grilla quedarán bloqueados.`}
         confirmLabel="Iniciar partida"

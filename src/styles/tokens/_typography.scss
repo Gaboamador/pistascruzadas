@@ -1,10 +1,64 @@
-$font-family-display:
-  Inter,
-  system-ui,
-  -apple-system,
-  BlinkMacSystemFont,
-  "Segoe UI",
+/*
+ * Tipografías oficiales presentes en el material
+ * gráfico y en el reglamento de Pistas Cruzadas.
+ */
+
+/*
+ * Desigers Bold:
+ * - títulos decorativos;
+ * - letras y números de los ejes;
+ * - coordenadas de las cartas.
+ */
+$font-family-brand:
+  "Desigers",
+  Georgia,
+  "Times New Roman",
+  serif;
+
+/*
+ * Curse Casual Regular:
+ * - palabras de las tarjetas;
+ * - texto principal del reglamento;
+ * - comunicación de tono lúdico.
+ */
+$font-family-game:
+  "Curse Casual",
+  "Arial Narrow",
+  Arial,
   sans-serif;
+
+/*
+ * Helvetica Neue Condensed Bold:
+ * - textos auxiliares condensados;
+ * - etiquetas compactas cuando sea necesario.
+ */
+$font-family-condensed:
+  "Helvetica Neue Condensed",
+  "Arial Narrow",
+  Arial,
+  sans-serif;
+
+/*
+ * Gill Sans MT:
+ * - contenido editorial secundario;
+ * - texto legal o institucional.
+ */
+$font-family-editorial:
+  "Gill Sans MT",
+  "Gill Sans",
+  Calibri,
+  Arial,
+  sans-serif;
+
+/*
+ * Tokens semánticos generales.
+ *
+ * La interfaz conserva una sans de sistema para lectura,
+ * formularios y controles. Las fuentes oficiales de carácter
+ * expresivo se aplican mediante los tokens específicos anteriores.
+ */
+$font-family-display:
+  $font-family-brand;
 
 $font-family-text:
   Inter,
@@ -14,7 +68,8 @@ $font-family-text:
   "Segoe UI",
   sans-serif;
 
-$font-family-input: $font-family-text;
+$font-family-input:
+  $font-family-text;
 
 $font-size-xs: 0.75rem;
 $font-size-sm: 0.875rem;

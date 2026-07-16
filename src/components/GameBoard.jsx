@@ -29,7 +29,10 @@ function GameBoard({ tableCode }) {
 
   if (error) {
     return (
-      <section className={styles.status} role="alert">
+      <section
+        className={styles.status}
+        role="alert"
+      >
         No se pudo cargar el tablero.
       </section>
     );
@@ -37,14 +40,19 @@ function GameBoard({ tableCode }) {
 
   if (!gameBoard) {
     return (
-      <section className={styles.status} role="alert">
+      <section
+        className={styles.status}
+        role="alert"
+      >
         La partida está iniciada, pero no encontramos el tablero.
       </section>
     );
   }
 
   const axisIndexes = Array.from(
-    { length: gameBoard.gridSize },
+    {
+      length: gameBoard.gridSize,
+    },
     (_, index) => index,
   );
 
@@ -80,7 +88,8 @@ function GameBoard({ tableCode }) {
         <div
           className={styles.board}
           style={{
-            '--grid-size': gameBoard.gridSize,
+            '--grid-size':
+              gameBoard.gridSize,
           }}
         >
           <div
@@ -88,70 +97,166 @@ function GameBoard({ tableCode }) {
             aria-hidden="true"
           />
 
-          {axisIndexes.map((columnIndex) => {
-            const columnLabel = getColumnLabel(columnIndex);
-            const word =
-              gameBoard.columnWords[columnIndex];
-
-            return (
-              <div
-                key={`column-${columnLabel}`}
-                className={styles.columnHeader}
-              >
-                <span className={styles.axisLabel}>
-                  {columnLabel}
-                </span>
-
-                <strong className={styles.axisWord}>
-                  {word}
-                </strong>
-              </div>
-            );
-          })}
-
-          {axisIndexes.map((rowIndex) => (
-            <div
-              key={`row-${rowIndex + 1}`}
-              className={styles.boardRow}
-            >
-              <div className={styles.rowHeader}>
-                <span className={styles.axisLabel}>
-                  {rowIndex + 1}
-                </span>
-
-                <strong className={styles.axisWord}>
-                  {gameBoard.rowWords[rowIndex]}
-                </strong>
-              </div>
-
-              {axisIndexes.map((columnIndex) => {
-                const coordinate = `${getColumnLabel(
+          {axisIndexes.map(
+            (columnIndex) => {
+              const columnLabel =
+                getColumnLabel(
                   columnIndex,
-                )}${rowIndex + 1}`;
+                );
 
-                const isRevealed =
-                  revealedCoordinates.has(coordinate);
+              const word =
+                gameBoard
+                  .columnWords[
+                    columnIndex
+                  ];
 
-                return (
+              return (
+                <div
+                  key={`column-${columnLabel}`}
+                  className={
+                    styles.columnHeader
+                  }
+                >
                   <div
-                    key={coordinate}
-                    className={`${styles.coordinateCell} ${
-                      isRevealed
-                        ? styles.coordinateCellRevealed
-                        : ''
-                    }`}
-                    aria-label={
-                      isRevealed
-                        ? `${coordinate}, coordenada descubierta`
-                        : `${coordinate}, coordenada pendiente`
+                    className={
+                      styles.axisLabelCard
                     }
                   >
-                    {coordinate}
+                    <span
+                      className={
+                        styles.axisLabel
+                      }
+                    >
+                      {columnLabel}
+                    </span>
                   </div>
-                );
-              })}
-            </div>
-          ))}
+
+                  <div
+                    className={
+                      styles.axisWordCard
+                    }
+                  >
+                    <strong className={styles.axisWord}>
+                      <span className={styles.axisWordText}>
+                        {word}
+                      </span>
+                    </strong>
+                  </div>
+                </div>
+              );
+            },
+          )}
+
+          {axisIndexes.map(
+            (rowIndex) => {
+              const rowLabel =
+                rowIndex + 1;
+
+              return (
+                <div
+                  key={`row-${rowLabel}`}
+                  className={
+                    styles.boardRow
+                  }
+                >
+                  <div
+                    className={
+                      styles.rowHeader
+                    }
+                  >
+                    <div
+                      className={
+                        styles.axisLabelCard
+                      }
+                    >
+                      <span
+                        className={
+                          styles.axisLabel
+                        }
+                      >
+                        {rowLabel}
+                      </span>
+                    </div>
+
+                    <div
+                      className={
+                        styles.axisWordCard
+                      }
+                    >
+                      <strong className={styles.axisWord}>
+                        <span className={styles.axisWordText}>
+                          {gameBoard.rowWords[rowIndex]}
+                        </span>
+                      </strong>
+                    </div>
+                  </div>
+
+                  {axisIndexes.map(
+                    (columnIndex) => {
+                      const columnLabel =
+                        getColumnLabel(
+                          columnIndex,
+                        );
+
+                      const coordinate =
+                        `${columnLabel}${rowLabel}`;
+
+                      const isRevealed =
+                        revealedCoordinates.has(
+                          coordinate,
+                        );
+
+                      return (
+                        <div
+                          key={
+                            coordinate
+                          }
+                          className={`${styles.coordinateCell} ${
+                            isRevealed
+                              ? styles.coordinateCellRevealed
+                              : ''
+                          }`}
+                          aria-label={
+                            isRevealed
+                              ? `${coordinate}, coordenada descubierta`
+                              : `${coordinate}, coordenada pendiente`
+                          }
+                        >
+                          <span
+                            className={
+                              styles.coordinateLetter
+                            }
+                            aria-hidden="true"
+                          >
+                            {
+                              columnLabel
+                            }
+                          </span>
+
+                          <span
+                            className={
+                              styles.coordinateBadge
+                            }
+                            aria-hidden="true"
+                          >
+                            <span
+                              className={
+                                styles.coordinateNumber
+                              }
+                            >
+                              {
+                                rowLabel
+                              }
+                            </span>
+                          </span>
+                        </div>
+                      );
+                    },
+                  )}
+                </div>
+              );
+            },
+          )}
         </div>
       </div>
     </section>
