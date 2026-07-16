@@ -1,3 +1,4 @@
+import CoordinateCardBack from '@/components/CoordinateCardBack';
 import useGameBoard from '@/hooks/useGameBoard';
 
 import styles from '@/components/GameBoard.module.scss';
@@ -136,8 +137,16 @@ function GameBoard({ tableCode }) {
                       styles.axisWordCard
                     }
                   >
-                    <strong className={styles.axisWord}>
-                      <span className={styles.axisWordText}>
+                    <strong
+                      className={
+                        styles.axisWord
+                      }
+                    >
+                      <span
+                        className={
+                          styles.axisWordText
+                        }
+                      >
                         {word}
                       </span>
                     </strong>
@@ -183,9 +192,22 @@ function GameBoard({ tableCode }) {
                         styles.axisWordCard
                       }
                     >
-                      <strong className={styles.axisWord}>
-                        <span className={styles.axisWordText}>
-                          {gameBoard.rowWords[rowIndex]}
+                      <strong
+                        className={
+                          styles.axisWord
+                        }
+                      >
+                        <span
+                          className={
+                            styles.axisWordText
+                          }
+                        >
+                          {
+                            gameBoard
+                              .rowWords[
+                                rowIndex
+                              ]
+                          }
                         </span>
                       </strong>
                     </div>
@@ -206,21 +228,28 @@ function GameBoard({ tableCode }) {
                           coordinate,
                         );
 
+                      if (!isRevealed) {
+                        return (
+                          <CoordinateCardBack
+                            key={
+                              coordinate
+                            }
+                            coordinate={
+                              coordinate
+                            }
+                          />
+                        );
+                      }
+
                       return (
                         <div
                           key={
                             coordinate
                           }
-                          className={`${styles.coordinateCell} ${
-                            isRevealed
-                              ? styles.coordinateCellRevealed
-                              : ''
-                          }`}
-                          aria-label={
-                            isRevealed
-                              ? `${coordinate}, coordenada descubierta`
-                              : `${coordinate}, coordenada pendiente`
+                          className={
+                            styles.coordinateCell
                           }
+                          aria-label={`${coordinate}, coordenada descubierta`}
                         >
                           <span
                             className={

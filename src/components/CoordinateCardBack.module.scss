@@ -1,0 +1,263 @@
+.card {
+  position: relative;
+
+  display: grid;
+  place-items: center;
+
+  min-width: 0;
+  min-height: 4.75rem;
+  aspect-ratio: 1 / 1;
+
+  padding: $space-2xs;
+
+  background-color: #c7bc99;
+  border: 0.25rem solid $color-card-cream;
+  border-radius: $radius-sm;
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.16),
+    $shadow-sm;
+  overflow: hidden;
+}
+
+.frame {
+  width: 100%;
+  height: 100%;
+  padding: 0.18rem;
+
+  background-color: #f3edd7;
+  border-radius: calc(#{$radius-sm} * 0.72);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+/*
+ * Fondo inspirado en la imagen original:
+ * franjas diagonales color durazno, azul y verde,
+ * con separaciones crema, y la banda rosa cruzada.
+ */
+.art::before {
+  content: '';
+
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+
+  background:
+    linear-gradient(
+      80deg,
+      #d9d1b2 0%,
+      #d9d1b2 14%,
+      #e9c69e 14%,
+      #e9c69e 33%,
+      #d9d1b2 33%,
+      #d9d1b2 39%,
+      #77a8af 39%,
+      #77a8af 62%,
+      #d9d1b2 62%,
+      #d9d1b2 68%,
+      #a1a976 68%,
+      #a1a976 90%,
+      #d9d1b2 90%,
+      #d9d1b2 100%
+    );
+}
+
+.art::after {
+  content: '';
+
+  position: absolute;
+  z-index: 1;
+
+  top: 43%;
+  left: -12%;
+  width: 124%;
+  height: 20%;
+
+  background-color: $color-brand-danger;
+  transform: rotate(-7deg);
+  box-shadow:
+    0 0 16px rgba(204, 114, 123, 0.14);
+}
+
+.titleBlock {
+  position: absolute;
+  z-index: 2;
+
+  top: 50%;
+  left: 50%;
+
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  gap: 0;
+
+  width: 92%;
+  max-width: 92%;
+  padding:
+    0.06rem
+    0.08rem;
+
+  font-size:
+    clamp(
+      0.76rem,
+      2.3vw,
+      1.25rem
+    );
+
+  text-align: center;
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    )
+    rotate(-8deg);
+
+  transform-origin: center;
+}
+
+.titleLine {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  max-width: 100%;
+
+  color: #191511;
+
+  font-family:
+    $font-family-brand;
+
+  font-size: inherit;
+
+  font-weight:
+    $font-weight-bold;
+
+  line-height: 0.82;
+
+  letter-spacing:
+    0.005em;
+
+  white-space: nowrap;
+
+  text-align: center;
+
+  text-shadow:
+    1px
+    1px
+    0
+    rgba(
+      255,
+      255,
+      255,
+      0.22
+    ),
+    0
+    0
+    1px
+    rgba(
+      0,
+      0,
+      0,
+      0.08
+    );
+}
+
+.titleLine:nth-child(2) {
+  font-size: 0.88em;
+}
+
+.titleLine + .titleLine {
+  margin-top:
+    0.46em;
+}
+
+.titleLetter {
+  display: inline-block;
+
+  transform-origin:
+    center bottom;
+}
+
+/*
+ * Ondulación general de las letras.
+ */
+.titleLetter:nth-child(6n + 1) {
+  transform:
+    translateY(0.08em)
+    rotate(-4deg);
+}
+
+.titleLetter:nth-child(6n + 2) {
+  transform:
+    translateY(-0.08em)
+    rotate(2deg);
+}
+
+.titleLetter:nth-child(6n + 3) {
+  transform:
+    translateY(0.04em)
+    rotate(-2deg);
+}
+
+.titleLetter:nth-child(6n + 4) {
+  transform:
+    translateY(-0.1em)
+    rotate(3deg);
+}
+
+.titleLetter:nth-child(6n + 5) {
+  transform:
+    translateY(0.06em)
+    rotate(-3deg);
+}
+
+.titleLetter:nth-child(6n) {
+  transform:
+    translateY(-0.04em)
+    rotate(2deg);
+}
+
+/*
+ * La segunda línea es más larga.
+ * Se achica mínimamente para evitar cortes.
+ */
+.titleLine:nth-child(2) {
+  font-size:
+    0.88em;
+
+  letter-spacing:
+    -0.01em;
+}
+
+@media (
+  max-width:
+    $breakpoint-sm
+) {
+  .card {
+    min-height:
+      5.5rem;
+  }
+
+  .titleBlock {
+    width: 90%;
+    max-width: 90%;
+
+    font-size:
+      clamp(
+        0.62rem,
+        3.2vw,
+        0.86rem
+      );
+  }
+
+  .titleLine {
+    line-height: 0.8;
+    letter-spacing: 0;
+  }
+
+  .titleLine + .titleLine {
+    margin-top:
+      0.42em;
+  }
+}
