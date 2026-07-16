@@ -642,6 +642,17 @@ function TablePage({ user }) {
     );
   }
 
+  if (isDeletingTable) {
+    return (
+      <StatusContent
+        eyebrow="Pistas Cruzadas"
+        title="Limpiando datos…"
+        description="Estamos eliminando los datos de la partida."
+        role="status"
+      />
+    );
+  }
+
   if (error) {
     return (
       <StatusContent

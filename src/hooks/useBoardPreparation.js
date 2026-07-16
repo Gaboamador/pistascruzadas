@@ -1,4 +1,7 @@
-import { useEffect, useState } from 'react';
+import {
+  useEffect,
+  useState,
+} from 'react';
 
 import {
   ensureBoardPreparation,
@@ -11,10 +14,25 @@ function useBoardPreparation({
   uid,
   gridSize,
 }) {
-  const [boardWords, setBoardWords] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
-  const [error, setError] = useState(null);
+  const [
+    boardWords,
+    setBoardWords,
+  ] = useState(null);
+
+  const [
+    isLoading,
+    setIsLoading,
+  ] = useState(true);
+
+  const [
+    isSaving,
+    setIsSaving,
+  ] = useState(false);
+
+  const [
+    error,
+    setError,
+  ] = useState(null);
 
   useEffect(() => {
     let isActive = true;
@@ -24,73 +42,143 @@ function useBoardPreparation({
     setIsSaving(false);
     setError(null);
 
-    const unsubscribe = subscribeToBoardPreparation({
-      tableCode,
-      gridSize,
-      onBoardChanged: (nextBoardWords) => {
-        if (!isActive || !nextBoardWords) {
-          return;
-        }
+    const unsubscribe =
+      subscribeToBoardPreparation({
+        tableCode,
+        gridSize,
 
-        setBoardWords(nextBoardWords);
-        setIsLoading(false);
-      },
-      onError: (subscriptionError) => {
-        if (!isActive) {
-          return;
-        }
+        onBoardChanged: (
+          nextBoardWords,
+        ) => {
+          if (
+            !isActive
+            || !nextBoardWords
+          ) {
+            return;
+          }
 
-        setError(subscriptionError);
-        setIsLoading(false);
-      },
-    });
+          setBoardWords(
+            nextBoardWords,
+          );
+
+          setError(null);
+          setIsLoading(false);
+        },
+
+        onError: (
+          subscriptionError,
+        ) => {
+          if (!isActive) {
+            return;
+          }
+
+          setError(
+            subscriptionError,
+          );
+
+          setIsLoading(false);
+        },
+      });
 
     ensureBoardPreparation({
       tableCode,
       uid,
       gridSize,
-    }).catch((initializationError) => {
-      if (!isActive) {
-        return;
-      }
+    })
+      .then(
+        (
+          initialBoardWords,
+        ) => {
+          if (
+            !isActive
+            || !initialBoardWords
+          ) {
+            return;
+          }
 
-      setError(initializationError);
-      setIsLoading(false);
-    });
+          /*
+           * No dependemos exclusivamente
+           * de que onSnapshot vuelva a emitir
+           * después de la transacción.
+           */
+          setBoardWords(
+            initialBoardWords,
+          );
+
+          setError(null);
+          setIsLoading(false);
+        },
+      )
+      .catch(
+        (
+          initializationError,
+        ) => {
+          if (!isActive) {
+            return;
+          }
+
+          setError(
+            initializationError,
+          );
+
+          setIsLoading(false);
+        },
+      );
 
     return () => {
       isActive = false;
       unsubscribe();
     };
-  }, [tableCode, uid, gridSize]);
+  }, [
+    tableCode,
+    uid,
+    gridSize,
+  ]);
 
-  const updateBoardWords = async (createNextBoardWords) => {
-    if (!boardWords || isSaving) {
-      return;
-    }
+  const updateBoardWords =
+    async (
+      createNextBoardWords,
+    ) => {
+      if (
+        !boardWords
+        || isSaving
+      ) {
+        return;
+      }
 
-    const previousBoardWords = boardWords;
-    const nextBoardWords =
-      createNextBoardWords(previousBoardWords);
+      const previousBoardWords =
+        boardWords;
 
-    setBoardWords(nextBoardWords);
-    setIsSaving(true);
-    setError(null);
+      const nextBoardWords =
+        createNextBoardWords(
+          previousBoardWords,
+        );
 
-    try {
-      await saveBoardPreparation({
-        tableCode,
-        uid,
-        gridSize,
-        boardWords: nextBoardWords,
-      });
-    } catch (saveError) {
-      setBoardWords(previousBoardWords);
-      setError(saveError);
-    } finally {
-      setIsSaving(false);
-    }
-  };
+      setBoardWords(
+        nextBoardWords,
+      );
+
+      setIsSaving(true);
+      setError(null);
+
+      try {
+        await saveBoardPreparation({
+          tableCode,
+          uid,
+          gridSize,
+          boardWords:
+            nextBoardWords,
+        });
+      } catch (saveError) {
+        setBoardWords(
+          previousBoardWords,
+        );
+
+        setError(saveError);
+      } finally {
+        setIsSaving(false);
+      }
+    };
 
   return {
     boardWords,
