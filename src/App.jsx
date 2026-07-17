@@ -3,6 +3,7 @@ import {
   Routes,
 } from 'react-router';
 
+import AppBackground from '@/components/AppBackground';
 import AppStatus from '@/components/AppStatus';
 import AuthStatus from '@/components/AuthStatus';
 import useAnonymousAuth from '@/hooks/useAnonymousAuth';
@@ -82,6 +83,8 @@ function App() {
 
   return (
     <>
+      <AppBackground />
+
       {content}
 
       <AppStatus />

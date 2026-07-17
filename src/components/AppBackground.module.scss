@@ -1,0 +1,111 @@
+.background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+
+  overflow: hidden;
+
+  opacity:
+    var(
+      --app-background-spark-opacity
+    );
+
+  pointer-events: none;
+}
+
+.spark {
+  position: absolute;
+
+  @include spark(
+    3rem,
+    #fff,
+    1
+  );
+}
+
+.sparkOne {
+  top:
+    clamp(
+      2.5rem,
+      8vh,
+      6rem
+    );
+
+  left:
+    clamp(
+      -0.5rem,
+      4vw,
+      4rem
+    );
+
+  width:
+    clamp(
+      2.6rem,
+      6vw,
+      5rem
+    );
+
+  transform:
+    rotate(-8deg);
+}
+
+.sparkTwo {
+  top:
+    clamp(
+      8rem,
+      25vh,
+      15rem
+    );
+
+  right:
+    clamp(
+      -0.4rem,
+      4vw,
+      4rem
+    );
+
+  width:
+    clamp(
+      2.4rem,
+      5.5vw,
+      4.75rem
+    );
+
+  /*
+   * Variación relativa muy leve.
+   * La opacidad global de 0.13 sigue aplicándose
+   * al contenedor completo.
+   */
+  opacity: 0.92;
+
+  transform:
+    rotate(7deg);
+}
+
+.sparkThree {
+  bottom:
+    clamp(
+      3rem,
+      13vh,
+      8rem
+    );
+
+  left:
+    clamp(
+      -0.2rem,
+      10vw,
+      7rem
+    );
+
+  width:
+    clamp(
+      1.9rem,
+      4.4vw,
+      3.6rem
+    );
+
+  opacity: 0.85;
+
+  transform:
+    rotate(14deg);
+}

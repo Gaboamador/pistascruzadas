@@ -3,11 +3,36 @@
 @use "../tokens/shadows" as *;
 @use "../tokens/spacing" as *;
 @use "../tokens/typography" as *;
+@use "spark" as *;
 
 @mixin coordinate-card {
     --coordinate-scale: 1rem;
     --coordinate-badge-overlap: -0.45em; /* Más negativo significa más superposición. */
     --coordinate-letter-shift-x: 0; /* Más negativo mueve la letra hacia la izquierda. */
+
+    /*
+     * Spark pequeño del lateral izquierdo.
+     */
+    --coordinate-spark-left-size: 0.6em;
+    --coordinate-spark-left-top: 53%;
+    --coordinate-spark-left-left: 2%;
+    --coordinate-spark-left-rotation: -8deg;
+
+    /*
+     * Spark grande de la esquina superior derecha.
+     */
+    --coordinate-spark-top-size: 0.9em;
+    --coordinate-spark-top-top: 2%;
+    --coordinate-spark-top-right: 1%;
+    --coordinate-spark-top-rotation: 8deg;
+
+    /*
+     * Spark mediano de la esquina inferior derecha.
+     */
+    --coordinate-spark-bottom-size: 0.65em;
+    --coordinate-spark-bottom-right: -0.5em;
+    --coordinate-spark-bottom-bottom: -0.65em;
+    --coordinate-spark-bottom-rotation: -12deg;
 
     position: relative;
     display: flex;
@@ -23,6 +48,49 @@
     border-radius: $radius-sm;
     box-shadow: inset 0 0 0 1px rgba($color-card-ink, 0.14), $shadow-sm;
     isolation: isolate;
+
+    /*
+     * Sparks izquierdo y superior derecho.
+     */
+    &::before,
+    &::after {
+        content: '';
+
+        position: absolute;
+        z-index: 0;
+
+        pointer-events: none;
+    }
+
+    &::before {
+        top: var(--coordinate-spark-left-top);
+        left: var(--coordinate-spark-left-left);
+
+        @include spark(
+            var(--coordinate-spark-left-size),
+            #fff,
+            1,
+            var(--coordinate-spark-left-rotation)
+        );
+
+        transform:
+            translateY(-50%)
+            rotate(
+                var(--coordinate-spark-left-rotation)
+            );
+    }
+
+    &::after {
+        top: var(--coordinate-spark-top-top);
+        right: var(--coordinate-spark-top-right);
+
+        @include spark(
+            var(--coordinate-spark-top-size),
+            #fff,
+            1,
+            var(--coordinate-spark-top-rotation)
+        );
+    }
 
     .coordinateLetter {
         position: relative;
@@ -53,6 +121,26 @@
         border: 0.13em solid $color-card-border;
         border-radius: $radius-pill;
         box-shadow: inset 0 0 0 0.06em rgba($color-card-ink, 0.08);
+
+        /*
+         * Spark inferior derecho.
+         */
+        &::before {
+            content: '';
+
+            position: absolute;
+            z-index: -1;
+
+            right: var(--coordinate-spark-bottom-right);
+            bottom: var(--coordinate-spark-bottom-bottom);
+
+            @include spark(
+                var(--coordinate-spark-bottom-size),
+                #fff,
+                1,
+                var(--coordinate-spark-bottom-rotation)
+            );
+        }
     }
 
     .coordinateNumber {

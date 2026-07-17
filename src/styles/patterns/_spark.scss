@@ -1,0 +1,43 @@
+@mixin spark-shape {
+  clip-path: polygon(
+    37.83% 48.90%,
+    47.29% 8.32%,
+    48.09% 47.84%,
+    85.17% 44.13%,
+    53.74% 62.26%,
+    59.26% 84.29%,
+    42.71% 59.81%,
+    35.86% 75.35%,
+    33.57% 58.55%,
+    14.03% 58.45%
+  );
+}
+
+@mixin spark(
+  $width,
+  $color: #fff,
+  $opacity: 1,
+  $rotation: 0deg
+) {
+  display: block;
+
+  width: $width;
+  aspect-ratio: 35 / 31;
+
+  background-color:
+    rgba(
+      $color,
+      $opacity
+    );
+
+  @include spark-shape;
+
+  transform:
+    rotate(
+      $rotation
+    );
+
+  transform-origin: center;
+
+  pointer-events: none;
+}

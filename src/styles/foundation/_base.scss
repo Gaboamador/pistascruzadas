@@ -1,6 +1,17 @@
 @use "../refs" as *;
 
 :root {
+
+  /*
+ * El pattern necesita menos opacidad porque
+ * utiliza varios colores sobre el fondo crema.
+ *
+ * Los sparks son blancos y necesitan una
+ * opacidad mayor para conservar visibilidad.
+ */
+--app-background-pattern-opacity: 0.13;
+--app-background-spark-opacity: 0.52;
+
   /*
    * Insets del sistema operativo.
    *
@@ -44,14 +55,20 @@ body,
 #root {
   width: 100%;
   max-width: 100%;
+
   margin: 0;
   padding: 0;
+
   color-scheme: light;
+
   font-size: $font-size-md;
 }
 
 html {
+  position: relative;
+
   min-height: 100%;
+
   scrollbar-gutter: stable;
 
   /*
@@ -64,11 +81,21 @@ html {
 }
 
 body {
+  position: relative;
+
   min-width: 0;
   min-height: 100%;
-  font-family: $font-family-text;
+
   color: $color-text-primary;
-  background-color: $color-bg-page;
+
+  font-family:
+    $font-family-text;
+
+  background-color:
+    $color-bg-page;
+
+  isolation: isolate;
+
   user-select: none;
 
   /*
@@ -81,9 +108,37 @@ body {
   overscroll-behavior-x: none;
 }
 
+/*
+ * Textura general basada en el mismo diseño
+ * utilizado por CoordinateCardBack.
+ *
+ * La opacidad se aplica solamente a esta capa,
+ * por lo que nunca afecta al contenido de la app.
+ */
+body::before {
+  content: '';
+
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+
+  @include coordinate-card-back-page-pattern;
+
+  opacity:   var(
+    --app-background-pattern-opacity
+  );
+
+  pointer-events: none;
+}
+
+
 #root {
+  position: relative;
+  z-index: 0;
+
   display: flex;
   flex-direction: column;
+
   min-width: 0;
 
   /*
@@ -91,6 +146,8 @@ body {
    */
   min-height: 100vh;
   min-height: 100svh;
+
+  isolation: isolate;
 }
 
 input,
@@ -103,7 +160,8 @@ button,
 input,
 textarea,
 select {
-  font-family: $font-family-input;
+  font-family:
+    $font-family-input;
 }
 
 button,
@@ -121,7 +179,8 @@ label {
 
 button,
 a {
-  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color:
+    transparent;
 }
 
 img,
@@ -135,28 +194,57 @@ svg {
 
 .input {
   width: 100%;
-  min-height: var(--touch-target-min);
-  padding: $space-sm $space-md;
-  color: $color-text-primary;
-  background-color: $color-bg-elevated-2;
-  border: 1px solid $color-border;
-  border-radius: $radius-md;
+
+  min-height:
+    var(
+      --touch-target-min
+    );
+
+  padding:
+    $space-sm
+    $space-md;
+
+  color:
+    $color-text-primary;
+
+  background-color:
+    $color-bg-elevated-2;
+
+  border:
+    1px
+    solid
+    $color-border;
+
+  border-radius:
+    $radius-md;
+
   outline: none;
+
   transition:
-    background-color 160ms ease,
-    border-color 160ms ease,
-    box-shadow 160ms ease;
+    background-color
+    160ms
+    ease,
+    border-color
+    160ms
+    ease,
+    box-shadow
+    160ms
+    ease;
 
   &::placeholder {
-    color: $color-text-muted;
+    color:
+      $color-text-muted;
   }
 
   &:hover:not(:disabled) {
-    border-color: $color-border-strong;
+    border-color:
+      $color-border-strong;
   }
 
   &:focus {
-    border-color: $color-accent-primary;
+    border-color:
+      $color-accent-primary;
+
     box-shadow:
       0
       0
@@ -169,17 +257,23 @@ svg {
   }
 
   &:disabled {
-    color: $color-text-disabled;
+    color:
+      $color-text-disabled;
+
     cursor: not-allowed;
+
     opacity: 0.6;
   }
 }
 
 .input--error {
-  border-color: $color-danger;
+  border-color:
+    $color-danger;
 
   &:focus {
-    border-color: $color-danger;
+    border-color:
+      $color-danger;
+
     box-shadow:
       0
       0
@@ -196,37 +290,86 @@ svg {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
   gap: $space-xs;
-  min-height: var(--touch-target-min);
-  padding: $space-sm $space-lg;
-  border: 1px solid transparent;
-  border-radius: $radius-md;
-  font-weight: $font-weight-bold;
+
+  min-height:
+    var(
+      --touch-target-min
+    );
+
+  padding:
+    $space-sm
+    $space-lg;
+
+  border:
+    1px
+    solid
+    transparent;
+
+  border-radius:
+    $radius-md;
+
+  font-weight:
+    $font-weight-bold;
+
   line-height: 1;
+
   text-align: center;
+
   cursor: pointer;
+
   transition:
-    background-color 160ms ease,
-    border-color 160ms ease,
-    color 160ms ease,
-    opacity 160ms ease,
-    transform 160ms ease;
+    background-color
+    160ms
+    ease,
+    border-color
+    160ms
+    ease,
+    color
+    160ms
+    ease,
+    opacity
+    160ms
+    ease,
+    transform
+    160ms
+    ease;
 
   &:not(:disabled):active {
-    transform: translateY(1px);
+    transform:
+      translateY(
+        1px
+      );
   }
 
   &:disabled {
     cursor: not-allowed;
+
     opacity: 0.5;
   }
 }
 
 .button--primary {
-  color: $color-accent-primary-contrast;
-  background-color: $color-accent-primary-surface;
-  border: 2px solid $color-text-primary;
-  box-shadow: 2px 2px 0 rgba($color-text-primary, 0.22);
+  color:
+    $color-accent-primary-contrast;
+
+  background-color:
+    $color-accent-primary-surface;
+
+  border:
+    2px
+    solid
+    $color-text-primary;
+
+  box-shadow:
+    2px
+    2px
+    0
+    rgba(
+      $color-text-primary,
+      0.22
+    );
 
   &:not(:disabled):hover {
     background-color:
@@ -240,18 +383,27 @@ svg {
 }
 
 .button--secondary {
-  color: $color-text-primary;
-  background-color: $color-bg-elevated-2;
-  border-color: $color-border;
+  color:
+    $color-text-primary;
+
+  background-color:
+    $color-bg-elevated-2;
+
+  border-color:
+    $color-border;
 
   &:not(:disabled):hover {
-    border-color: $color-border-strong;
+    border-color:
+      $color-border-strong;
   }
 }
 
 .button--danger {
-  color: $color-text-primary;
-  background-color: $color-danger-surface;
+  color:
+    $color-text-primary;
+
+  background-color:
+    $color-danger-surface;
 }
 
 :focus-visible {
@@ -262,7 +414,9 @@ svg {
       $color-accent-primary,
       0.55
     );
-  outline-offset: 0.1875rem;
+
+  outline-offset:
+    0.1875rem;
 }
 
 @media (
@@ -272,11 +426,15 @@ svg {
   *,
   *::before,
   *::after {
-    scroll-behavior: auto !important;
+    scroll-behavior:
+      auto !important;
+
     animation-duration:
       0.01ms !important;
+
     animation-iteration-count:
       1 !important;
+
     transition-duration:
       0.01ms !important;
   }

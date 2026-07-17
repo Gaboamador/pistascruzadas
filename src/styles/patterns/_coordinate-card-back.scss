@@ -1,0 +1,105 @@
+@use "../tokens/colors" as *;
+
+/*
+ * Franjas principales utilizadas por el reverso
+ * de las cartas de coordenadas.
+ */
+@mixin coordinate-card-back-stripes {
+  background:
+    linear-gradient(
+      80deg,
+      #d9d1b2 0%,
+      #d9d1b2 14%,
+      #e9c69e 14%,
+      #e9c69e 33%,
+      #d9d1b2 33%,
+      #d9d1b2 39%,
+      #77a8af 39%,
+      #77a8af 62%,
+      #d9d1b2 62%,
+      #d9d1b2 68%,
+      #a1a976 68%,
+      #a1a976 90%,
+      #d9d1b2 90%,
+      #d9d1b2 100%
+    );
+}
+
+/*
+ * Banda rosa que atraviesa el reverso
+ * de la carta.
+ */
+@mixin coordinate-card-back-band {
+  background-color:
+    $color-brand-danger;
+
+  transform:
+    rotate(-7deg);
+
+  box-shadow:
+    0
+    0
+    16px
+    rgba(
+      204,
+      114,
+      123,
+      0.14
+    );
+}
+
+/*
+ * Versión continua del mismo diseño para
+ * utilizar como textura general de la app.
+ *
+ * La banda rosa se integra como una capa
+ * adicional del background para no necesitar
+ * elementos HTML decorativos.
+ */
+@mixin coordinate-card-back-page-pattern {
+  background-image:
+    linear-gradient(
+      -7deg,
+      transparent 0%,
+      transparent 40%,
+      rgba(
+        $color-brand-danger,
+        0.84
+      ) 40%,
+      rgba(
+        $color-brand-danger,
+        0.84
+      ) 52%,
+      transparent 52%,
+      transparent 100%
+    ),
+    linear-gradient(
+      80deg,
+      #d9d1b2 0%,
+      #d9d1b2 14%,
+      #e9c69e 14%,
+      #e9c69e 33%,
+      #d9d1b2 33%,
+      #d9d1b2 39%,
+      #77a8af 39%,
+      #77a8af 62%,
+      #d9d1b2 62%,
+      #d9d1b2 68%,
+      #a1a976 68%,
+      #a1a976 90%,
+      #d9d1b2 90%,
+      #d9d1b2 100%
+    );
+
+  background-position:
+    center,
+    center;
+
+  background-repeat:
+    repeat,
+    repeat;
+
+  background-size:
+    34rem 24rem,
+    34rem 24rem;
+}
