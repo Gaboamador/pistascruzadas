@@ -1,0 +1,20 @@
+/*
+ * Dimensiones canónicas de todas las cartas
+ * de coordenadas, tanto frente como reverso.
+ */
+
+$coordinate-card-size-desktop:
+  clamp(
+    5.5rem,
+    7vw,
+    6rem
+  );
+
+$coordinate-card-size-mobile:
+  3.5rem;
+
+$coordinate-card-scale-desktop:
+  1.12rem;
+
+$coordinate-card-scale-mobile:
+  0.9rem;

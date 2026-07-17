@@ -101,20 +101,6 @@
 .coordinate {
   @include coordinate-card;
 
-  /*
-   * Tarjeta privada más grande,
-   * pero con la misma proporción interna.
-   */
-  --coordinate-scale:
-    1.6rem;
-
-  min-width: 7rem;
-  min-height: 7rem;
-  padding: $space-lg;
-
-  border-width:
-    0.3rem;
-
   border-radius:
     $radius-lg;
 
@@ -339,13 +325,6 @@
   }
 
 .coordinate {
-  --coordinate-scale:
-    1.1rem;
-
-  min-width: 4.25rem;
-  min-height: 4.25rem;
-  padding: $space-xs;
-
   border-radius:
     $radius-md;
 }
@@ -400,16 +379,10 @@
       1fr;
   }
 
-  .coordinate {
-    --coordinate-scale:
-      1.15rem;
-
-    width: 100%;
-
-    min-height:
-      4.25rem;
-  }
-
+.coordinate {
+  justify-self:
+    center;
+}
   .actions {
     grid-template-columns:
       1fr;

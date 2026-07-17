@@ -5,6 +5,8 @@
 @use "../tokens/spacing" as *;
 @use "../tokens/typography" as *;
 @use "coordinate-card" as *;
+@use "spark" as *;
+@use "coordinate-card-sizing" as *;
 
 @mixin game-board-pattern {
   .boardScroller {
@@ -28,13 +30,67 @@
   .board {
     --grid-size: 4;
 
+    /*
+     * Lado fijo compartido por:
+     *
+     * - tarjetas de coordenadas;
+     * - tarjetas superiores A–E.
+     *
+     * El mínimo de 5.5rem conserva el espacio
+     * vertical que necesitan las palabras rotadas
+     * y permite que las coordenadas sean cuadradas.
+     */
+    --board-coordinate-size:
+  #{$coordinate-card-size-desktop};
+
+/*
+ * La etiqueta numérica usa el mismo lado
+ * que las coordenadas y queda cuadrada.
+ */
+--board-row-label-width:
+  var(
+    --board-coordinate-size
+  );
+
+/*
+ * La tarjeta de palabra vertical conserva
+ * aproximadamente el ancho que tenía antes.
+ */
+--board-row-word-width:
+  clamp(
+    2.15rem,
+    3.8vw,
+    2.75rem
+  );
+
+/*
+ * La primera columna contiene:
+ *
+ * - la etiqueta numérica cuadrada;
+ * - la tarjeta de palabra vertical.
+ */
+--board-row-header-width:
+  calc(
+    var(
+      --board-row-label-width
+    )
+    +
+    var(
+      --board-row-word-width
+    )
+  );
+
     display: grid;
 
     grid-template-columns:
-      minmax(7rem, max-content)
+      var(
+        --board-row-header-width
+      )
       repeat(
         var(--grid-size),
-        minmax(6rem, max-content)
+        var(
+          --board-coordinate-size
+        )
       );
 
     justify-content: center;
@@ -67,21 +123,49 @@
 
   .columnHeader {
     grid-template-rows:
-      minmax(0, 1fr)
+      auto
       auto;
+
+    width:
+      var(
+        --board-coordinate-size
+      );
 
     min-height:
       5.5rem;
   }
 
-  .rowHeader {
-    grid-template-columns:
-      minmax(2.75rem, 0.42fr)
-      minmax(0, 1fr);
+  /*
+   * La altura de cada rowHeader queda ligada
+   * al mismo lado de las coordenadas.
+   *
+   * Como el contenido de la palabra se posiciona
+   * de forma absoluta, ya no puede agrandar
+   * la fila del grid.
+   */
+.rowHeader {
+  grid-template-columns:
+    var(
+      --board-row-label-width
+    )
+    var(
+      --board-row-word-width
+    );
 
-    min-height:
-      4.75rem;
-  }
+  width:
+    var(
+      --board-row-header-width
+    );
+
+  height:
+    var(
+      --board-coordinate-size
+    );
+
+  min-height: 0;
+
+  overflow: hidden;
+}
 
   .axisLabelCard,
   .axisWordCard {
@@ -95,21 +179,157 @@
     text-align: center;
 
     border:
-      0.25rem solid
+      0.25rem
+      solid
       $color-card-border;
 
     border-radius: 0;
   }
 
-  .axisLabelCard {
-    z-index: 2;
+.axisLabelCard {
+  /*
+   * Dos sparks sobre el lateral izquierdo:
+   * el superior es ligeramente más grande.
+   */
+  --axis-spark-left-top-size:
+    1.42rem;
 
-    padding:
-      $space-sm;
+  --axis-spark-left-top:
+    27%; // más porcentaje, más abajo
 
-    background-color:
-      $color-card-cream;
+  --axis-spark-left-top-left:
+    4%; // más porcentaje, más a la derecha
+
+  --axis-spark-left-top-rotation:
+    -8deg;
+
+  --axis-spark-left-bottom-size:
+    0.9rem;
+
+  --axis-spark-left-bottom:
+    67%; // más porcentaje, más abajo
+
+  --axis-spark-left-bottom-left:
+    2%; // más porcentaje, más a la derecha
+
+  --axis-spark-left-bottom-rotation:
+    10deg;
+
+  /*
+   * Dos sparks sobre el lateral derecho:
+   * el inferior es claramente más grande.
+   */
+  --axis-spark-right-top-size:
+    0.9rem;
+
+  --axis-spark-right-top:
+    41%; // más porcentaje, más abajo
+
+  --axis-spark-right-top-right:
+    3%; // más porcentaje, más a la izquierda
+
+  --axis-spark-right-top-rotation:
+    -49deg;
+
+  --axis-spark-right-bottom-size:
+    1.42rem;
+
+  --axis-spark-right-bottom:
+    85%; // más porcentaje, más abajo
+
+  --axis-spark-right-bottom-right:
+    3%; // más porcentaje, más a la izquierda
+
+  --axis-spark-right-bottom-rotation:
+    0deg;
+
+  z-index: 2;
+
+  padding:
+    $space-sm;
+
+  overflow: hidden;
+
+  background-color:
+    $color-card-cream;
+
+  isolation: isolate;
+
+  /*
+   * Sparks del lateral izquierdo.
+   */
+  &::before,
+  &::after {
+    content: '';
+
+    position: absolute;
+    z-index: 0;
+
+    pointer-events: none;
   }
+
+  &::before {
+    top:
+      var(
+        --axis-spark-left-top
+      );
+
+    left:
+      var(
+        --axis-spark-left-top-left
+      );
+
+    @include spark(
+      var(
+        --axis-spark-left-top-size
+      ),
+      #fff,
+      1,
+      var(
+        --axis-spark-left-top-rotation
+      )
+    );
+
+    transform:
+      translateY(-50%)
+      rotate(
+        var(
+          --axis-spark-left-top-rotation
+        )
+      );
+  }
+
+  &::after {
+    top:
+      var(
+        --axis-spark-left-bottom
+      );
+
+    left:
+      var(
+        --axis-spark-left-bottom-left
+      );
+
+    @include spark(
+      var(
+        --axis-spark-left-bottom-size
+      ),
+      #fff,
+      1,
+      var(
+        --axis-spark-left-bottom-rotation
+      )
+    );
+
+    transform:
+      translateY(-50%)
+      rotate(
+        var(
+          --axis-spark-left-bottom-rotation
+        )
+      );
+  }
+}
 
   /*
    * En las columnas, la tarjeta de palabra
@@ -118,6 +338,14 @@
    */
   .columnHeader
   .axisLabelCard {
+    width:
+      var(
+        --board-coordinate-size
+      );
+
+    aspect-ratio:
+      1 / 1;
+
     box-shadow:
       0
       0.3rem
@@ -144,6 +372,19 @@
    */
   .rowHeader
   .axisLabelCard {
+    width:
+  var(
+    --board-row-label-width
+  );
+
+height:
+  var(
+    --board-coordinate-size
+  );
+
+aspect-ratio:
+  1 / 1;
+
     box-shadow:
       0.3rem
       0
@@ -190,28 +431,106 @@
       );
   }
 
-  .axisLabel {
-    color:
-      $color-card-ink;
+.axisLabel {
+  /*
+   * Se mantiene static para que los sparks
+   * se posicionen respecto de axisLabelCard.
+   */
+  position: static;
+  z-index: 1;
 
-    font-family:
-      $font-family-brand;
+  color:
+    $color-card-ink;
 
-    font-size:
-      $font-size-lg;
+  font-family:
+    $font-family-brand;
 
-    font-weight:
-      $font-weight-bold;
+  font-size:
+    3.75rem;
 
-    line-height: 1;
+  font-weight:
+    $font-weight-bold;
+
+  line-height: 1;
+
+  /*
+   * Sparks del lateral derecho.
+   */
+  &::before,
+  &::after {
+    content: '';
+
+    position: absolute;
+    z-index: -1;
+
+    pointer-events: none;
   }
+
+  &::before {
+    top:
+      var(
+        --axis-spark-right-top
+      );
+
+    right:
+      var(
+        --axis-spark-right-top-right
+      );
+
+    @include spark(
+      var(
+        --axis-spark-right-top-size
+      ),
+      #fff,
+      1,
+      var(
+        --axis-spark-right-top-rotation
+      )
+    );
+
+    transform:
+      translateY(-50%)
+      rotate(
+        var(
+          --axis-spark-right-top-rotation
+        )
+      );
+  }
+
+  &::after {
+    top:
+      var(
+        --axis-spark-right-bottom
+      );
+
+    right:
+      var(
+        --axis-spark-right-bottom-right
+      );
+
+    @include spark(
+      var(
+        --axis-spark-right-bottom-size
+      ),
+      #fff,
+      1,
+      var(
+        --axis-spark-right-bottom-rotation
+      )
+    );
+
+    transform:
+      translateY(-50%)
+      rotate(
+        var(
+          --axis-spark-right-bottom-rotation
+        )
+      );
+  }
+}
 
   /*
    * Pieza blanca que contiene la palabra.
-   *
-   * En las columnas se muestra normalmente.
-   * En las filas mobile se rota la pieza
-   * completa, conservando su silueta.
    */
   .axisWord {
     position: relative;
@@ -287,7 +606,6 @@
 
   /*
    * Este elemento sólo contiene el texto.
-   * No se posiciona ni se transforma por separado.
    */
   .axisWordText {
     display:
@@ -312,6 +630,101 @@
       nowrap;
   }
 
+  /*
+   * Las palabras de fila permanecen rotadas
+   * en todos los tamaños de pantalla.
+   *
+   * El contenido absoluto no participa del
+   * cálculo de altura del grid.
+   */
+  .rowHeader
+  .axisWordCard {
+    position: relative;
+
+    display: block;
+
+    min-width: 0;
+    min-height: 0;
+
+    padding: 0;
+
+    overflow: hidden;
+  }
+
+  /*
+   * La palabra se rasteriza al doble de tamaño
+   * y luego se reduce para conservar definición.
+   */
+  .rowHeader
+  .axisWord {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    display:
+      inline-grid;
+
+    width:
+      max-content;
+
+    min-width:
+      max-content;
+
+    max-width:
+      none;
+
+    height:
+      auto;
+
+    padding:
+      calc(
+        #{$space-2xs}
+        * 2
+      )
+      calc(
+        #{$space-sm}
+        * 2
+      );
+
+    overflow:
+      visible;
+
+    font-size:
+      calc(
+        #{$font-size-sm}
+        * 2
+      );
+
+    line-height: 1;
+
+    white-space:
+      nowrap;
+
+    transform:
+      translate(
+        -50%,
+        -50%
+      )
+      rotate(-90deg)
+      scale(0.5);
+
+    transform-origin:
+      center
+      center;
+  }
+
+  .rowHeader
+  .axisWordText {
+    display: block;
+
+    width:
+      max-content;
+
+    white-space:
+      nowrap;
+  }
+
   .boardRow {
     display:
       contents;
@@ -319,25 +732,27 @@
 
   /*
    * Tarjeta de coordenada compartida.
+   *
+   * Tanto width como height reciben el mismo
+   * valor para impedir que el track del grid
+   * estire la tarjeta verticalmente.
    */
   .coordinateCell {
-    @include coordinate-card;
-  }
+  @include coordinate-card;
+
+  --coordinate-card-size:
+    var(
+      --board-coordinate-size
+    );
+}
 
   @media (
     max-width:
       $breakpoint-sm
   ) {
     .board {
-      grid-template-columns:
-        3.25rem
-        repeat(
-          var(--grid-size),
-          minmax(
-            3.5rem,
-            max-content
-          )
-        );
+      --board-coordinate-size:
+    #{$coordinate-card-size-mobile};
 
       gap:
         $space-2xs;
@@ -354,27 +769,14 @@
       gap: 0;
     }
 
-    .rowHeader {
-      grid-template-columns:
-        minmax(
-          1.3rem,
-          0.42fr
-        )
-        minmax(
-          1.55rem,
-          0.58fr
-        );
-
-      min-height:
-        5.5rem;
-
-      overflow:
-        hidden;
-    }
-
     .axisLabelCard {
       padding:
         $space-2xs;
+    }
+
+    .axisLabel {
+  font-size:
+    2.5rem;
     }
 
     .axisWordCard {
@@ -387,20 +789,14 @@
         hidden;
     }
 
-    .axisLabel {
-      font-size:
-        $font-size-md;
-    }
-
     /*
-     * Configuración general de las palabras
-     * en mobile. Se aplica normalmente a las
-     * palabras de columna.
+     * Configuración mobile de las palabras
+     * horizontales.
      */
     .axisWord {
       padding:
         $space-3xs
-        $space-xs;
+        $space-2xs;
 
       font-size:
         $font-size-xs;
@@ -409,121 +805,26 @@
     }
 
     /*
-     * La celda turquesa funciona como viewport
-     * de la pieza blanca rotada.
-     */
-    .rowHeader
-    .axisWordCard {
-      position:
-        relative;
-
-      display:
-        block;
-
-      min-width: 0;
-      min-height: 0;
-
-      padding: 0;
-
-      overflow:
-        hidden;
-    }
-
-    /*
-     * La palabra y el fondo blanco se renderizan
-     * juntos al doble de tamaño y luego se reducen.
-     *
-     * El tamaño visual final equivale a
-     * $font-size-xs, pero el navegador rasteriza
-     * inicialmente los glifos con mayor definición.
+     * Conserva la misma rotación permanente,
+     * pero utiliza la escala tipográfica mobile.
      */
     .rowHeader
     .axisWord {
-      position:
-        absolute;
-
-      top: 50%;
-      left: 50%;
-
-      display:
-        inline-grid;
-
-      width:
-        max-content;
-
-      min-width:
-        max-content;
-
-      max-width:
-        none;
-
-      height:
-        auto;
-
       padding:
         calc(
           #{$space-3xs}
           * 2
         )
         calc(
-          #{$space-xs}
+          #{$space-2xs}
           * 2
         );
-
-      overflow:
-        visible;
 
       font-size:
         calc(
           #{$font-size-xs}
           * 2
         );
-
-      line-height: 1;
-
-      white-space:
-        nowrap;
-
-      transform:
-        translate(
-          -50%,
-          -50%
-        )
-        rotate(-90deg)
-        scale(0.5);
-
-      transform-origin:
-        center center;
-    }
-
-    /*
-     * Evita que el span interior altere las
-     * dimensiones intrínsecas de la pieza.
-     */
-    .rowHeader
-    .axisWordText {
-      display:
-        block;
-
-      width:
-        max-content;
-
-      white-space:
-        nowrap;
-    }
-
-    .coordinateCell {
-      --coordinate-scale:
-        1.1rem;
-
-      min-height:
-        5.5rem;
-
-      padding:
-        $space-2xs;
-
-      border-radius:
-        $radius-sm;
     }
   }
 }

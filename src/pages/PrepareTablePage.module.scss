@@ -420,27 +420,26 @@
     $radius-md;
 }
 
-.axisWordCard {
-  padding-right:
-    2rem;
-}
-
 .columnHeader,
 .rowHeader {
   position: relative;
 }
 
+/*
+ * El botón queda fuera del flujo normal:
+ * ya no consume espacio dentro de la tarjeta
+ * de palabra ni modifica sus dimensiones.
+ */
 .rerollButton {
   position: absolute;
-  right: $space-2xs;
-  bottom: $space-2xs;
-  z-index: 3;
+  z-index: 4;
 
   display: grid;
   place-items: center;
 
   width: 1.75rem;
   height: 1.75rem;
+
   padding: 0;
 
   color:
@@ -453,7 +452,8 @@
     );
 
   border:
-    1px solid
+    1px
+    solid
     $color-border;
 
   border-radius:
@@ -462,10 +462,18 @@
   cursor: pointer;
 
   transition:
-    color 160ms ease,
-    background-color 160ms ease,
-    border-color 160ms ease,
-    transform 160ms ease;
+    color
+    160ms
+    ease,
+    background-color
+    160ms
+    ease,
+    border-color
+    160ms
+    ease,
+    transform
+    160ms
+    ease;
 
   &:hover:not(:disabled) {
     color:
@@ -473,11 +481,6 @@
 
     border-color:
       $color-accent-primary;
-  }
-
-  &:active:not(:disabled) {
-    transform:
-      rotate(45deg);
   }
 
   &:disabled {
@@ -491,6 +494,48 @@
   svg {
     width: 1rem;
     height: 1rem;
+  }
+}
+
+/*
+ * Columnas A–E:
+ * botón flotando sobre la esquina superior
+ * derecha de la tarjeta de letra.
+ */
+.columnHeader
+.rerollButton {
+  top:
+    $space-2xs;
+
+  right:
+    $space-2xs;
+
+  &:active:not(:disabled) {
+    transform:
+      rotate(45deg);
+  }
+}
+
+/*
+ * Filas 1–5:
+ * botón centrado horizontalmente sobre
+ * la tarjeta numérica.
+ *
+ * --board-row-label-width proviene del
+ * pattern compartido de la grilla.
+ */
+.rowHeader
+.rerollButton {
+  top:
+    $space-2xs;
+
+  left:
+    $space-2xs;
+
+  &:active:not(:disabled) {
+    transform:
+      translateX(-50%)
+      rotate(45deg);
   }
 }
 
@@ -617,51 +662,4 @@
     width: 100%;
   }
 
-  .axisWordCard {
-    padding-right:
-      $space-2xs;
-  }
-
-  .columnHeader
-  .axisWordCard {
-    padding-right:
-      1.65rem;
-  }
-
-  .rerollButton {
-    width: 1.4rem;
-    height: 1.4rem;
-
-    svg {
-      width: 0.8rem;
-      height: 0.8rem;
-    }
-  }
-
-  /*
-   * En los encabezados de fila, el botón queda
-   * dentro del sector derecho correspondiente
-   * a la tarjeta de palabra.
-   *
-   * No se centra sobre todo el rowHeader porque
-   * eso lo dejaba sobre la separación con la
-   * tarjeta numérica.
-   */
-  .rowHeader
-  .rerollButton {
-    right:
-      $space-3xs;
-
-    bottom:
-      $space-3xs;
-
-    z-index: 4;
-
-    transform: none;
-
-    &:active:not(:disabled) {
-      transform:
-        rotate(45deg);
-    }
-  }
 }

@@ -184,16 +184,6 @@
 .coordinate {
   @include coordinate-card;
 
-  --coordinate-scale:
-    1rem;
-
-  width: 4rem;
-  min-width: 4rem;
-  min-height: 4rem;
-
-  padding:
-    $space-2xs;
-
   text-decoration: none;
 }
 
@@ -296,15 +286,6 @@
     font-size:
       0.65rem;
   }
-
-.coordinate {
-  --coordinate-scale:
-    0.9rem;
-
-  width: 3.5rem;
-  min-width: 3.5rem;
-  min-height: 3.5rem;
-}
 
   .emptyMessage {
     margin-top:
