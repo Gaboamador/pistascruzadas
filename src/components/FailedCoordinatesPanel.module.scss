@@ -121,11 +121,20 @@
 .coordinateItem {
   position: relative;
 
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-  min-height: 5rem;
+  gap:
+    $space-sm;
+
+  min-width: 0;
+  min-height: 7.5rem;
+
   padding:
+    $space-md
+    $space-sm
     $space-sm;
 
   background-color:
@@ -183,6 +192,11 @@
 
 .coordinate {
   @include coordinate-card;
+  
+  flex:
+    0
+    0
+    auto;
 
   text-decoration: none;
 }
@@ -201,6 +215,71 @@
 
   line-height:
     $line-height-normal;
+}
+
+.clueContent {
+  display: grid;
+  place-items: center;
+
+  width: 100%;
+  min-width: 0;
+
+  gap:
+    $space-2xs;
+
+  padding-top:
+    $space-xs;
+
+  border-top:
+    1px solid
+    rgba(
+      $color-danger,
+      0.22
+    );
+
+  text-align: center;
+}
+
+.clueLabel {
+  color:
+    $color-text-muted;
+
+  font-size:
+    0.65rem;
+
+  font-weight:
+    $font-weight-bold;
+
+  line-height: 1;
+
+  letter-spacing:
+    0.08em;
+
+  text-transform:
+    uppercase;
+}
+
+.clue {
+  display: block;
+
+  max-width: 100%;
+
+  overflow-wrap:
+    anywhere;
+
+  color:
+    $color-text-primary;
+
+  font-size:
+    $font-size-sm;
+
+  font-weight:
+    $font-weight-bold;
+
+  line-height:
+    $line-height-normal;
+
+  text-align: center;
 }
 
 @media (
@@ -271,12 +350,33 @@
   }
 
   .coordinateItem {
-    min-height: 4.25rem;
+    gap:
+      $space-xs;
+
+    min-height: 6.5rem;
+
     padding:
+      $space-sm
+      $space-xs
       $space-xs;
 
     border-radius:
       $radius-sm;
+  }
+
+  .clueContent {
+    padding-top:
+      $space-2xs;
+  }
+
+  .clueLabel {
+    font-size:
+      0.6rem;
+  }
+
+  .clue {
+    font-size:
+      $font-size-xs;
   }
 
   .order {

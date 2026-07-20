@@ -1,10 +1,67 @@
 import styles from '@/components/FailedCoordinatesPanel.module.scss';
 
+function normalizeFailedCoordinate(
+  failedCoordinate,
+) {
+  /*
+   * Compatibilidad temporal con partidas
+   * o datos creados antes de incorporar
+   * el registro de pistas.
+   */
+  if (
+    typeof failedCoordinate
+      === 'string'
+  ) {
+    return {
+      coordinate:
+        failedCoordinate,
+      clue: '',
+    };
+  }
+
+  if (
+    !failedCoordinate
+    || typeof failedCoordinate
+      !== 'object'
+  ) {
+    return null;
+  }
+
+  const coordinate =
+    typeof failedCoordinate.coordinate
+      === 'string'
+      ? failedCoordinate.coordinate
+      : '';
+
+  const clue =
+    typeof failedCoordinate.clue
+      === 'string'
+      ? failedCoordinate.clue
+      : '';
+
+  if (!coordinate) {
+    return null;
+  }
+
+  return {
+    coordinate,
+    clue,
+  };
+}
+
 function FailedCoordinatesPanel({
   failedCoordinates = [],
 }) {
+  const normalizedFailedCoordinates =
+    failedCoordinates
+      .map(
+        normalizeFailedCoordinate,
+      )
+      .filter(Boolean);
+
   const hasFailedCoordinates =
-    failedCoordinates.length > 0;
+    normalizedFailedCoordinates.length
+      > 0;
 
   return (
     <section
@@ -21,28 +78,42 @@ function FailedCoordinatesPanel({
             id="failed-coordinates-title"
             className={styles.title}
           >
-            Coordenadas falladas
+            Fallos y pistas
           </h2>
         </div>
 
         <span
           className={styles.counter}
-          aria-label={`${failedCoordinates.length} coordenadas falladas`}
+          aria-label={`${normalizedFailedCoordinates.length} fallos registrados`}
         >
-          {failedCoordinates.length}
+          {
+            normalizedFailedCoordinates.length
+          }
         </span>
       </header>
 
       {hasFailedCoordinates ? (
         <>
           <p className={styles.description}>
-            Estas cartas ya fueron descartadas y no volverán a
-            repartirse.
+            Estas cartas ya fueron descartadas. Podés revisar la
+            coordenada y la pista que diste en cada intento.
           </p>
 
-          <ol className={styles.coordinateList}>
-            {failedCoordinates.map(
-              (coordinate, index) => {
+          <ol
+            className={
+              styles.coordinateList
+            }
+          >
+            {normalizedFailedCoordinates.map(
+              (
+                failedCoordinate,
+                index,
+              ) => {
+                const {
+                  coordinate,
+                  clue,
+                } = failedCoordinate;
+
                 const coordinateLetter =
                   coordinate.charAt(0);
 
@@ -52,14 +123,22 @@ function FailedCoordinatesPanel({
                 return (
                   <li
                     key={`${coordinate}-${index}`}
-                    className={styles.coordinateItem}
+                    className={
+                      styles.coordinateItem
+                    }
                   >
-                    <span className={styles.order}>
+                    <span
+                      className={
+                        styles.order
+                      }
+                    >
                       {index + 1}
                     </span>
 
                     <strong
-                      className={styles.coordinate}
+                      className={
+                        styles.coordinate
+                      }
                       aria-label={`Coordenada fallada ${coordinate}`}
                     >
                       <span
@@ -68,7 +147,9 @@ function FailedCoordinatesPanel({
                         }
                         aria-hidden="true"
                       >
-                        {coordinateLetter}
+                        {
+                          coordinateLetter
+                        }
                       </span>
 
                       <span
@@ -82,10 +163,34 @@ function FailedCoordinatesPanel({
                             styles.coordinateNumber
                           }
                         >
-                          {coordinateNumber}
+                          {
+                            coordinateNumber
+                          }
                         </span>
                       </span>
                     </strong>
+
+                    <div
+                      className={
+                        styles.clueContent
+                      }
+                    >
+                      <span
+                        className={
+                          styles.clueLabel
+                        }
+                      >
+                        Pista
+                      </span>
+
+                      <strong
+                        className={
+                          styles.clue
+                        }
+                      >
+                        {clue || 'Sin pista registrada'}
+                      </strong>
+                    </div>
                   </li>
                 );
               },
@@ -93,8 +198,12 @@ function FailedCoordinatesPanel({
           </ol>
         </>
       ) : (
-        <p className={styles.emptyMessage}>
-          Todavía no fallaste ninguna coordenada.
+        <p
+          className={
+            styles.emptyMessage
+          }
+        >
+          Todavía no tenés fallos registrados.
         </p>
       )}
     </section>

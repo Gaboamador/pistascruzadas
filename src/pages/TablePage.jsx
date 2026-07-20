@@ -84,7 +84,7 @@ function getFinishedContent(
       title:
         'El anfitrión terminó la partida',
       description:
-        'La partida terminó antes de procesar todas las coordenadas. El tablero conserva las coordenadas acertadas y tus fallos siguen siendo privados.',
+        'La partida terminó antes de procesar todas las coordenadas. El tablero conserva las coordenadas acertadas y tus fallos con sus pistas siguen siendo privados.',
       footer:
         'La partida fue finalizada manualmente por el anfitrión.',
     };
@@ -94,7 +94,7 @@ function getFinishedContent(
     title:
       'Se procesaron todas las coordenadas',
     description:
-      'El tablero muestra las coordenadas que fueron acertadas. Tus coordenadas falladas permanecen visibles solamente para vos.',
+      'El tablero muestra las coordenadas que fueron acertadas. Tus coordenadas falladas y las pistas que diste permanecen visibles solamente para vos.',
     footer:
       'La partida terminó porque ya no quedan coordenadas pendientes.',
   };
@@ -531,7 +531,7 @@ function PendingJoinRequestsPanel({
         description={
           isApproveConfirmation
             ? isRejoinConfirmation
-              ? 'Se reactivará su acceso, conservará sus coordenadas falladas y recibirá una nueva coordenada disponible.'
+              ? 'Se reactivará su acceso, conservará sus coordenadas falladas con sus pistas y recibirá una nueva coordenada disponible.'
               : 'Se creará su acceso como jugador y se le asignará una coordenada disponible.'
             : 'La solicitud quedará rechazada y el usuario no tendrá acceso a la mesa.'
         }
@@ -1784,7 +1784,7 @@ const handleConfirmFinish =
         }
         description={
           isPlaying
-            ? 'Tu coordenada actual volverá a quedar disponible. Tus coordenadas falladas se conservarán por si más adelante solicitás reingresar.'
+            ? 'Tu coordenada actual volverá a quedar disponible. Tus coordenadas falladas y sus pistas se conservarán por si más adelante solicitás reingresar.'
             : isFinished
               ? 'Dejarás de figurar como jugador activo. Si el anfitrión inicia otra partida, no participarás automáticamente.'
               : 'Dejarás de figurar como jugador activo en esta mesa.'
@@ -1836,7 +1836,7 @@ const handleConfirmFinish =
           isConfirmingRestart
         }
         title="Jugar otra partida"
-        description="Se conservarán la mesa, el código, los apodos y los participantes actuales. Se eliminarán el tablero, las coordenadas, los fallos y las solicitudes de la ronda anterior."
+        description="Se conservarán la mesa, el código, los apodos y los participantes actuales. Se eliminarán el tablero, las coordenadas, los fallos, sus pistas y las solicitudes de la ronda anterior."
         confirmLabel="Preparar otra partida"
         processingLabel="Preparando…"
         tone={

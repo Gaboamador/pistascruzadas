@@ -123,6 +123,77 @@
     );
 }
 
+.clueField {
+  grid-column:
+    1
+    /
+    -1;
+
+  display: grid;
+
+  gap:
+    $space-xs;
+}
+
+.clueLabel {
+  color:
+    $color-text-primary;
+
+  font-size:
+    $font-size-sm;
+
+  font-weight:
+    $font-weight-bold;
+}
+
+.clueMeta {
+  display: flex;
+  align-items:
+    flex-start;
+  justify-content:
+    space-between;
+
+  gap:
+    $space-md;
+}
+
+.clueHelp,
+.clueError {
+  margin: 0;
+
+  font-size:
+    $font-size-xs;
+
+  line-height:
+    $line-height-relaxed;
+}
+
+.clueHelp {
+  color:
+    $color-text-muted;
+}
+
+.clueError {
+  color:
+    $color-danger;
+}
+
+.clueCounter {
+  flex:
+    0
+    0
+    auto;
+
+  color:
+    $color-text-muted;
+
+  font-size:
+    $font-size-xs;
+
+  font-variant-numeric:
+    tabular-nums;
+}
+
 .actions {
   display: grid;
 

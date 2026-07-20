@@ -17,6 +17,32 @@ service cloud.firestore {
         && coordinate.matches('^[A-E][1-5]$');
     }
 
+    function isValidFailedCoordinate(
+      failedCoordinate,
+      expectedCoordinate
+    ) {
+      return failedCoordinate is map
+        && failedCoordinate.keys()
+          .hasOnly([
+            'coordinate',
+            'clue'
+          ])
+        && failedCoordinate.coordinate
+          == expectedCoordinate
+        && isValidCoordinate(
+          failedCoordinate.coordinate
+        )
+        && failedCoordinate.clue
+          is string
+        && failedCoordinate.clue.size()
+          >= 1
+        && failedCoordinate.clue.size()
+          <= 40
+        && failedCoordinate.clue.matches(
+          '.*\\S.*'
+        );
+    }
+
     function isValidNickname(nickname) {
       return nickname is string
         && nickname.size() >= 2
@@ -859,10 +885,22 @@ service cloud.firestore {
                 request.resource.data.failedCoordinates
                   == resource.data.failedCoordinates
                 ||
-                request.resource.data.failedCoordinates
-                  == resource.data.failedCoordinates.concat([
+                (
+                  request.resource.data.failedCoordinates.size()
+                    == resource.data.failedCoordinates.size() + 1
+                  && request.resource.data.failedCoordinates
+                    == resource.data.failedCoordinates.concat([
+                      request.resource.data.failedCoordinates[
+                        request.resource.data.failedCoordinates.size() - 1
+                      ]
+                    ])
+                  && isValidFailedCoordinate(
+                    request.resource.data.failedCoordinates[
+                      request.resource.data.failedCoordinates.size() - 1
+                    ],
                     resource.data.currentCoordinate
-                  ])
+                  )
+                )
               )
             )
             ||

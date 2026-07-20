@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import {
+  useEffect,
+  useState,
+} from 'react';
 import {
   FiCheck,
   FiX,
@@ -7,9 +10,13 @@ import {
 import ConfirmModal, {
   CONFIRM_MODAL_TONES,
 } from '@/components/ConfirmModal';
+import {
+  CLUE_MAX_LENGTH,
+} from '@/constants/table';
 import useOnlineStatus from '@/hooks/useOnlineStatus';
 import {
   COORDINATE_RESULT,
+  normalizeClue,
   resolveCurrentCoordinate,
 } from '@/services/firebase/coordinateService';
 
@@ -22,6 +29,16 @@ function PlayerCoordinateCard({
 }) {
   const isOnline =
     useOnlineStatus();
+
+  const [
+    clue,
+    setClue,
+  ] = useState('');
+
+  const [
+    clueError,
+    setClueError,
+  ] = useState('');
 
   const [
     isResolving,
@@ -41,6 +58,9 @@ function PlayerCoordinateCard({
   const hasCoordinate =
     Boolean(currentCoordinate);
 
+  const normalizedClue =
+    normalizeClue(clue);
+
   const coordinateLetter =
     hasCoordinate
       ? currentCoordinate.charAt(0)
@@ -54,6 +74,31 @@ function PlayerCoordinateCard({
   const isCorrectResult =
     pendingResult
       === COORDINATE_RESULT.CORRECT;
+
+  useEffect(() => {
+    setClue('');
+    setClueError('');
+    setError('');
+    setPendingResult(null);
+  }, [
+    currentCoordinate,
+  ]);
+
+  const handleClueChange = (
+    event,
+  ) => {
+    setClue(
+      event.target.value,
+    );
+
+    if (clueError) {
+      setClueError('');
+    }
+
+    if (error) {
+      setError('');
+    }
+  };
 
   const openResolveModal =
     (result) => {
@@ -72,6 +117,19 @@ function PlayerCoordinateCard({
         return;
       }
 
+      if (
+        result
+          === COORDINATE_RESULT.FAILED
+        && !normalizedClue
+      ) {
+        setClueError(
+          'Ingresá la pista que diste antes de marcar la coordenada como fallada.',
+        );
+
+        return;
+      }
+
+      setClueError('');
       setError('');
       setPendingResult(result);
     };
@@ -105,6 +163,21 @@ function PlayerCoordinateCard({
         return;
       }
 
+      if (
+        pendingResult
+          === COORDINATE_RESULT.FAILED
+        && !normalizedClue
+      ) {
+        setClueError(
+          'Ingresá la pista que diste antes de marcar la coordenada como fallada.',
+        );
+
+        setPendingResult(null);
+
+        return;
+      }
+
+      setClueError('');
       setError('');
       setIsResolving(true);
 
@@ -114,8 +187,11 @@ function PlayerCoordinateCard({
           uid,
           result:
             pendingResult,
+          clue:
+            normalizedClue,
         });
 
+        setClue('');
         setPendingResult(null);
       } catch (resolveError) {
         console.error(
@@ -133,6 +209,11 @@ function PlayerCoordinateCard({
         setIsResolving(false);
       }
     };
+
+  const modalDescription =
+    isCorrectResult
+      ? `¿Confirmás que acertaron la coordenada ${currentCoordinate}? Se revelará en el tablero y recibirás otra coordenada si quedan disponibles.`
+      : `¿Confirmás que fallaron la coordenada ${currentCoordinate} con la pista “${normalizedClue}”? Se guardarán juntas y recibirás otra coordenada si quedan disponibles.`;
 
   return (
     <>
@@ -179,9 +260,7 @@ function PlayerCoordinateCard({
                 }
                 aria-hidden="true"
               >
-                {
-                  coordinateLetter
-                }
+                {coordinateLetter}
               </span>
 
               <span
@@ -195,9 +274,7 @@ function PlayerCoordinateCard({
                     styles.coordinateNumber
                   }
                 >
-                  {
-                    coordinateNumber
-                  }
+                  {coordinateNumber}
                 </span>
               </span>
             </>
@@ -207,6 +284,87 @@ function PlayerCoordinateCard({
             </span>
           )}
         </div>
+
+        {hasCoordinate && (
+          <div className={styles.clueField}>
+            <label
+              className={styles.clueLabel}
+              htmlFor="current-coordinate-clue"
+            >
+              Pista que diste
+            </label>
+
+            <input
+              id="current-coordinate-clue"
+              name="clue"
+              type="text"
+              className={`input ${
+                clueError
+                  ? 'input--error'
+                  : ''
+              }`}
+              value={clue}
+              onChange={
+                handleClueChange
+              }
+              maxLength={
+                CLUE_MAX_LENGTH
+              }
+              autoComplete="off"
+              spellCheck="true"
+              disabled={
+                isResolving
+              }
+              aria-invalid={
+                Boolean(clueError)
+              }
+              aria-describedby={
+                clueError
+                  ? 'current-coordinate-clue-error'
+                  : 'current-coordinate-clue-help'
+              }
+              placeholder="Ej.: Hospital"
+            />
+
+            <div
+              className={
+                styles.clueMeta
+              }
+            >
+              {clueError ? (
+                <p
+                  id="current-coordinate-clue-error"
+                  className={
+                    styles.clueError
+                  }
+                  role="alert"
+                >
+                  {clueError}
+                </p>
+              ) : (
+                <p
+                  id="current-coordinate-clue-help"
+                  className={
+                    styles.clueHelp
+                  }
+                >
+                  Se guardará solamente si la coordenada resulta fallada.
+                </p>
+              )}
+
+              <span
+                className={
+                  styles.clueCounter
+                }
+                aria-label={`${clue.length} de ${CLUE_MAX_LENGTH} caracteres`}
+              >
+                {clue.length}
+                /
+                {CLUE_MAX_LENGTH}
+              </span>
+            </div>
+          </div>
+        )}
 
         {hasCoordinate ? (
           <div className={styles.actions}>
@@ -223,9 +381,7 @@ function PlayerCoordinateCard({
                 || !isOnline
               }
             >
-              <FiX
-                aria-hidden="true"
-              />
+              <FiX aria-hidden="true" />
 
               {isResolving
                 ? 'Procesando…'
@@ -245,9 +401,7 @@ function PlayerCoordinateCard({
                 || !isOnline
               }
             >
-              <FiCheck
-                aria-hidden="true"
-              />
+              <FiCheck aria-hidden="true" />
 
               {isResolving
                 ? 'Procesando…'
@@ -255,11 +409,7 @@ function PlayerCoordinateCard({
             </button>
           </div>
         ) : (
-          <p
-            className={
-              styles.emptyMessage
-            }
-          >
+          <p className={styles.emptyMessage}>
             No quedan coordenadas disponibles para asignarte.
           </p>
         )}
@@ -286,9 +436,7 @@ function PlayerCoordinateCard({
             : 'Confirmar fallo'
         }
         description={
-          isCorrectResult
-            ? `¿Confirmás que acertaron la coordenada ${currentCoordinate}? Se revelará en el tablero y recibirás otra coordenada si quedan disponibles.`
-            : `¿Confirmás que fallaron la coordenada ${currentCoordinate}? Se guardará entre tus fallos y recibirás otra coordenada si quedan disponibles.`
+          modalDescription
         }
         confirmLabel={
           isCorrectResult

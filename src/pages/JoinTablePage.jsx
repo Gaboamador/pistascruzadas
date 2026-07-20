@@ -333,7 +333,7 @@ function JoinRequestStatus({
 
   let description =
     isRejoinRequest
-      ? 'Solicitaste volver a la partida. Si el anfitrión aprueba el reingreso, conservarás tus coordenadas falladas y recibirás una nueva coordenada.'
+      ? 'Solicitaste volver a la partida. Si el anfitrión aprueba el reingreso, conservarás tus coordenadas falladas con sus pistas y recibirás una nueva coordenada.'
       : 'La partida ya comenzó. Enviamos una solicitud para que el anfitrión decida si podés incorporarte.';
 
   if (isApproved) {

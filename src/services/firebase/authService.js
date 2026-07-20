@@ -69,8 +69,51 @@ function subscribeToAuthState(
   );
 }
 
+function waitForAuthenticatedUser(
+  expectedUid,
+) {
+  if (
+    auth.currentUser?.uid
+      === expectedUid
+  ) {
+    return Promise.resolve(
+      auth.currentUser,
+    );
+  }
+
+  return new Promise(
+    (resolve, reject) => {
+      let unsubscribe = null;
+
+      unsubscribe =
+        onAuthStateChanged(
+          auth,
+          (authenticatedUser) => {
+            if (
+              !authenticatedUser
+              || authenticatedUser.uid
+                !== expectedUid
+            ) {
+              return;
+            }
+
+            unsubscribe?.();
+            resolve(
+              authenticatedUser,
+            );
+          },
+          (error) => {
+            unsubscribe?.();
+            reject(error);
+          },
+        );
+    },
+  );
+}
+
 export {
   deleteCurrentAnonymousUser,
   signInAnonymousUser,
   subscribeToAuthState,
+  waitForAuthenticatedUser,
 };

@@ -10,6 +10,7 @@ import useOnlineStatus from '@/hooks/useOnlineStatus';
 import {
   deleteCurrentAnonymousUser,
   signInAnonymousUser,
+  waitForAuthenticatedUser,
 } from '@/services/firebase/authService';
 import { createTable } from '@/services/firebase/tableService';
 import {
@@ -81,6 +82,12 @@ function CreateTablePage({ user }) {
         nickname: normalizedNickname,
         gridSize,
       });
+
+      await waitForAuthenticatedUser(
+        authenticatedUser.uid,
+      );
+
+      await authenticatedUser.getIdToken();
 
       navigate(`/mesa/${tableCode}`, {
         replace: true,
