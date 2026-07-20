@@ -1,8 +1,13 @@
-import { useState } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   FiCheck,
   FiFlag,
   FiLogOut,
+  FiRefreshCw,
   FiTrash2,
   FiX,
 } from 'react-icons/fi';
@@ -29,7 +34,10 @@ import usePendingJoinRequests from '@/hooks/usePendingJoinRequests';
 import useOnlineStatus from '@/hooks/useOnlineStatus';
 import useTableRoom from '@/hooks/useTableRoom';
 import {
-  deleteFinishedTable,
+  deleteCurrentAnonymousUser,
+} from '@/services/firebase/authService';
+import {
+  closeTable,
 } from '@/services/firebase/deleteTableService';
 import {
   finishGameManually,
@@ -41,6 +49,9 @@ import {
 import {
   leaveTable,
 } from '@/services/firebase/leaveTableService';
+import {
+  restartFinishedTable,
+} from '@/services/firebase/restartTableService';
 
 import styles from '@/pages/TablePage.module.scss';
 
@@ -555,6 +566,9 @@ function TablePage({ user }) {
   const navigate = useNavigate();
   const isOnline = useOnlineStatus();
 
+  const isCleaningRemovedTableUserRef =
+    useRef(false);
+
   const [
     isLeaving,
     setIsLeaving,
@@ -573,6 +587,16 @@ function TablePage({ user }) {
   const [
     finishGameError,
     setFinishGameError,
+  ] = useState('');
+
+  const [
+    isRestartingTable,
+    setIsRestartingTable,
+  ] = useState(false);
+
+  const [
+    restartTableError,
+    setRestartTableError,
   ] = useState('');
 
   const [
@@ -604,6 +628,7 @@ function TablePage({ user }) {
     error,
     tableExists,
     hasAccess,
+    wasTableRemoved,
   } = useTableRoom({
     tableCode:
       normalizedTableCode,
@@ -618,6 +643,43 @@ function TablePage({ user }) {
   const isPlaying =
     table?.status
       === TABLE_STATUS.PLAYING;
+
+  useEffect(() => {
+    if (
+      !wasTableRemoved
+      || isDeletingTable
+      || isCleaningRemovedTableUserRef.current
+    ) {
+      return;
+    }
+
+    isCleaningRemovedTableUserRef.current = true;
+
+    const finishRemoteTableClosure =
+      async () => {
+        try {
+          await deleteCurrentAnonymousUser();
+        } catch (cleanupError) {
+          console.error(
+            'La mesa fue cerrada, pero no se pudo eliminar la identidad anónima local:',
+            cleanupError,
+          );
+        } finally {
+          navigate('/', {
+            replace: true,
+            state: {
+              tableClosed: true,
+            },
+          });
+        }
+      };
+
+    finishRemoteTableClosure();
+  }, [
+    isDeletingTable,
+    navigate,
+    wasTableRemoved,
+  ]);
 
   const {
     pendingJoinRequests,
@@ -648,6 +710,17 @@ function TablePage({ user }) {
         eyebrow="Pistas Cruzadas"
         title="Limpiando datos…"
         description="Estamos eliminando los datos de la partida."
+        role="status"
+      />
+    );
+  }
+
+  if (wasTableRemoved) {
+    return (
+      <StatusContent
+        eyebrow="Mesa cerrada"
+        title="La mesa fue cerrada"
+        description="El anfitrión cerró la mesa. Estamos volviendo al inicio."
         role="status"
       />
     );
@@ -755,10 +828,21 @@ function TablePage({ user }) {
         === TABLE_STATUS.LOBBY
       || table.status
         === TABLE_STATUS.PLAYING
+      || table.status
+        === TABLE_STATUS.FINISHED
     );
 
-  const canDeleteFinishedTable =
+  const canRestartTable =
     isHost && isFinished;
+
+  const canCloseTable =
+    isHost
+    && (
+      table.status
+        === TABLE_STATUS.LOBBY
+      || table.status
+        === TABLE_STATUS.FINISHED
+    );
 
   const failedCoordinates =
     Array.isArray(
@@ -781,13 +865,18 @@ function TablePage({ user }) {
     confirmationAction
       === 'finish';
 
-  const isConfirmingCleanup =
+  const isConfirmingRestart =
     confirmationAction
-      === 'cleanup';
+      === 'restart';
+
+  const isConfirmingClose =
+    confirmationAction
+      === 'close';
 
   const isAnyOperationRunning =
     isLeaving
     || isFinishingGame
+    || isRestartingTable
     || isDeletingTable;
 
   const remoteActionsDisabled =
@@ -822,6 +911,7 @@ function TablePage({ user }) {
 
       setLeaveError('');
       setFinishGameError('');
+      setRestartTableError('');
       setDeleteTableError('');
 
       setConfirmationAction(
@@ -848,6 +938,7 @@ function TablePage({ user }) {
 
       setFinishGameError('');
       setLeaveError('');
+      setRestartTableError('');
       setDeleteTableError('');
 
       setConfirmationAction(
@@ -855,10 +946,37 @@ function TablePage({ user }) {
       );
     };
 
-    const openCleanupConfirmation =
+    const openRestartConfirmation =
     () => {
       if (
-        !canDeleteFinishedTable
+        !canRestartTable
+        || isAnyOperationRunning
+      ) {
+        return;
+      }
+
+      if (!isOnline) {
+        setRestartTableError(
+          'Necesitás conexión a internet para preparar otra partida.',
+        );
+
+        return;
+      }
+
+      setRestartTableError('');
+      setLeaveError('');
+      setFinishGameError('');
+      setDeleteTableError('');
+
+      setConfirmationAction(
+        'restart',
+      );
+    };
+
+    const openCloseConfirmation =
+    () => {
+      if (
+        !canCloseTable
         || isAnyOperationRunning
       ) {
         return;
@@ -866,7 +984,7 @@ function TablePage({ user }) {
 
       if (!isOnline) {
         setDeleteTableError(
-          'Necesitás conexión a internet para eliminar los datos de la partida.',
+          'Necesitás conexión a internet para cerrar la mesa.',
         );
 
         return;
@@ -875,9 +993,10 @@ function TablePage({ user }) {
       setDeleteTableError('');
       setLeaveError('');
       setFinishGameError('');
+      setRestartTableError('');
 
       setConfirmationAction(
-        'cleanup',
+        'close',
       );
     };
 
@@ -902,6 +1021,7 @@ function TablePage({ user }) {
 
       setLeaveError('');
       setFinishGameError('');
+      setRestartTableError('');
       setDeleteTableError('');
       setIsLeaving(true);
 
@@ -911,6 +1031,10 @@ function TablePage({ user }) {
             normalizedTableCode,
           uid: user.uid,
         });
+
+        if (isFinished) {
+          await deleteCurrentAnonymousUser();
+        }
 
         setConfirmationAction('');
 
@@ -955,6 +1079,7 @@ const handleConfirmFinish =
 
     setFinishGameError('');
     setLeaveError('');
+    setRestartTableError('');
     setDeleteTableError('');
     setIsFinishingGame(true);
 
@@ -982,10 +1107,59 @@ const handleConfirmFinish =
     }
   };
 
-  const handleConfirmCleanup =
+  const handleConfirmRestart =
     async () => {
       if (
-        !canDeleteFinishedTable
+        !canRestartTable
+        || isAnyOperationRunning
+      ) {
+        return;
+      }
+
+      if (!isOnline) {
+        setRestartTableError(
+          'Necesitás conexión a internet para preparar otra partida.',
+        );
+
+        setConfirmationAction('');
+
+        return;
+      }
+
+      setRestartTableError('');
+      setLeaveError('');
+      setFinishGameError('');
+      setDeleteTableError('');
+      setIsRestartingTable(true);
+
+      try {
+        await restartFinishedTable({
+          tableCode:
+            normalizedTableCode,
+          hostUid: user.uid,
+        });
+
+        setConfirmationAction('');
+      } catch (restartError) {
+        console.error(
+          'Error al preparar otra partida:',
+          restartError,
+        );
+
+        setRestartTableError(
+          restartError instanceof Error
+            ? restartError.message
+            : 'No se pudo preparar otra partida.',
+        );
+      } finally {
+        setIsRestartingTable(false);
+      }
+    };
+
+  const handleConfirmClose =
+    async () => {
+      if (
+        !canCloseTable
         || isAnyOperationRunning
       ) {
         return;
@@ -993,7 +1167,7 @@ const handleConfirmFinish =
 
       if (!isOnline) {
         setDeleteTableError(
-          'Necesitás conexión a internet para eliminar los datos de la partida.',
+          'Necesitás conexión a internet para cerrar la mesa.',
         );
 
         setConfirmationAction('');
@@ -1007,27 +1181,39 @@ const handleConfirmFinish =
       setIsDeletingTable(true);
 
       try {
-        await deleteFinishedTable({
+        await closeTable({
           tableCode:
             normalizedTableCode,
           hostUid: user.uid,
         });
 
+        try {
+          await deleteCurrentAnonymousUser();
+        } catch (cleanupError) {
+          console.error(
+            'La mesa se cerró, pero no se pudo eliminar la identidad anónima del anfitrión:',
+            cleanupError,
+          );
+        }
+
         setConfirmationAction('');
 
         navigate('/', {
           replace: true,
+          state: {
+            tableClosed: true,
+          },
         });
       } catch (deleteError) {
         console.error(
-          'Error al eliminar la partida:',
+          'Error al cerrar la mesa:',
           deleteError,
         );
 
         setDeleteTableError(
           deleteError instanceof Error
             ? deleteError.message
-            : 'No se pudieron eliminar los datos de la partida.',
+            : 'No se pudo cerrar la mesa.',
         );
 
         setIsDeletingTable(false);
@@ -1301,6 +1487,17 @@ const handleConfirmFinish =
             </p>
           )}
 
+          {restartTableError && (
+            <p
+              className={
+                styles.finishGameError
+              }
+              role="alert"
+            >
+              {restartTableError}
+            </p>
+          )}
+
           {deleteTableError && (
             <p
               className={
@@ -1400,78 +1597,57 @@ const handleConfirmFinish =
                   />
 
                   {isLeaving
-                    ? 'Abandonando…'
-                    : 'Abandonar mesa'}
+                    ? 'Saliendo…'
+                    : isPlaying
+                      ? 'Abandonar partida'
+                      : isFinished
+                        ? 'Salir de la mesa'
+                        : 'Abandonar mesa'}
                 </button>
               )}
 
-              {canDeleteFinishedTable && (
-                <>
-                  <button
-                    type="button"
-                    className="button button--primary"
-                    onClick={
-                      openCleanupConfirmation
-                    }
-                    disabled={
-                      remoteActionsDisabled
-                    }
-                  >
-                    <FiTrash2
-                      aria-hidden="true"
-                    />
-
-                    {isDeletingTable
-                      ? 'Limpiando datos…'
-                      : 'Limpiar datos y volver al inicio'}
-                  </button>
-
-                  <Link
-                    to="/"
-                    className="button button--secondary"
-                    aria-disabled={
-                      isAnyOperationRunning
-                    }
-                    onClick={(event) => {
-                      if (
-                        isAnyOperationRunning
-                      ) {
-                        event.preventDefault();
-                      }
-                    }}
-                  >
-                    Volver al inicio y mantener historial
-                  </Link>
-                </>
-              )}
-
-              {isFinished
-                && !isHost && (
-                <Link
-                  to="/"
-                  className="button button--secondary"
-                >
-                  Volver al inicio
-                </Link>
-              )}
-
-              {table.status === TABLE_STATUS.LOBBY && (
-                <Link
-                  to="/"
-                  className="button button--secondary"
-                  aria-disabled={
-                    isAnyOperationRunning
+              {canRestartTable && (
+                <button
+                  type="button"
+                  className="button button--primary"
+                  onClick={
+                    openRestartConfirmation
                   }
-                  onClick={(event) => {
-                    if (
-                      isAnyOperationRunning
-                    ) {
-                      event.preventDefault();
-                    }
-                  }}
+                  disabled={
+                    remoteActionsDisabled
+                  }
                 >
-                  Volver al inicio
-                </Link>
+                  <FiRefreshCw
+                    aria-hidden="true"
+                  />
+
+                  {isRestartingTable
+                    ? 'Preparando…'
+                    : 'Jugar otra partida'}
+                </button>
+              )}
+
+              {canCloseTable && (
+                <button
+                  type="button"
+                  className={
+                    styles.finishGameButton
+                  }
+                  onClick={
+                    openCloseConfirmation
+                  }
+                  disabled={
+                    remoteActionsDisabled
+                  }
+                >
+                  <FiTrash2
+                    aria-hidden="true"
+                  />
+
+                  {isDeletingTable
+                    ? 'Cerrando mesa…'
+                    : 'Cerrar mesa'}
+                </button>
               )}
             </div>
           </footer>
@@ -1485,17 +1661,23 @@ const handleConfirmFinish =
         title={
           isPlaying
             ? 'Abandonar la partida'
-            : 'Abandonar la mesa'
+            : isFinished
+              ? 'Salir de la mesa'
+              : 'Abandonar la mesa'
         }
         description={
           isPlaying
             ? 'Tu coordenada actual volverá a quedar disponible. Tus coordenadas falladas se conservarán por si más adelante solicitás reingresar.'
-            : 'Dejarás de figurar como jugador activo en esta mesa.'
+            : isFinished
+              ? 'Dejarás de figurar como jugador activo. Si el anfitrión inicia otra partida, no participarás automáticamente.'
+              : 'Dejarás de figurar como jugador activo en esta mesa.'
         }
         confirmLabel={
           isPlaying
             ? 'Abandonar partida'
-            : 'Abandonar mesa'
+            : isFinished
+              ? 'Salir de la mesa'
+              : 'Abandonar mesa'
         }
         processingLabel="Abandonando…"
         tone={
@@ -1534,12 +1716,34 @@ const handleConfirmFinish =
 
       <ConfirmModal
         isOpen={
-          isConfirmingCleanup
+          isConfirmingRestart
         }
-        title="Limpiar los datos de la partida"
-        description="Se eliminarán definitivamente el tablero, los jugadores, las solicitudes y todos los datos de esta mesa. Esta acción no se puede deshacer."
-        confirmLabel="Limpiar datos y volver al inicio"
-        processingLabel="Limpiando datos…"
+        title="Jugar otra partida"
+        description="Se conservarán la mesa, el código, los apodos y los participantes actuales. Se eliminarán el tablero, las coordenadas, los fallos y las solicitudes de la ronda anterior."
+        confirmLabel="Preparar otra partida"
+        processingLabel="Preparando…"
+        tone={
+          CONFIRM_MODAL_TONES.SUCCESS
+        }
+        isProcessing={
+          isRestartingTable
+        }
+        onConfirm={
+          handleConfirmRestart
+        }
+        onCancel={
+          closeActionConfirmation
+        }
+      />
+
+      <ConfirmModal
+        isOpen={
+          isConfirmingClose
+        }
+        title="Cerrar la mesa"
+        description="Se eliminarán definitivamente el tablero, los jugadores, las solicitudes y todos los datos de esta mesa. Nadie podrá volver a ingresar con este código."
+        confirmLabel="Cerrar mesa"
+        processingLabel="Cerrando mesa…"
         tone={
           CONFIRM_MODAL_TONES.DANGER
         }
@@ -1547,7 +1751,7 @@ const handleConfirmFinish =
           isDeletingTable
         }
         onConfirm={
-          handleConfirmCleanup
+          handleConfirmClose
         }
         onCancel={
           closeActionConfirmation

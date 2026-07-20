@@ -7,6 +7,10 @@ import {
   NICKNAME_MAX_LENGTH,
 } from '@/constants/table';
 import useOnlineStatus from '@/hooks/useOnlineStatus';
+import {
+  deleteCurrentAnonymousUser,
+  signInAnonymousUser,
+} from '@/services/firebase/authService';
 import { createTable } from '@/services/firebase/tableService';
 import {
   normalizeNickname,
@@ -62,11 +66,18 @@ function CreateTablePage({ user }) {
     setSubmitError('');
     setIsSubmitting(true);
 
+    const hadAuthenticatedUser =
+      Boolean(user);
+
     try {
       const normalizedNickname = normalizeNickname(nickname);
 
+      const authenticatedUser =
+        user
+        ?? await signInAnonymousUser();
+
       const { tableCode } = await createTable({
-        uid: user.uid,
+        uid: authenticatedUser.uid,
         nickname: normalizedNickname,
         gridSize,
       });
@@ -80,6 +91,17 @@ function CreateTablePage({ user }) {
       });
     } catch (error) {
       console.error('Error al crear la mesa:', error);
+
+      if (!hadAuthenticatedUser) {
+        try {
+          await deleteCurrentAnonymousUser();
+        } catch (cleanupError) {
+          console.error(
+            'No se pudo limpiar la identidad anónima creada para el intento fallido:',
+            cleanupError,
+          );
+        }
+      }
 
       setSubmitError(
         'No se pudo crear la mesa. Revisá tu conexión e intentá nuevamente.',

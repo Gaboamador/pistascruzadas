@@ -18,6 +18,10 @@ import {
 import useJoinRequest from '@/hooks/useJoinRequest';
 import useOnlineStatus from '@/hooks/useOnlineStatus';
 import {
+  deleteCurrentAnonymousUser,
+  signInAnonymousUser,
+} from '@/services/firebase/authService';
+import {
   JOIN_TABLE_ENTRY_TYPES,
   JOIN_TABLE_ERROR_CODES,
   JoinTableError,
@@ -525,6 +529,14 @@ function JoinTablePage({ user }) {
   const navigate = useNavigate();
   const isOnline = useOnlineStatus();
 
+  const [
+    activeUser,
+    setActiveUser,
+  ] = useState(user);
+
+  const currentUser =
+    user ?? activeUser;
+
   const [tableCode, setTableCode] =
     useState('');
 
@@ -536,7 +548,7 @@ function JoinTablePage({ user }) {
     setPendingRequest,
   ] = useState(() =>
     readStoredPendingRequest(
-      user?.uid,
+      currentUser?.uid,
     ),
   );
 
@@ -552,15 +564,21 @@ function JoinTablePage({ user }) {
     useState(false);
 
   useEffect(() => {
+    if (user) {
+      setActiveUser(user);
+    }
+  }, [user]);
+
+  useEffect(() => {
     const storedPendingRequest =
       readStoredPendingRequest(
-        user?.uid,
+        currentUser?.uid,
       );
 
     setPendingRequest(
       storedPendingRequest,
     );
-  }, [user?.uid]);
+  }, [currentUser?.uid]);
 
   const updatePendingRequest = (
     nextPendingRequest,
@@ -571,7 +589,7 @@ function JoinTablePage({ user }) {
 
     if (nextPendingRequest) {
       savePendingRequest({
-        uid: user.uid,
+        uid: currentUser.uid,
         pendingRequest:
           nextPendingRequest,
       });
@@ -597,7 +615,7 @@ function JoinTablePage({ user }) {
         };
 
         savePendingRequest({
-          uid: user.uid,
+          uid: currentUser.uid,
           pendingRequest:
             nextPendingRequest,
         });
@@ -698,9 +716,20 @@ function JoinTablePage({ user }) {
     setSubmitError('');
     setIsSubmitting(true);
 
+    const hadAuthenticatedUser =
+      Boolean(currentUser);
+
     try {
+      const authenticatedUser =
+        currentUser
+        ?? await signInAnonymousUser();
+
+      setActiveUser(
+        authenticatedUser,
+      );
+
       const result = await joinTable({
-        uid: user.uid,
+        uid: authenticatedUser.uid,
         tableCode:
           normalizedTableCode,
         nickname:
@@ -711,7 +740,20 @@ function JoinTablePage({ user }) {
         result.entryType
           === JOIN_TABLE_ENTRY_TYPES.REQUEST
       ) {
-        updatePendingRequest({
+        savePendingRequest({
+          uid: authenticatedUser.uid,
+          pendingRequest: {
+            tableCode:
+              result.tableCode,
+            nickname:
+              normalizedNickname,
+            requestType:
+              result.requestType,
+            hasObservedPending: false,
+          },
+        });
+
+        setPendingRequest({
           tableCode:
             result.tableCode,
           nickname:
@@ -749,6 +791,17 @@ function JoinTablePage({ user }) {
         error,
       );
 
+      if (!hadAuthenticatedUser) {
+        try {
+          await deleteCurrentAnonymousUser();
+        } catch (cleanupError) {
+          console.error(
+            'No se pudo limpiar la identidad anónima creada para el intento fallido:',
+            cleanupError,
+          );
+        }
+      }
+
       setSubmitError(
         getJoinErrorMessage(error),
       );
@@ -763,7 +816,7 @@ function JoinTablePage({ user }) {
         pendingRequest={
           pendingRequest
         }
-        user={user}
+        user={currentUser}
         onPendingConfirmed={
           handlePendingConfirmed
         }

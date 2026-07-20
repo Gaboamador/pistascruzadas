@@ -14,6 +14,7 @@ const INITIAL_ROOM_STATE = {
   error: null,
   tableExists: true,
   hasAccess: true,
+  wasTableRemoved: false,
 };
 
 function useTableRoom({ tableCode, uid }) {
@@ -40,9 +41,13 @@ function useTableRoom({ tableCode, uid }) {
     let participantLoaded = false;
     let playersLoaded = false;
 
+    let tableWasAvailable = false;
+    let tableIsMissing = false;
+
     const updateLoadingState = () => {
       if (
         !isActive
+        || tableIsMissing
         || !tableLoaded
         || !participantLoaded
         || !playersLoaded
@@ -57,7 +62,10 @@ function useTableRoom({ tableCode, uid }) {
     };
 
     const handleError = (error) => {
-      if (!isActive) {
+      if (
+        !isActive
+        || tableIsMissing
+      ) {
         return;
       }
 
@@ -68,6 +76,8 @@ function useTableRoom({ tableCode, uid }) {
       }));
     };
 
+    setRoomState(INITIAL_ROOM_STATE);
+
     const unsubscribeTable = subscribeToTable({
       tableCode,
       onTableChanged: (table) => {
@@ -77,10 +87,33 @@ function useTableRoom({ tableCode, uid }) {
 
         tableLoaded = true;
 
+        if (!table) {
+          tableIsMissing = true;
+
+          setRoomState({
+            table: null,
+            participant: null,
+            players: [],
+            isLoading: false,
+            error: null,
+            tableExists: false,
+            hasAccess: false,
+            wasTableRemoved:
+              tableWasAvailable,
+          });
+
+          return;
+        }
+
+        tableWasAvailable = true;
+        tableIsMissing = false;
+
         setRoomState((currentState) => ({
           ...currentState,
           table,
-          tableExists: Boolean(table),
+          tableExists: true,
+          wasTableRemoved: false,
+          error: null,
         }));
 
         updateLoadingState();
@@ -92,7 +125,10 @@ function useTableRoom({ tableCode, uid }) {
       tableCode,
       uid,
       onParticipantChanged: (participant) => {
-        if (!isActive) {
+        if (
+          !isActive
+          || tableIsMissing
+        ) {
           return;
         }
 
@@ -112,7 +148,10 @@ function useTableRoom({ tableCode, uid }) {
     const unsubscribePlayers = subscribeToPlayers({
       tableCode,
       onPlayersChanged: (players) => {
-        if (!isActive) {
+        if (
+          !isActive
+          || tableIsMissing
+        ) {
           return;
         }
 

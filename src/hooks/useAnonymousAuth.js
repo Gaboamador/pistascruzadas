@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+import {
+  useEffect,
+  useState,
+} from 'react';
 
 import {
-  signInAnonymousUser,
   subscribeToAuthState,
 } from '@/services/firebase/authService';
 
@@ -15,37 +17,23 @@ function useAnonymousAuth() {
   useEffect(() => {
     let isActive = true;
 
-    const handleUserChanged = async (user) => {
+    const handleUserChanged = (
+      user,
+    ) => {
       if (!isActive) {
         return;
       }
 
-      if (user) {
-        setAuthState({
-          user,
-          isLoading: false,
-          error: null,
-        });
-
-        return;
-      }
-
-      try {
-        await signInAnonymousUser();
-      } catch (error) {
-        if (!isActive) {
-          return;
-        }
-
-        setAuthState({
-          user: null,
-          isLoading: false,
-          error,
-        });
-      }
+      setAuthState({
+        user,
+        isLoading: false,
+        error: null,
+      });
     };
 
-    const handleAuthError = (error) => {
+    const handleAuthError = (
+      error,
+    ) => {
       if (!isActive) {
         return;
       }
@@ -57,10 +45,11 @@ function useAnonymousAuth() {
       });
     };
 
-    const unsubscribe = subscribeToAuthState(
-      handleUserChanged,
-      handleAuthError,
-    );
+    const unsubscribe =
+      subscribeToAuthState(
+        handleUserChanged,
+        handleAuthError,
+      );
 
     return () => {
       isActive = false;

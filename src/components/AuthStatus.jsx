@@ -15,13 +15,13 @@ function AuthStatus({ error = null }) {
         <h1 className={styles.title}>
           {hasError
             ? 'No se pudo iniciar la aplicación'
-            : 'Preparando la partida'}
+            : 'Preparando la aplicación'}
         </h1>
 
         <p className={styles.description}>
           {hasError
-            ? 'No pudimos crear tu identidad de jugador. Revisá tu conexión e intentá recargar la página.'
-            : 'Estamos preparando tu identidad de jugador.'}
+            ? 'No pudimos recuperar el estado de tu sesión. Revisá tu conexión e intentá recargar la página.'
+            : 'Estamos recuperando el estado guardado en este dispositivo.'}
         </p>
 
         {hasError && (

@@ -1,4 +1,5 @@
 import {
+  Navigate,
   Route,
   Routes,
 } from 'react-router';
@@ -14,6 +15,25 @@ import NotFoundPage from '@/pages/NotFoundPage';
 import PrepareTablePage from '@/pages/PrepareTablePage';
 import TablePage from '@/pages/TablePage';
 
+function ProtectedRoute({
+  user,
+  children,
+}) {
+  if (!user) {
+    return (
+      <Navigate
+        to="/"
+        replace
+        state={{
+          sessionUnavailable: true,
+        }}
+      />
+    );
+  }
+
+  return children;
+}
+
 function App() {
   const {
     user,
@@ -25,7 +45,7 @@ function App() {
 
   if (isLoading) {
     content = <AuthStatus />;
-  } else if (error || !user) {
+  } else if (error) {
     content = (
       <AuthStatus error={error} />
     );
@@ -58,18 +78,26 @@ function App() {
         <Route
           path="/mesa/:tableCode"
           element={
-            <TablePage
+            <ProtectedRoute
               user={user}
-            />
+            >
+              <TablePage
+                user={user}
+              />
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/mesa/:tableCode/preparar"
           element={
-            <PrepareTablePage
+            <ProtectedRoute
               user={user}
-            />
+            >
+              <PrepareTablePage
+                user={user}
+              />
+            </ProtectedRoute>
           }
         />
 

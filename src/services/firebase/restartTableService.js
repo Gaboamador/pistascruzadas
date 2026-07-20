@@ -1,5 +1,6 @@
 import {
   collection,
+  deleteField,
   doc,
   getDoc,
   getDocs,
@@ -15,13 +16,13 @@ import { db } from '@/services/firebase/firebase';
 
 const FIRESTORE_BATCH_WRITE_LIMIT = 500;
 
-async function closeTable({
+async function restartFinishedTable({
   tableCode,
   hostUid,
 }) {
   if (!tableCode || !hostUid) {
     throw new Error(
-      'Faltan datos para cerrar la mesa.',
+      'Faltan datos para preparar otra partida.',
     );
   }
 
@@ -39,12 +40,32 @@ async function closeTable({
     hostUid,
   );
 
+  const participantsReference =
+    collection(
+      db,
+      'tables',
+      tableCode,
+      'participants',
+    );
+
+  const joinRequestsReference =
+    collection(
+      db,
+      'tables',
+      tableCode,
+      'joinRequests',
+    );
+
   const [
     tableSnapshot,
     hostParticipantSnapshot,
+    participantsSnapshot,
+    joinRequestsSnapshot,
   ] = await Promise.all([
     getDoc(tableReference),
     getDoc(hostParticipantReference),
+    getDocs(participantsReference),
+    getDocs(joinRequestsReference),
   ]);
 
   if (!tableSnapshot.exists()) {
@@ -64,15 +85,12 @@ async function closeTable({
   const hostParticipantData =
     hostParticipantSnapshot.data();
 
-  const canCloseCurrentStatus =
+  if (
     tableData.status
-      === TABLE_STATUS.LOBBY
-    || tableData.status
-      === TABLE_STATUS.FINISHED;
-
-  if (!canCloseCurrentStatus) {
+      !== TABLE_STATUS.FINISHED
+  ) {
     throw new Error(
-      'La mesa sólo puede cerrarse desde el lobby o después de finalizar la partida.',
+      'Sólo puede prepararse otra partida después de finalizar la actual.',
     );
   }
 
@@ -86,43 +104,9 @@ async function closeTable({
       !== PARTICIPANT_STATUS.ACTIVE
   ) {
     throw new Error(
-      'Solamente el anfitrión activo puede cerrar la mesa.',
+      'Solamente el anfitrión activo puede preparar otra partida.',
     );
   }
-
-  const participantsReference =
-    collection(
-      db,
-      'tables',
-      tableCode,
-      'participants',
-    );
-
-  const playersReference =
-    collection(
-      db,
-      'tables',
-      tableCode,
-      'players',
-    );
-
-  const joinRequestsReference =
-    collection(
-      db,
-      'tables',
-      tableCode,
-      'joinRequests',
-    );
-
-  const [
-    participantsSnapshot,
-    playersSnapshot,
-    joinRequestsSnapshot,
-  ] = await Promise.all([
-    getDocs(participantsReference),
-    getDocs(playersReference),
-    getDocs(joinRequestsReference),
-  ]);
 
   const setupBoardReference = doc(
     db,
@@ -148,43 +132,55 @@ async function closeTable({
     'state',
   );
 
-  const documentReferencesToDelete = [
-    ...participantsSnapshot.docs.map(
-      (documentSnapshot) =>
-        documentSnapshot.ref,
-    ),
-    ...playersSnapshot.docs.map(
-      (documentSnapshot) =>
-        documentSnapshot.ref,
-    ),
-    ...joinRequestsSnapshot.docs.map(
-      (documentSnapshot) =>
-        documentSnapshot.ref,
-    ),
-    setupBoardReference,
-    gameBoardReference,
-    gameStateReference,
-    tableReference,
-  ];
+  const operationCount =
+    1
+    + participantsSnapshot.size
+    + joinRequestsSnapshot.size
+    + 3;
 
   if (
-    documentReferencesToDelete.length
+    operationCount
       > FIRESTORE_BATCH_WRITE_LIMIT
   ) {
     throw new Error(
-      'La mesa contiene demasiados documentos para cerrarla en una sola operación.',
+      'La mesa contiene demasiados documentos para preparar otra partida en una sola operación.',
     );
   }
 
   const batch = writeBatch(db);
 
-  documentReferencesToDelete.forEach(
-    (documentReference) => {
-      batch.delete(documentReference);
+  participantsSnapshot.docs.forEach(
+    (participantDocument) => {
+      batch.update(
+        participantDocument.ref,
+        {
+          currentCoordinate: null,
+          failedCoordinates: [],
+        },
+      );
     },
   );
+
+  joinRequestsSnapshot.docs.forEach(
+    (joinRequestDocument) => {
+      batch.delete(
+        joinRequestDocument.ref,
+      );
+    },
+  );
+
+  batch.delete(setupBoardReference);
+  batch.delete(gameBoardReference);
+  batch.delete(gameStateReference);
+
+  batch.update(tableReference, {
+    status: TABLE_STATUS.LOBBY,
+    startedAt: deleteField(),
+    finishedAt: deleteField(),
+    finishReason: deleteField(),
+  });
 
   await batch.commit();
 }
 
-export { closeTable };
+export { restartFinishedTable };

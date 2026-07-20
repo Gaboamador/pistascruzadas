@@ -103,9 +103,10 @@ async function leaveTable({
     if (
       tableData.status !== TABLE_STATUS.LOBBY
       && tableData.status !== TABLE_STATUS.PLAYING
+      && tableData.status !== TABLE_STATUS.FINISHED
     ) {
       throw new Error(
-        'No se puede abandonar una mesa finalizada.',
+        'No se puede salir de la mesa en su estado actual.',
       );
     }
 

@@ -103,6 +103,20 @@ service cloud.firestore {
         ).data.status == 'finished';
     }
 
+    function isClosableTableHost(
+      tableCode
+    ) {
+      return isCurrentHost(tableCode)
+        && (
+          get(
+            tablePath(tableCode)
+          ).data.status == 'lobby'
+          || get(
+            tablePath(tableCode)
+          ).data.status == 'finished'
+        );
+    }
+
     function isLobby(tableCode) {
       return get(
         tablePath(tableCode)
@@ -405,6 +419,12 @@ service cloud.firestore {
               )
             )
           )
+          ||
+          (
+            get(
+              tablePath(tableCode)
+            ).data.status == 'finished'
+          )
         );
     }
 
@@ -522,6 +542,38 @@ service cloud.firestore {
         ).data.status == 'pending';
     }
 
+    function isRestartingFinishedTable(
+      tableCode
+    ) {
+      return isCurrentHost(tableCode)
+        && resource.data.status == 'finished'
+        && request.resource.data.status == 'lobby'
+        && request.resource.data
+          .diff(resource.data)
+          .affectedKeys()
+          .hasOnly([
+            'status',
+            'startedAt',
+            'finishedAt',
+            'finishReason'
+          ])
+        && !request.resource.data.keys()
+          .hasAny([
+            'startedAt',
+            'finishedAt',
+            'finishReason'
+          ])
+        && !existsAfter(
+          setupBoardPath(tableCode)
+        )
+        && !existsAfter(
+          gameBoardPath(tableCode)
+        )
+        && !existsAfter(
+          gameStatePath(tableCode)
+        );
+    }
+
     match /tables/{tableCode} {
       allow create: if isAuthenticated()
         && request.resource.data.keys()
@@ -603,12 +655,16 @@ service cloud.firestore {
           )
           ||
           isFinishingGame(tableCode)
+          ||
+          isRestartingFinishedTable(
+            tableCode
+          )
         );
 
       allow list: if false;
 
       allow delete: if
-        isFinishedTableHost(tableCode);
+        isClosableTableHost(tableCode);
 
       match /participants/{participantUid} {
         allow create: if isAuthenticated()
@@ -884,6 +940,29 @@ service cloud.firestore {
               )
             )
             ||
+            (
+              isCurrentHost(tableCode)
+              && get(
+                tablePath(tableCode)
+              ).data.status == 'finished'
+              && getAfter(
+                tablePath(tableCode)
+              ).data.status == 'lobby'
+              && request.resource.data
+                .diff(resource.data)
+                .affectedKeys()
+                .hasOnly([
+                  'currentCoordinate',
+                  'failedCoordinates'
+                ])
+              && request.resource.data.currentCoordinate
+                == null
+              && request.resource.data.failedCoordinates
+                is list
+              && request.resource.data.failedCoordinates
+                .size() == 0
+            )
+            ||
             isLeavingOwnParticipant(
               tableCode,
               participantUid
@@ -891,10 +970,10 @@ service cloud.firestore {
           );
 
         allow list: if
-          isFinishedTableHost(tableCode);
+          isClosableTableHost(tableCode);
 
         allow delete: if
-          isFinishedTableHost(tableCode);
+          isClosableTableHost(tableCode);
       }
 
       match /players/{playerUid} {
@@ -1128,6 +1207,9 @@ service cloud.firestore {
                 || get(
                   tablePath(tableCode)
                 ).data.status == 'playing'
+                || get(
+                  tablePath(tableCode)
+                ).data.status == 'finished'
               )
               && request.resource.data
                 .diff(resource.data)
@@ -1177,7 +1259,7 @@ service cloud.firestore {
           );
 
         allow delete: if
-          isFinishedTableHost(tableCode);
+          isClosableTableHost(tableCode);
       }
 
       match /joinRequests/{requestUid} {
@@ -1483,7 +1565,7 @@ service cloud.firestore {
           );
 
         allow delete: if
-          isFinishedTableHost(tableCode);
+          isClosableTableHost(tableCode);
       }
 
       match /setup/{setupDocumentId} {
@@ -1502,7 +1584,7 @@ service cloud.firestore {
         allow list: if false;
 
         allow delete: if
-          isFinishedTableHost(tableCode);
+          isClosableTableHost(tableCode);
       }
 
       match /game/{gameDocumentId} {
@@ -1700,7 +1782,7 @@ service cloud.firestore {
         allow list: if false;
 
         allow delete: if
-          isFinishedTableHost(tableCode);
+          isClosableTableHost(tableCode);
       }
     }
   }
