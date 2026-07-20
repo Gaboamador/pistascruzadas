@@ -124,6 +124,9 @@
 }
 
 .finishedPanel {
+  --finished-result-color:
+    #{$color-success};
+
   padding: $space-lg;
   text-align: center;
   background-color: rgba(
@@ -138,9 +141,58 @@
   box-shadow: $shadow-md;
 }
 
+.finishedPanelFiasco {
+  --finished-result-color:
+    #{$color-danger};
+
+  background-color: rgba(
+    $color-danger,
+    0.1
+  );
+  border-color: rgba(
+    $color-danger,
+    0.4
+  );
+}
+
+.finishedPanelRegular {
+  --finished-result-color:
+    #{$color-warning};
+
+  background-color: rgba(
+    $color-warning,
+    0.1
+  );
+  border-color: rgba(
+    $color-warning,
+    0.4
+  );
+}
+
+.finishedPanelGood {
+  --finished-result-color:
+    #{$color-accent-primary};
+
+  background-color: rgba(
+    $color-accent-primary,
+    0.1
+  );
+  border-color: rgba(
+    $color-accent-primary,
+    0.4
+  );
+}
+
+.finishedPanelIncredible {
+  --finished-result-color:
+    #{$color-success};
+}
+
 .finishedEyebrow {
   margin: 0 0 $space-xs;
-  color: $color-success;
+  color: var(
+    --finished-result-color
+  );
   font-size: $font-size-xs;
   font-weight: $font-weight-bold;
   letter-spacing: 0.1em;
@@ -149,15 +201,65 @@
 
 .finishedTitle {
   margin: 0;
-  color: $color-text-primary;
+  color: var(
+    --finished-result-color
+  );
   font-family: $font-family-display;
-  font-size: $font-size-2xl;
+  font-size: clamp(
+    $font-size-2xl,
+    8vw,
+    $font-size-4xl
+  );
   line-height: $line-height-tight;
 }
 
-.finishedDescription {
+.finishedScore {
+  margin: $space-sm 0 0;
+  color: $color-text-secondary;
+  font-size: $font-size-sm;
+  line-height: $line-height-normal;
+
+  strong {
+    color: $color-text-primary;
+    font-family: $font-family-condensed;
+    font-size: $font-size-2xl;
+  }
+}
+
+.finishedResultDescription {
   max-width: 42rem;
   margin: $space-sm auto 0;
+  color: $color-text-primary;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-relaxed;
+}
+
+.finishedStatus {
+  margin: $space-md 0 0;
+  color: $color-text-secondary;
+  font-size: $font-size-sm;
+  line-height: $line-height-normal;
+}
+
+.finishedContext {
+  max-width: 42rem;
+  margin: $space-lg auto 0;
+  padding-top: $space-md;
+  color: $color-text-secondary;
+  border-top: 1px solid rgba(
+    $color-border,
+    0.8
+  );
+
+  > strong {
+    color: $color-text-primary;
+    font-size: $font-size-sm;
+  }
+}
+
+.finishedDescription {
+  margin: $space-xs auto 0;
   color: $color-text-secondary;
   font-size: $font-size-sm;
   line-height: $line-height-relaxed;
@@ -691,3 +793,6 @@
 }
 
 }
+ 
+ 
+ 

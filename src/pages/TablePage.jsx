@@ -30,6 +30,7 @@ import {
   PARTICIPANT_STATUS,
   TABLE_STATUS,
 } from '@/constants/table';
+import useGameBoard from '@/hooks/useGameBoard';
 import usePendingJoinRequests from '@/hooks/usePendingJoinRequests';
 import useOnlineStatus from '@/hooks/useOnlineStatus';
 import useTableRoom from '@/hooks/useTableRoom';
@@ -52,6 +53,7 @@ import {
 import {
   restartFinishedTable,
 } from '@/services/firebase/restartTableService';
+import { getGameResult } from '@/utils/gameResult';
 
 import styles from '@/pages/TablePage.module.scss';
 
@@ -635,6 +637,17 @@ function TablePage({ user }) {
     uid: user.uid,
   });
 
+  const {
+    gameBoard,
+    isLoading:
+      isGameBoardLoading,
+    error:
+      gameBoardError,
+  } = useGameBoard({
+    tableCode:
+      normalizedTableCode,
+  });
+
   const isHost =
     participant?.role
       === PARTICIPANT_ROLE.HOST
@@ -856,6 +869,41 @@ function TablePage({ user }) {
     getFinishedContent(
       table.finishReason,
     );
+
+
+  const revealedCoordinates =
+    Array.isArray(
+      gameBoard?.revealedCoordinates,
+    )
+      ? gameBoard
+        .revealedCoordinates
+      : [];
+
+  const correctCoordinateCount =
+    revealedCoordinates.length;
+
+  const totalCoordinateCount =
+    table.gridSize ** 2;
+
+  const gameResult =
+    isFinished
+    && gameBoard
+      ? getGameResult({
+          gridSize:
+            table.gridSize,
+          correctCount:
+            correctCoordinateCount,
+        })
+      : null;
+
+  const finishedPanelToneClass =
+    gameResult
+      ? styles[
+          `finishedPanel${gameResult.level
+            .charAt(0)
+            .toUpperCase()}${gameResult.level.slice(1)}`
+        ] ?? ''
+      : '';
 
   const isConfirmingLeave =
     confirmationAction
@@ -1293,9 +1341,8 @@ const handleConfirmFinish =
 
               {isFinished && (
                 <section
-                  className={
-                    styles.finishedPanel
-                  }
+                  className={`${styles.finishedPanel} ${finishedPanelToneClass}`}
+                  aria-labelledby="finished-result-title"
                 >
                   <p
                     className={
@@ -1305,25 +1352,91 @@ const handleConfirmFinish =
                     Partida finalizada
                   </p>
 
-                  <h2
-                    className={
-                      styles.finishedTitle
-                    }
-                  >
-                    {
-                      finishedContent.title
-                    }
-                  </h2>
+                  {isGameBoardLoading ? (
+                    <p
+                      className={
+                        styles.finishedStatus
+                      }
+                      role="status"
+                      aria-live="polite"
+                    >
+                      Calculando resultado…
+                    </p>
+                  ) : gameBoardError || !gameResult ? (
+                    <p
+                      className={
+                        styles.finishedStatus
+                      }
+                      role="alert"
+                    >
+                      No se pudo calcular el resultado de la partida.
+                    </p>
+                  ) : (
+                    <>
+                      <h2
+                        id="finished-result-title"
+                        className={
+                          styles.finishedTitle
+                        }
+                      >
+                        {
+                          gameResult.title
+                        }
+                      </h2>
 
-                  <p
+                      <p
+                        className={
+                          styles.finishedScore
+                        }
+                      >
+                        <strong>
+                          {
+                            correctCoordinateCount
+                          }
+                        </strong>
+
+                        <span>
+                          {' '}de{' '}
+                          {
+                            totalCoordinateCount
+                          }{' '}
+                          coordenadas acertadas
+                        </span>
+                      </p>
+
+                      <p
+                        className={
+                          styles.finishedResultDescription
+                        }
+                      >
+                        {
+                          gameResult.description
+                        }
+                      </p>
+                    </>
+                  )}
+
+                  <div
                     className={
-                      styles.finishedDescription
+                      styles.finishedContext
                     }
                   >
-                    {
-                      finishedContent.description
-                    }
-                  </p>
+                    <strong>
+                      {
+                        finishedContent.title
+                      }
+                    </strong>
+
+                    <p
+                      className={
+                        styles.finishedDescription
+                      }
+                    >
+                      {
+                        finishedContent.description
+                      }
+                    </p>
+                  </div>
                 </section>
               )}
 
@@ -1334,8 +1447,12 @@ const handleConfirmFinish =
               />
 
               <GameBoard
-                tableCode={
-                  normalizedTableCode
+                gameBoard={gameBoard}
+                isLoading={
+                  isGameBoardLoading
+                }
+                error={
+                  gameBoardError
                 }
               />
             </>
@@ -1762,3 +1879,6 @@ const handleConfirmFinish =
 }
 
 export default TablePage;
+ 
+ 
+ 

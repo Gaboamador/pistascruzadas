@@ -1,20 +1,15 @@
 import CoordinateCardBack from '@/components/CoordinateCardBack';
-import useGameBoard from '@/hooks/useGameBoard';
-
 import styles from '@/components/GameBoard.module.scss';
 
 function getColumnLabel(index) {
   return String.fromCharCode(65 + index);
 }
 
-function GameBoard({ tableCode }) {
-  const {
-    gameBoard,
-    isLoading,
-    error,
-  } = useGameBoard({
-    tableCode,
-  });
+function GameBoard({
+  gameBoard,
+  isLoading,
+  error,
+}) {
 
   if (isLoading) {
     return (
@@ -292,4 +287,6 @@ function GameBoard({ tableCode }) {
   );
 }
 
-export default GameBoard;
+export default GameBoard; 
+ 
+ 
