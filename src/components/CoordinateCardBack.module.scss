@@ -1,8 +1,8 @@
 @use "../styles/patterns/coordinate-card-sizing" as *;
 
 .card {
-  --coordinate-card-size:
-    #{$coordinate-card-size-desktop};
+  --coordinate-card-default-size: #{$coordinate-card-size-desktop};
+  --coordinate-card-size: var(--board-coordinate-size, var(--coordinate-card-default-size));
 
   position: relative;
 
@@ -295,8 +295,7 @@
     $breakpoint-sm
 ) {
   .card {
-    --coordinate-card-size:
-      #{$coordinate-card-size-mobile};
+    --coordinate-card-default-size: #{$coordinate-card-size-mobile};
   }
 
   .titleBlock {

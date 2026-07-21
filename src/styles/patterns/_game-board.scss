@@ -10,6 +10,9 @@
 
 @mixin game-board-pattern {
   .boardScroller {
+    container-name: game-board;
+    container-type: inline-size;
+
     width: 100%;
     min-width: 0;
     max-width: 100%;
@@ -17,92 +20,29 @@
     overflow-x: auto;
     overflow-y: hidden;
 
-    padding-bottom:
-      $space-xs;
+    padding-bottom: $space-xs;
 
-    overscroll-behavior-inline:
-      contain;
-
-    -webkit-overflow-scrolling:
-      touch;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
   }
 
   .board {
     --grid-size: 4;
-
-    /*
-     * Lado fijo compartido por:
-     *
-     * - tarjetas de coordenadas;
-     * - tarjetas superiores A–E.
-     *
-     * El mínimo de 5.5rem conserva el espacio
-     * vertical que necesitan las palabras rotadas
-     * y permite que las coordenadas sean cuadradas.
-     */
-    --board-coordinate-size:
-  #{$coordinate-card-size-desktop};
-
-/*
- * La etiqueta numérica usa el mismo lado
- * que las coordenadas y queda cuadrada.
- */
---board-row-label-width:
-  var(
-    --board-coordinate-size
-  );
-
-/*
- * La tarjeta de palabra vertical conserva
- * aproximadamente el ancho que tenía antes.
- */
---board-row-word-width:
-  clamp(
-    2.15rem,
-    3.8vw,
-    2.75rem
-  );
-
-/*
- * La primera columna contiene:
- *
- * - la etiqueta numérica cuadrada;
- * - la tarjeta de palabra vertical.
- */
---board-row-header-width:
-  calc(
-    var(
-      --board-row-label-width
-    )
-    +
-    var(
-      --board-row-word-width
-    )
-  );
+    --board-scale: 1;
+    --board-coordinate-size: #{$coordinate-card-size-desktop};
+    --board-row-label-width: var(--board-coordinate-size);
+    --board-row-word-width: clamp(2.15rem, 3.8vw, 2.75rem);
+    --board-row-header-width: calc(var(--board-row-label-width) + var(--board-row-word-width));
 
     display: grid;
-
-    grid-template-columns:
-      var(
-        --board-row-header-width
-      )
-      repeat(
-        var(--grid-size),
-        var(
-          --board-coordinate-size
-        )
-      );
-
+    grid-template-columns: var(--board-row-header-width) repeat(var(--grid-size), var(--board-coordinate-size));
     justify-content: center;
+    gap: $space-xs;
 
-    gap:
-      $space-xs;
+    width: max-content;
+    min-width: 100%;
 
-    width:
-      max-content;
-
-    min-width:
-      100%;
+    zoom: var(--board-scale);
   }
 
   .corner {
@@ -746,22 +686,101 @@ aspect-ratio:
     );
 }
 
-  @media (
-    max-width:
-      $breakpoint-sm
-  ) {
-    .board {
-      --board-coordinate-size:
-    #{$coordinate-card-size-mobile};
 
-      gap:
-        $space-2xs;
+  /*
+   * Rango intermedio:
+   * evita el salto directo entre cartas mobile de 3.5rem
+   * y cartas desktop de al menos 5.5rem.
+   */
+  @media (min-width: 481px) and (max-width: 725px) {
+    .board {
+      --board-coordinate-size: 4rem;
+      gap: $space-2xs;
+    }
+
+    .coordinateCell {
+      --coordinate-scale: 0.96rem;
     }
 
     .corner,
     .columnHeader {
-      min-height:
-        4.5rem;
+      min-height: 5rem;
+    }
+
+    .axisLabelCard {
+      padding: $space-xs;
+    }
+
+    .axisLabel {
+      font-size: 2.9rem;
+    }
+
+    .axisWordCard {
+      min-height: 0;
+      padding: $space-2xs $space-xs;
+    }
+
+    .axisWord {
+      padding: $space-3xs $space-xs;
+      font-size: $font-size-xs;
+      line-height: 1;
+    }
+
+    .rowHeader .axisWord {
+      padding: calc(#{$space-3xs} * 2) calc(#{$space-xs} * 2);
+      font-size: calc(#{$font-size-xs} * 2);
+    }
+
+    /*
+     * Escala de la grilla 5x5 según el ancho real
+     * disponible dentro de boardScroller.
+     */
+    @container game-board (max-width: 458px) {
+      .board[data-grid-size='5'] {
+        --board-scale: 0.96;
+      }
+    }
+
+    @container game-board (max-width: 438px) {
+      .board[data-grid-size='5'] {
+        --board-scale: 0.94;
+      }
+    }
+
+    @container game-board (max-width: 424px) {
+      .board[data-grid-size='5'] {
+        --board-scale: 0.92;
+      }
+    }
+
+    @container game-board (max-width: 400px) {
+      .board[data-grid-size='5'] {
+        --board-scale: 0.87;
+      }
+    }
+
+    @container game-board (max-width: 385px) {
+      .board[data-grid-size='5'] {
+        --board-scale: 0.84;
+      }
+    }
+
+    @container game-board (max-width: 375px) {
+      .board[data-grid-size='5'] {
+        --board-scale: 0.82;
+      }
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    .board {
+      --board-coordinate-size: #{$coordinate-card-size-mobile};
+      gap: $space-2xs;
+    }
+
+    .corner,
+    .columnHeader {
+      min-height: 4.5rem;
     }
 
     .columnHeader,
@@ -770,61 +789,73 @@ aspect-ratio:
     }
 
     .axisLabelCard {
-      padding:
-        $space-2xs;
+      padding: $space-2xs;
     }
 
     .axisLabel {
-  font-size:
-    2.5rem;
+      font-size: 2.5rem;
     }
 
     .axisWordCard {
       min-height: 0;
-
-      padding:
-        $space-2xs;
-
-      overflow:
-        hidden;
+      padding: $space-2xs;
+      overflow: hidden;
     }
 
-    /*
-     * Configuración mobile de las palabras
-     * horizontales.
-     */
     .axisWord {
-      padding:
-        $space-3xs
-        $space-2xs;
-
-      font-size:
-        $font-size-xs;
-
+      padding: $space-3xs $space-2xs;
+      font-size: $font-size-xs;
       line-height: 1;
     }
 
-    /*
-     * Conserva la misma rotación permanente,
-     * pero utiliza la escala tipográfica mobile.
-     */
-    .rowHeader
-    .axisWord {
-      padding:
-        calc(
-          #{$space-3xs}
-          * 2
-        )
-        calc(
-          #{$space-2xs}
-          * 2
-        );
+    .rowHeader .axisWord {
+      padding: calc(#{$space-3xs} * 2) calc(#{$space-2xs} * 2);
+      font-size: calc(#{$font-size-xs} * 2);
+    }
 
-      font-size:
-        calc(
-          #{$font-size-xs}
-          * 2
-        );
+    /*
+     * En 4x4 sólo hace falta una corrección mínima
+     * en el extremo más angosto del rango soportado.
+     */
+    @container game-board (max-width: 330px) {
+      .board[data-grid-size='4'] {
+        --board-scale: 0.98;
+      }
+    }
+
+    /*
+     * En mobile la grilla 5x5 parte de cartas de 3.5rem.
+     * Los umbrales corresponden al ancho de boardScroller,
+     * no al ancho total del viewport.
+     */
+    @container game-board (max-width: 390px) {
+      .board[data-grid-size='5'] {
+        --board-scale: 0.98;
+      }
+    }
+
+    @container game-board (max-width: 376px) {
+      .board[data-grid-size='5'] {
+        --board-scale: 0.94;
+      }
+    }
+
+    @container game-board (max-width: 352px) {
+      .board[data-grid-size='5'] {
+        --board-scale: 0.89;
+      }
+    }
+
+    @container game-board (max-width: 337px) {
+      .board[data-grid-size='5'] {
+        --board-scale: 0.86;
+      }
+    }
+
+    @container game-board (max-width: 327px) {
+      .board[data-grid-size='5'] {
+        --board-scale: 0.83;
+      }
     }
   }
 }

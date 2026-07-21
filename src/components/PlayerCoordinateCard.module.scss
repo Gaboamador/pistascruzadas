@@ -1,11 +1,27 @@
 .card {
+  --player-coordinate-card-size:
+    8rem;
+
   display: grid;
+  min-width: 0;
+
   grid-template-columns:
     minmax(0, 1fr)
-    auto;
-  align-items: center;
-  gap: $space-xl;
-  padding: $space-lg;
+    var(
+      --player-coordinate-card-size
+    );
+
+  align-items:
+    center;
+
+  column-gap:
+    $space-xl;
+
+  row-gap:
+    $space-md;
+
+  padding:
+    $space-lg;
 
   background-color:
     $color-bg-elevated;
@@ -42,6 +58,8 @@
 }
 
 .content {
+  grid-column: 1;
+
   min-width: 0;
 }
 
@@ -98,31 +116,6 @@
     $line-height-relaxed;
 }
 
-.coordinate {
-  @include coordinate-card;
-
-  border-radius:
-    $radius-lg;
-
-  box-shadow:
-    0
-    0.35rem
-    0.8rem
-    rgba(
-      $color-card-ink,
-      0.18
-    ),
-    inset
-    0
-    0
-    0
-    1px
-    rgba(
-      $color-card-ink,
-      0.1
-    );
-}
-
 .clueField {
   grid-column:
     1
@@ -158,14 +151,15 @@
 }
 
 .clueHelp,
-.clueError {
+.clueError,
+.clueCounter {
   margin: 0;
 
   font-size:
     $font-size-xs;
 
-  line-height:
-    $line-height-relaxed;
+  // line-height:
+  //   $line-height-relaxed;
 }
 
 .clueHelp {
@@ -212,30 +206,38 @@
 
 .actionButton {
   display:
-    inline-flex;
+    grid;
+
+  grid-template-columns:
+    2.25rem
+    minmax(0, 1fr);
 
   align-items:
     center;
 
-  justify-content:
-    center;
-
   gap:
-    $space-xs;
+    $space-sm;
 
-  min-height: 3rem;
+  min-height:
+    3rem;
 
   padding:
-    $space-sm
-    $space-md;
+    $space-2xs
+    $space-md
+    $space-2xs
+    $space-2xs;
 
-  color:
-    $color-text-primary;
-
-  font: inherit;
+  font:
+    inherit;
 
   font-weight:
     $font-weight-bold;
+
+  letter-spacing:
+    0.01em;
+
+  text-align:
+    center;
 
   border:
     1px solid
@@ -244,34 +246,95 @@
   border-radius:
     $radius-md;
 
-  cursor: pointer;
+  box-shadow:
+    0
+    0.2rem
+    0.45rem
+    rgba(
+      $color-card-ink,
+      0.08
+    );
+
+  cursor:
+    pointer;
 
   transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease,
     filter 160ms ease,
-    opacity 160ms ease,
-    transform 160ms ease;
+    opacity 160ms ease;
+
+  svg {
+    width:
+      2.25rem;
+
+    height:
+      2.25rem;
+
+    padding:
+      0.58rem;
+
+    overflow:
+      visible;
+
+    border-radius:
+      calc(
+        #{$radius-md}
+        - 0.15rem
+      );
+  }
 
   &:hover:not(:disabled) {
-    filter:
-      brightness(1.08);
+    transform:
+      translateY(-1px);
+
+    box-shadow:
+      0
+      0.35rem
+      0.7rem
+      rgba(
+        $color-card-ink,
+        0.12
+      );
   }
 
   &:active:not(:disabled) {
     transform:
-      translateY(1px);
+      translateY(0);
+
+    box-shadow:
+      0
+      0.15rem
+      0.3rem
+      rgba(
+        $color-card-ink,
+        0.1
+      );
+  }
+
+  &:focus-visible {
+    outline:
+      3px solid
+      rgba(
+        $color-accent-primary,
+        0.28
+      );
+
+    outline-offset:
+      2px;
   }
 
   &:disabled {
-    cursor: wait;
-    opacity: 0.65;
-  }
+    cursor:
+      wait;
 
-  svg {
-    flex:
-      0 0 auto;
+    opacity:
+      0.58;
 
-    width: 1.1rem;
-    height: 1.1rem;
+    box-shadow:
+      none;
   }
 }
 
@@ -279,28 +342,109 @@
   color:
     $color-danger;
 
-  background-color:
-    rgba(
-      $color-danger,
-      0.1
+  background:
+    linear-gradient(
+      180deg,
+      rgba(
+        $color-danger,
+        0.11
+      ),
+      rgba(
+        $color-danger,
+        0.07
+      )
     );
 
   border-color:
     rgba(
       $color-danger,
-      0.4
+      0.34
     );
+
+  svg {
+    color:
+      $color-danger;
+
+    background-color:
+      rgba(
+        $color-danger,
+        0.14
+      );
+  }
+
+  &:hover:not(:disabled) {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(
+          $color-danger,
+          0.16
+        ),
+        rgba(
+          $color-danger,
+          0.1
+        )
+      );
+
+    border-color:
+      rgba(
+        $color-danger,
+        0.58
+      );
+  }
 }
 
 .correctButton {
   color:
     $color-accent-tertiary-contrast;
 
-  background-color:
-    $color-success-surface;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(
+        $color-success,
+        0.2
+      ),
+      rgba(
+        $color-success,
+        0.12
+      )
+    );
 
   border-color:
-    $color-success;
+    rgba(
+      $color-success,
+      0.52
+    );
+
+  svg {
+    color:
+      $color-accent-tertiary-contrast;
+
+    background-color:
+      rgba(
+        $color-success,
+        0.2
+      );
+  }
+
+  &:hover:not(:disabled) {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(
+          $color-success,
+          0.27
+        ),
+        rgba(
+          $color-success,
+          0.16
+        )
+      );
+
+    border-color:
+      $color-success;
+  }
 }
 
 .emptyMessage {
@@ -354,19 +498,24 @@
     $breakpoint-sm
 ) {
   .card {
-    grid-template-columns:
-      minmax(0, 1fr)
-      auto;
+  --player-coordinate-card-size:
+    6.5rem;
 
-    gap:
-      $space-sm;
+  grid-template-columns:
+    minmax(0, 1fr)
+    var(
+      --player-coordinate-card-size
+    );
 
-    padding:
-      $space-sm;
+  column-gap:
+    $space-md;
 
-    border-radius:
-      $radius-md;
-  }
+  row-gap:
+    $space-md;
+
+  padding:
+    $space-md;
+}
 
   .eyebrow {
     margin-bottom:
@@ -395,34 +544,51 @@
       $line-height-normal;
   }
 
-.coordinate {
-  border-radius:
-    $radius-md;
-}
   .actions {
     gap:
       $space-xs;
   }
 
-  .actionButton {
-    min-height:
-      var(--touch-target-min);
+.actionButton {
+  grid-template-columns:
+    2rem
+    minmax(0, 1fr);
+
+  gap:
+    $space-xs;
+
+  min-height:
+    var(--touch-target-min);
+
+  padding:
+    $space-2xs
+    $space-sm
+    $space-2xs
+    $space-2xs;
+
+  font-size:
+    $font-size-sm;
+
+  border-radius:
+    $radius-sm;
+
+  svg {
+    width:
+      2rem;
+
+    height:
+      2rem;
 
     padding:
-      $space-xs
-      $space-sm;
-
-    font-size:
-      $font-size-sm;
+      0.5rem;
 
     border-radius:
-      $radius-sm;
-
-    svg {
-      width: 1rem;
-      height: 1rem;
-    }
+      calc(
+        #{$radius-sm}
+        - 0.1rem
+      );
   }
+}
 
   .emptyMessage {
     font-size:
@@ -445,15 +611,22 @@
 @media (
   max-width: 24rem
 ) {
+
   .card {
     grid-template-columns:
       1fr;
   }
 
-.coordinate {
-  justify-self:
-    center;
-}
+  .content {
+    grid-column:
+      1;
+  }
+
+  .coordinatePlacement {
+    justify-self:
+      center;
+  }
+
   .actions {
     grid-template-columns:
       1fr;

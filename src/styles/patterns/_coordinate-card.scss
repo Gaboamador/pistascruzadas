@@ -160,15 +160,8 @@
         transform: translateY(-0.02em);
     }
 
-    @media (
-  max-width:
-    $breakpoint-sm
-) {
-  --coordinate-card-size:
-    #{$coordinate-card-size-mobile};
-
-  --coordinate-scale:
-    #{$coordinate-card-scale-mobile};
-}
-
+    @media (max-width: $breakpoint-sm) {
+        --coordinate-card-size: #{$coordinate-card-size-mobile};
+        --coordinate-scale: #{$coordinate-card-scale-mobile};
+    }
 }

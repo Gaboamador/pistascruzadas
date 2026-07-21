@@ -1,0 +1,38 @@
+.coordinate {
+  @include coordinate-card;
+
+  border-radius:
+    $radius-lg;
+
+  box-shadow:
+    0
+    0.35rem
+    0.8rem
+    rgba(
+      $color-card-ink,
+      0.18
+    ),
+    inset
+    0
+    0
+    0
+    1px
+    rgba(
+      $color-card-ink,
+      0.1
+    );
+}
+
+@media (
+  max-width:
+    $breakpoint-sm
+) {
+  .coordinate {
+    border-radius:
+      $radius-md;
+  }
+  .coordinate {
+  border-radius:
+    $radius-md;
+}
+}

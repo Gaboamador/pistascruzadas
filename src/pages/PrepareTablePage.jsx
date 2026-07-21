@@ -739,6 +739,7 @@ function BoardPreparation({
                   className={
                     styles.board
                   }
+                  data-grid-size={table.gridSize}
                   style={{
                     '--grid-size':
                       table.gridSize,

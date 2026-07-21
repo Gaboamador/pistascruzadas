@@ -8,7 +8,7 @@ import {
   FiFlag,
   FiLogOut,
   FiRefreshCw,
-  FiTrash2,
+  FiPower,
   FiX,
 } from 'react-icons/fi';
 import {
@@ -20,6 +20,7 @@ import {
 import ConfirmModal, {
   CONFIRM_MODAL_TONES,
 } from '@/components/ConfirmModal';
+import CoordinateCard from '@/components/CoordinateCard';
 import FailedCoordinatesPanel from '@/components/FailedCoordinatesPanel';
 import GameBoard from '@/components/GameBoard';
 import PlayerCoordinateCard from '@/components/PlayerCoordinateCard';
@@ -1329,16 +1330,36 @@ const handleConfirmFinish =
           {shouldShowGame && (
             <>
               {isPlaying && (
-                <PlayerCoordinateCard
-                  tableCode={
-                    normalizedTableCode
+                <div
+                  className={
+                    styles.playerCoordinateSection
                   }
-                  uid={user.uid}
-                  currentCoordinate={
-                    participant
-                      .currentCoordinate
-                  }
-                />
+                >
+                  <PlayerCoordinateCard
+                    tableCode={
+                      normalizedTableCode
+                    }
+                    uid={user.uid}
+                    currentCoordinate={
+                      participant
+                        .currentCoordinate
+                    }
+                  />
+
+                  <div
+                    className={
+                      styles.coordinatePlacement
+                    }
+                  >
+                    <CoordinateCard
+                      coordinate={
+                        participant
+                          .currentCoordinate
+                      }
+                      ariaLive="polite"
+                    />
+                  </div>
+                </div>
               )}
 
               {isFinished && (
@@ -1657,7 +1678,7 @@ const handleConfirmFinish =
               {canPrepareTable && (
                 <Link
                   to={`/mesa/${normalizedTableCode}/preparar`}
-                  className="button button--primary"
+                  className={`${styles.footerActionButton} ${styles.primaryActionButton}`}
                   aria-disabled={
                     !isOnline
                     || isAnyOperationRunning
@@ -1678,9 +1699,7 @@ const handleConfirmFinish =
               {canFinishGame && (
                 <button
                   type="button"
-                  className={
-                    styles.finishGameButton
-                  }
+                  className={`${styles.footerActionButton} ${styles.warningActionButton}`}
                   onClick={
                     openFinishConfirmation
                   }
@@ -1701,9 +1720,7 @@ const handleConfirmFinish =
               {canLeaveTable && (
                 <button
                   type="button"
-                  className={
-                    styles.leaveButton
-                  }
+                  className={`${styles.footerActionButton} ${styles.dangerActionButton}`}
                   onClick={
                     openLeaveConfirmation
                   }
@@ -1728,7 +1745,7 @@ const handleConfirmFinish =
               {canRestartTable && (
                 <button
                   type="button"
-                  className="button button--primary"
+                  className={`${styles.footerActionButton} ${styles.successActionButton}`}
                   onClick={
                     openRestartConfirmation
                   }
@@ -1749,9 +1766,7 @@ const handleConfirmFinish =
               {canCloseTable && (
                 <button
                   type="button"
-                  className={
-                    styles.finishGameButton
-                  }
+                  className={`${styles.footerActionButton} ${styles.dangerActionButton}`}
                   onClick={
                     openCloseConfirmation
                   }
@@ -1759,7 +1774,7 @@ const handleConfirmFinish =
                     remoteActionsDisabled
                   }
                 >
-                  <FiTrash2
+                  <FiPower
                     aria-hidden="true"
                   />
 

@@ -61,16 +61,6 @@ function PlayerCoordinateCard({
   const normalizedClue =
     normalizeClue(clue);
 
-  const coordinateLetter =
-    hasCoordinate
-      ? currentCoordinate.charAt(0)
-      : '';
-
-  const coordinateNumber =
-    hasCoordinate
-      ? currentCoordinate.slice(1)
-      : '';
-
   const isCorrectResult =
     pendingResult
       === COORDINATE_RESULT.CORRECT;
@@ -237,52 +227,10 @@ function PlayerCoordinateCard({
             Tu coordenada actual
           </h2>
 
-          <p className={styles.description}>
+          {/* <p className={styles.description}>
             Sólo vos podés ver esta carta. Da una pista que conecte
             las palabras de esa columna y esa fila.
-          </p>
-        </div>
-
-        <div
-          className={styles.coordinate}
-          aria-live="polite"
-          aria-label={
-            hasCoordinate
-              ? `Tu coordenada es ${currentCoordinate}`
-              : 'No tenés una coordenada asignada'
-          }
-        >
-          {hasCoordinate ? (
-            <>
-              <span
-                className={
-                  styles.coordinateLetter
-                }
-                aria-hidden="true"
-              >
-                {coordinateLetter}
-              </span>
-
-              <span
-                className={
-                  styles.coordinateBadge
-                }
-                aria-hidden="true"
-              >
-                <span
-                  className={
-                    styles.coordinateNumber
-                  }
-                >
-                  {coordinateNumber}
-                </span>
-              </span>
-            </>
-          ) : (
-            <span aria-hidden="true">
-              —
-            </span>
-          )}
+          </p> */}
         </div>
 
         {hasCoordinate && (
@@ -348,7 +296,7 @@ function PlayerCoordinateCard({
                     styles.clueHelp
                   }
                 >
-                  Se guardará solamente si la coordenada resulta fallada.
+                  Solo se guarda si falla.
                 </p>
               )}
 

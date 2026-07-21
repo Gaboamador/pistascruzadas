@@ -83,6 +83,7 @@ function GameBoard({
       <div className={styles.boardScroller}>
         <div
           className={styles.board}
+          data-grid-size={gameBoard.gridSize}
           style={{
             '--grid-size':
               gameBoard.gridSize,

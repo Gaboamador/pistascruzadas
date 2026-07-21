@@ -95,8 +95,7 @@ function FailedCoordinatesPanel({
       {hasFailedCoordinates ? (
         <>
           <p className={styles.description}>
-            Estas cartas ya fueron descartadas. Podés revisar la
-            coordenada y la pista que diste en cada intento.
+            Estas cartas ya fueron descartadas.
           </p>
 
           <ol
