@@ -90,6 +90,12 @@
   line-height: $line-height-relaxed;
 }
 
+  .identityWrapper {
+    display: flex;
+    align-items: center;
+    gap: $space-sm;
+  }
+
 .identity {
   display: grid;
   justify-items: end;

@@ -49,8 +49,8 @@ export default defineConfig({
         description:
           'Tablero y mazo digital para jugar Pistas Cruzadas en grupo.',
 
-        theme_color: '#1a1d27',
-        background_color: '#11131a',
+        theme_color: '#e2dcba',
+        background_color: '#e2dcba',
 
         display: 'standalone',
 

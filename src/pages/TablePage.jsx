@@ -1308,19 +1308,21 @@ const handleConfirmFinish =
                 Estás jugando como
               </span>
 
-              <strong>
-                {participant.nickname}
-              </strong>
+              <div className={styles.identityWrapper}>
+                <strong>
+                  {participant.nickname}
+                </strong>
 
-              {isHost && (
-                <span
-                  className={
-                    styles.hostBadge
-                  }
-                >
-                  Anfitrión
-                </span>
-              )}
+                {isHost && (
+                  <span
+                    className={
+                      styles.hostBadge
+                    }
+                  >
+                    Anfitrión
+                  </span>
+                )}
+              </div>
             </div>
           </header>
 
