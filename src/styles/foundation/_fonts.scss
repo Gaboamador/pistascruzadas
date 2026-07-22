@@ -43,3 +43,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
+
+@font-face {
+  font-family: "Desigers Labels V2";
+  src:
+    url("../../assets/fonts/Desigers-Labels-v2.ttf")
+    format("truetype");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}

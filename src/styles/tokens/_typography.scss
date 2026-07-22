@@ -6,7 +6,6 @@
 /*
  * Desigers Bold:
  * - títulos decorativos;
- * - letras y números de los ejes;
  * - coordenadas de las cartas.
  */
 $font-family-brand:
@@ -49,6 +48,16 @@ $font-family-editorial:
   Calibri,
   Arial,
   sans-serif;
+
+/*
+ * Desigers Labels:
+ * - exclusiva para letras y números de los ejes;
+ */
+$font-family-labels:
+  "Desigers Labels V2",
+  Georgia,
+  "Times New Roman",
+  serif;
 
 /*
  * Tokens semánticos generales.
